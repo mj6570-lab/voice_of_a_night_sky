@@ -173,25 +173,25 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
 /* 핸드폰용 (<600px) */
 @media (max-width: 599px) {
   .modal-content {
-    width: 90%;           /* 화면 폭 대비 */
-    max-width: 420px;     /* 최대 폭 제한 */
+    width: 85%;        /* 기존 90% → 85%로 조금 작게 */
+    max-width: 380px;  /* 기존 420px → 380px로 조정 */
     border-radius: 8px;
-    transform: scale(0.95);
-    overflow: hidden;     /* 박스보다 내용 넘치면 숨김 */
-    padding: 0;           /* 이미지에 맞춰 여백 제거 */
-    display: block;       /* 이미지 높이에 맞춰 자동 */
+    transform: scale(0.92); /* 기존 0.95 → 0.92로 조금 축소 */
+    overflow: hidden;
+    padding: 0;
+    display: block;
   }
 
   .modal-grid {
     grid-template-columns: 1fr;
-    gap: 0;               /* 이미지와 맞춤 */
+    gap: 0;
   }
 
   .modal-cover {
     width: 100%;
-    display: block;       /* 박스에 맞춤 */
-    height: auto;         /* 원본 비율 유지 */
-    object-fit: cover;    /* 박스 꽉 채우기 */
+    display: block;
+    height: auto;
+    object-fit: cover;
     margin: 0;
   }
 }
@@ -531,6 +531,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </body>
 
 </html>
+
 
 
 
