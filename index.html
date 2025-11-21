@@ -173,24 +173,25 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
 /* 핸드폰용 (<600px) */
 @media (max-width: 599px) {
   .modal-content {
-    max-width: 90%;
+    width: 90%;              /* 화면 폭 대비 */
+    max-width: 420px;        /* 최대 폭 제한 */
     border-radius: 8px;
     transform: scale(0.95);
-    max-height: 90vh;
-    overflow-y: auto;
-    padding: 16px;
+    overflow: hidden;        /* 박스보다 내용 넘치면 숨김 */
+    padding: 0;              /* 이미지에 맞춰 여백 제거 */
+    display: inline-block;   /* 이미지 크기에 맞게 */
   }
 
   .modal-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 0;                  /* 이미지와 맞춤 */
   }
 
   .modal-cover {
     width: 100%;
-    height: auto;
-    max-height: none;
-    object-fit: contain;
+    height: auto;             /* 이미지 비율 유지 */
+    max-height: none;         /* 제한 제거 */
+    object-fit: cover;        /* 박스 꽉 채우기 */
     display: block;
     margin: 0 auto;
   }
@@ -531,6 +532,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </body>
 
 </html>
+
 
 
 
