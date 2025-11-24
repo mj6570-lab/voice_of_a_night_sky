@@ -532,12 +532,12 @@ document.querySelectorAll('#discGrid .card, #galleryGrid .card').forEach(card =>
   }, {passive: true});
 
   card.addEventListener('touchend', function(e){
-    if(!moved){
-      // 클릭, 모달 열림 방지
-      e.preventDefault();
-      e.stopPropagation();
+    // moved === true → 스크롤 중이라 터치 무시
+    // moved === false → 클릭 허용
+    if(moved) {
+      e.stopPropagation(); // 스크롤 방해 안 하도록
     }
-    // moved가 true이면 스크롤이므로 아무것도 막지 않음 → 스크롤 부드럽게
+    // 클릭은 기존 버튼 이벤트나 카드 링크 그대로 작동
   });
 });
 /* 초기 렌더 & show default section (About) */
@@ -547,6 +547,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
