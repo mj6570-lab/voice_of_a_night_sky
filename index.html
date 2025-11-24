@@ -520,24 +520,29 @@ document.querySelectorAll('#discGrid .card, #galleryGrid .card').forEach(card =>
   let moved = false;
 
   card.addEventListener('touchstart', function(e){
+    // 이미지 터치는 스크롤 가능하도록 무시
+    if(e.target.tagName === 'IMG') return;
+
     startY = e.touches[0].clientY;
     startX = e.touches[0].clientX;
     moved = false;
   }, {passive: true});
 
   card.addEventListener('touchmove', function(e){
+    if(e.target.tagName === 'IMG') return;
+
     const diffY = Math.abs(e.touches[0].clientY - startY);
     const diffX = Math.abs(e.touches[0].clientX - startX);
     if(diffY > 5 || diffX > 5) moved = true;
   }, {passive: true});
 
   card.addEventListener('touchend', function(e){
-    // moved === true → 스크롤 중이라 터치 무시
-    // moved === false → 클릭 허용
-    if(moved) {
-      e.stopPropagation(); // 스크롤 방해 안 하도록
-    }
-    // 클릭은 기존 버튼 이벤트나 카드 링크 그대로 작동
+    if(e.target.tagName === 'IMG') return;
+
+    if(moved) return;
+
+    const btn = card.querySelector('button');
+    if(btn) btn.click();
   });
 });
 /* 초기 렌더 & show default section (About) */
@@ -547,6 +552,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
