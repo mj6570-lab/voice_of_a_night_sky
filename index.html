@@ -133,7 +133,12 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
     grid-template-columns: repeat(2,1fr);
   }
 }
-
+/* 아주 작은 핸드폰 (600px 이하)에서는 여전히 1열로 */
+@media (max-width:599px){
+  #discGrid, #galleryGrid {
+    grid-template-columns: repeat(1,1fr);
+  }
+}
 .card{ background:linear-gradient(180deg,var(--glass),rgba(255,255,255,0.85)); border-radius:12px; overflow:hidden; transition: transform .18s ease, box-shadow .18s ease; border:1px solid rgba(16,24,40,0.04);
   display:flex; flex-direction:column; align-items:stretch }
 .card:hover{ transform: translateY(-6px); box-shadow:0 18px 40px rgba(18,22,30,0.08) }
@@ -534,6 +539,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
