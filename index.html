@@ -503,6 +503,30 @@ document.addEventListener('contextmenu', function(e) {
     alert('이미지는 복사/저장이 불가합니다.');
   }
 });
+/* 모바일/태블릿 스와이프 클릭 방지 */
+let touchStartY = 0;
+let touchStartX = 0;
+let touchMoved = false;
+
+document.querySelectorAll('#discGrid img, #galleryGrid img').forEach(img => {
+  img.addEventListener('touchstart', function(e){
+    touchStartY = e.touches[0].clientY;
+    touchStartX = e.touches[0].clientX;
+    touchMoved = false;
+  }, {passive: true});
+
+  img.addEventListener('touchmove', function(e){
+    const moveY = Math.abs(e.touches[0].clientY - touchStartY);
+    const moveX = Math.abs(e.touches[0].clientX - touchStartX);
+    if(moveY > 10 || moveX > 10) touchMoved = true;
+  }, {passive: true});
+
+  img.addEventListener('touchend', function(e){
+    if(touchMoved){
+      e.preventDefault(); // 스와이프면 클릭 막음
+    }
+  });
+});
 /* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
   showSection('about', document.querySelector('.hero-nav .btn'));
@@ -510,6 +534,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
