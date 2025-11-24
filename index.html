@@ -262,8 +262,10 @@ img {
   -o-user-drag: none;        
   user-drag: none;           
   user-select: none;          /* 선택 금지 */
+  -webkit-touch-callout: none;    /* iOS 길게 누름 메뉴 방지 */
   pointer-events: auto;       /* 클릭은 가능하게 */
 }
+
 </style>
 </head>
 <body>
@@ -488,9 +490,16 @@ contentItems.forEach(item => {
   card.appendChild(a);
   contentGrid.appendChild(card);
 });
+// 모바일 길게 눌러 이미지 저장 방지
+document.addEventListener('touchstart', function(e) {
+  if(e.target.tagName === 'IMG') {
+    e.preventDefault();
+  }
+}, { passive: false });
+
 document.addEventListener('contextmenu', function(e) {
   if(e.target.tagName === 'IMG'){
-    e.preventDefault();  // 이미지 오른쪽 클릭 금지
+    e.preventDefault();  // 오른쪽 클릭 방지
     alert('이미지는 복사/저장이 불가합니다.');
   }
 });
@@ -501,6 +510,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
