@@ -247,7 +247,12 @@ a.link{ color:var(--accent); text-decoration:none }
     grid-template-columns: repeat(2, 1fr); /* 태블릿/모바일에서 2열 */
   }
 }
-
+/* CONTENT GRID: 모바일 1열 */
+@media (max-width:599px){
+  #contentGrid {
+    grid-template-columns: repeat(1,1fr);
+  }
+}
 #contentGrid .card {
   border-radius: 12px;
   overflow: hidden;
@@ -495,9 +500,10 @@ contentItems.forEach(item => {
   card.appendChild(a);
   contentGrid.appendChild(card);
 });
-// 모바일 길게 눌러 이미지 저장 방지
+// 모바일 길게 눌러 이미지 저장 방지 (수정)
 document.addEventListener('touchstart', function(e) {
-  if(e.target.tagName === 'IMG') {
+  // contentGrid 안의 이미지는 터치 허용
+  if(e.target.tagName === 'IMG' && !e.target.closest('#contentGrid')) {
     e.preventDefault();
   }
 }, { passive: false });
@@ -531,7 +537,7 @@ document.querySelectorAll('#discGrid .card, #galleryGrid .card').forEach(card =>
       e.preventDefault();
       e.stopPropagation();
     }
-    // 스크롤 시에는 터치 무시 → 부드럽게 스크롤
+    // moved가 true이면 스크롤이므로 아무것도 막지 않음 → 스크롤 부드럽게
   });
 });
 /* 초기 렌더 & show default section (About) */
@@ -541,6 +547,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
