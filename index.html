@@ -255,6 +255,15 @@ a.link{ color:var(--accent); text-decoration:none }
   height: auto; /* 이미지 원본 비율 유지 */
   display: block;
 }
+img {
+  -webkit-user-drag: none;   /* 사파리/크롬 드래그 방지 */
+  -khtml-user-drag: none;    
+  -moz-user-drag: none;      /* 파이어폭스 */
+  -o-user-drag: none;        
+  user-drag: none;           
+  user-select: none;          /* 선택 금지 */
+  pointer-events: auto;       /* 클릭은 가능하게 */
+}
 </style>
 </head>
 <body>
@@ -479,7 +488,12 @@ contentItems.forEach(item => {
   card.appendChild(a);
   contentGrid.appendChild(card);
 });
-
+document.addEventListener('contextmenu', function(e) {
+  if(e.target.tagName === 'IMG'){
+    e.preventDefault();  // 이미지 오른쪽 클릭 금지
+    alert('이미지는 복사/저장이 불가합니다.');
+  }
+});
 /* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
   showSection('about', document.querySelector('.hero-nav .btn'));
@@ -487,6 +501,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
