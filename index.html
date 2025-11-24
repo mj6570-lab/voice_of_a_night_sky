@@ -514,37 +514,6 @@ document.addEventListener('contextmenu', function(e) {
     alert('이미지는 복사/저장이 불가합니다.');
   }
 });
-document.querySelectorAll('#discGrid .card, #galleryGrid .card').forEach(card => {
-  let startY = 0;
-  let startX = 0;
-  let moved = false;
-
-  card.addEventListener('touchstart', function(e){
-    // 이미지 터치는 스크롤 가능하도록 무시
-    if(e.target.tagName === 'IMG') return;
-
-    startY = e.touches[0].clientY;
-    startX = e.touches[0].clientX;
-    moved = false;
-  }, {passive: true});
-
-  card.addEventListener('touchmove', function(e){
-    if(e.target.tagName === 'IMG') return;
-
-    const diffY = Math.abs(e.touches[0].clientY - startY);
-    const diffX = Math.abs(e.touches[0].clientX - startX);
-    if(diffY > 5 || diffX > 5) moved = true;
-  }, {passive: true});
-
-  card.addEventListener('touchend', function(e){
-    if(e.target.tagName === 'IMG') return;
-
-    if(moved) return;
-
-    const btn = card.querySelector('button');
-    if(btn) btn.click();
-  });
-});
 /* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
   showSection('about', document.querySelector('.hero-nav .btn'));
@@ -552,6 +521,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
