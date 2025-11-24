@@ -276,8 +276,10 @@ img {
   pointer-events: auto;       /* 클릭은 가능하게 */
 }
 #discGrid .card img,
-#galleryGrid .card img,{
+#galleryGrid .card img,
+#about img {
     pointer-events: none; /* 이미지 위에서 터치해도 부모로 이벤트 전달 */
+}
 </style>
 </head>
 <body>
@@ -523,6 +525,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
