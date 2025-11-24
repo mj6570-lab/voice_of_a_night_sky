@@ -358,12 +358,13 @@ contentItems.forEach(item => {
     grid-template-columns: repeat(1,1fr); /* 모바일: 1열 */
   }
 }
-
-#contentGrid img.card-media {
+.card-media {
   width: 100%;
-  height: auto !important;
-  object-fit: contain !important;
-  aspect-ratio: auto !important;
+  height: auto;
+  object-fit: contain; /* 원본 비율 유지 */
+  aspect-ratio: auto;  /* 강제 비율 제거 */
+  display: block;
+  background: #ffffff00; /* 혹시 남는 공간이 있어도 자연스럽게 */
 }
 </style>
 
@@ -529,8 +530,8 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 </body>
-
 </html>
+
 
 
 
