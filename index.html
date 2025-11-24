@@ -509,6 +509,7 @@ document.addEventListener('contextmenu', function(e) {
   }
 });
 // 모바일 이미지 터치 처리 (스크롤 시 클릭 방지)
+// 디스코그래피 / 갤러리 이미지는 클릭 막고 스크롤만 가능
 document.querySelectorAll('#discGrid img, #galleryGrid img').forEach(img => {
   let startY = 0;
   let startX = 0;
@@ -523,13 +524,37 @@ document.querySelectorAll('#discGrid img, #galleryGrid img').forEach(img => {
   img.addEventListener('touchmove', function(e){
     const diffY = Math.abs(e.touches[0].clientY - startY);
     const diffX = Math.abs(e.touches[0].clientX - startX);
-    if(diffY > 5 || diffX > 5) moved = true; // 조금이라도 움직이면 스크롤로 판단
+    if(diffY > 5 || diffX > 5) moved = true; 
   }, {passive: true});
 
   img.addEventListener('touchend', function(e){
-    if(moved){
-      e.preventDefault(); // 스크롤이면 클릭 막음
-    }
+    // 클릭이 안 되도록 preventDefault
+    e.preventDefault(); 
+  });
+});
+
+// 콘텐츠 탭 이미지는 클릭 가능
+document.querySelectorAll('#contentGrid img').forEach(img => {
+  let startY = 0;
+  let startX = 0;
+  let moved = false;
+
+  img.addEventListener('touchstart', function(e){
+    startY = e.touches[0].clientY;
+    startX = e.touches[0].clientX;
+    moved = false;
+  }, {passive: true});
+
+  img.addEventListener('touchmove', function(e){
+    const diffY = Math.abs(e.touches[0].clientY - startY);
+    const diffX = Math.abs(e.touches[0].clientX - startX);
+    if(diffY > 5 || diffX > 5) moved = true; 
+  }, {passive: true});
+
+  img.addEventListener('touchend', function(e){
+    // 스크롤이면 클릭 안함
+    if(moved) e.preventDefault(); 
+    // 이동하지 않으면 a 링크가 정상 작동
   });
 });
 /* 초기 렌더 & show default section (About) */
@@ -539,6 +564,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
