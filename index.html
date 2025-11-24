@@ -503,27 +503,27 @@ document.addEventListener('contextmenu', function(e) {
     alert('이미지는 복사/저장이 불가합니다.');
   }
 });
-/* 모바일/태블릿 스와이프 클릭 방지 */
-let touchStartY = 0;
-let touchStartX = 0;
-let touchMoved = false;
-
+// 모바일 이미지 터치 처리 (스크롤 시 클릭 방지)
 document.querySelectorAll('#discGrid img, #galleryGrid img').forEach(img => {
+  let startY = 0;
+  let startX = 0;
+  let moved = false;
+
   img.addEventListener('touchstart', function(e){
-    touchStartY = e.touches[0].clientY;
-    touchStartX = e.touches[0].clientX;
-    touchMoved = false;
+    startY = e.touches[0].clientY;
+    startX = e.touches[0].clientX;
+    moved = false;
   }, {passive: true});
 
   img.addEventListener('touchmove', function(e){
-    const moveY = Math.abs(e.touches[0].clientY - touchStartY);
-    const moveX = Math.abs(e.touches[0].clientX - touchStartX);
-    if(moveY > 10 || moveX > 10) touchMoved = true;
+    const diffY = Math.abs(e.touches[0].clientY - startY);
+    const diffX = Math.abs(e.touches[0].clientX - startX);
+    if(diffY > 5 || diffX > 5) moved = true; // 조금이라도 움직이면 스크롤로 판단
   }, {passive: true});
 
   img.addEventListener('touchend', function(e){
-    if(touchMoved){
-      e.preventDefault(); // 스와이프면 클릭 막음
+    if(moved){
+      e.preventDefault(); // 스크롤이면 클릭 막음
     }
   });
 });
@@ -534,6 +534,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
