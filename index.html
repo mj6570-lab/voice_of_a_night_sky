@@ -260,11 +260,13 @@ a.link{ color:var(--accent); text-decoration:none }
   background: #fff; /* 카드 배경 */
 }
 
-#contentGrid .card  {
-  width: 100%;
-  height: auto; /* 이미지 원본 비율 유지 */
-  display: block;
+#contentGrid .card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover; /* 필요 시 */
 }
+
 img {
   -webkit-user-drag: none;   /* 사파리/크롬 드래그 방지 */
   -khtml-user-drag: none;    
@@ -525,6 +527,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
