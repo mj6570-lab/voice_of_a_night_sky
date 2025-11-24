@@ -508,60 +508,32 @@ document.addEventListener('contextmenu', function(e) {
     alert('이미지는 복사/저장이 불가합니다.');
   }
 });
-// 모바일 이미지 터치 처리 (스크롤 시 클릭 방지)
-// 디스코그래피 / 갤러리 이미지는 클릭 막고 스크롤만 가능
-document.querySelectorAll('#discGrid img, #galleryGrid img').forEach(img => {
+document.querySelectorAll('#discGrid .card, #galleryGrid .card').forEach(card => {
   let startY = 0;
   let startX = 0;
   let moved = false;
 
-  img.addEventListener('touchstart', function(e){
+  card.addEventListener('touchstart', function(e){
     startY = e.touches[0].clientY;
     startX = e.touches[0].clientX;
     moved = false;
   }, {passive: true});
 
-  img.addEventListener('touchmove', function(e){
+  card.addEventListener('touchmove', function(e){
     const diffY = Math.abs(e.touches[0].clientY - startY);
     const diffX = Math.abs(e.touches[0].clientX - startX);
-    if(diffY > 5 || diffX > 5) moved = true; 
+    if(diffY > 5 || diffX > 5) moved = true;
   }, {passive: true});
 
-  img.addEventListener('touchend', function(e){
-    // 클릭이 안 되도록 preventDefault
-    e.preventDefault(); 
-  });
-});
-
-// 콘텐츠 탭 이미지는 클릭 가능
-// 콘텐츠 탭 이미지 터치 처리
-document.querySelectorAll('#contentGrid img').forEach(img => {
-  let startY = 0;
-  let startX = 0;
-  let moved = false;
-
-  img.addEventListener('touchstart', function(e){
-    startY = e.touches[0].clientY;
-    startX = e.touches[0].clientX;
-    moved = false;
-  }, {passive: true});
-
-  img.addEventListener('touchmove', function(e){
-    const diffY = Math.abs(e.touches[0].clientY - startY);
-    const diffX = Math.abs(e.touches[0].clientX - startX);
-    if(diffY > 5 || diffX > 5) moved = true; 
-  }, {passive: true});
-
-  img.addEventListener('touchend', function(e){
-    // 스크롤이면 클릭 방지
-    if(moved){
-      e.preventDefault(); 
-      e.stopPropagation(); // 추가: 스크롤 중 클릭 이벤트 전파 막기
+  card.addEventListener('touchend', function(e){
+    if(!moved){
+      // 클릭, 모달 열림 방지
+      e.preventDefault();
+      e.stopPropagation();
     }
-    // 이동하지 않으면 a 링크는 그대로 작동
+    // 스크롤 시에는 터치 무시 → 부드럽게 스크롤
   });
 });
-
 /* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
   showSection('about', document.querySelector('.hero-nav .btn'));
@@ -569,6 +541,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
