@@ -612,22 +612,27 @@ function enableSlider(slidesEl) {
     slidesEl.style.transform = `translateX(${-index * 100}%)`;
   }
 
+  let isSwiping = false;
+
   /* ============================
-     📱 모바일 전용 스와이프 처리
+     📱 모바일 스와이프
      ============================ */
 
   slidesEl.addEventListener("touchstart", (e) => {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
     currentX = startX;
+    isSwiping = true;
 
-    // 갤러리 안에서 스크롤 잠시 중지 → 좌우 스와이프 안정적으로 인식
+    // 스크롤 완전 차단
     document.body.style.overflow = "hidden";
   });
 
   slidesEl.addEventListener(
     "touchmove",
     (e) => {
+      if (!isSwiping) return;
+
       const x = e.touches[0].clientX;
       const y = e.touches[0].clientY;
 
@@ -639,18 +644,19 @@ function enableSlider(slidesEl) {
 
       currentX = x;
 
-      // 작은 움직임(탭)은 무시
+      // 스와이프 판단이 되기 전 작은 움직임
       if (absDx < 10 && absDy < 10) return;
 
-      // 세로 스크롤이 명확하면 좌우 스와이프 해제
-      if (absDy > absDx) {
-        document.body.style.overflow = ""; // 스크롤 다시 활성화
+      // 📌 세로가 더 강하면 스와이프 취소 → 정상 스크롤 허용
+      if (absDy > absDx + 10) {
+        isSwiping = false;
+        document.body.style.overflow = "";
         return;
       }
 
-      // 좌우 스와이프 확실하면 브라우저 세로 스크롤 방지
-      if (absDx > 25) {
-        e.preventDefault();
+      // 좌우 이동 확실하면 가로 스와이프만 진행
+      if (absDx > absDy) {
+        e.preventDefault(); // 세로 스크롤 차단 유지
       }
     },
     { passive: false }
@@ -658,32 +664,28 @@ function enableSlider(slidesEl) {
 
   slidesEl.addEventListener("touchend", () => {
     const dx = currentX - startX;
-    const absDx = Math.abs(dx);
-    const threshold = 40;
 
-    // 갤러리 영역 벗어나면 스크롤 원상복구
+    // 스크롤 복원
     document.body.style.overflow = "";
+    if (!isSwiping) return;
 
-    // threshold 미만은 탭 → 슬라이드 넘기지 않음
-    if (absDx < threshold) return;
+    // 의미 없는 작은 움직임(탭)
+    if (Math.abs(dx) < 40) return;
 
-    if (dx < 0) setIndex(index + 1); // 오른쪽 → 왼쪽 스와이프
-    else setIndex(index - 1);        // 왼쪽 → 오른쪽 스와이프
+    if (dx < 0) setIndex(index + 1);
+    else setIndex(index - 1);
+
+    isSwiping = false;
   });
 
   /* ============================
-      🖥 PC 화살표 클릭 전용
+     🖥 PC 화살표
      ============================ */
-
   const leftBtn = slidesEl.parentElement.querySelector(".slider-arrow.left");
   const rightBtn = slidesEl.parentElement.querySelector(".slider-arrow.right");
 
-  if (leftBtn) {
-    leftBtn.addEventListener("click", () => setIndex(index - 1));
-  }
-  if (rightBtn) {
-    rightBtn.addEventListener("click", () => setIndex(index + 1));
-  }
+  if (leftBtn) leftBtn.addEventListener("click", () => setIndex(index - 1));
+  if (rightBtn) rightBtn.addEventListener("click", () => setIndex(index + 1));
 }
 /* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
@@ -692,6 +694,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
