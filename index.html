@@ -620,17 +620,16 @@ function enableSlider(slidesEl) {
 
   slidesEl.addEventListener('touchstart', e => {
     startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY; // 👉 추가
+    startY = e.touches[0].clientY;
   });
 
   slidesEl.addEventListener('touchmove', e => {
     currentX = e.touches[0].clientX;
-
     const dx = Math.abs(currentX - startX);
     const dy = Math.abs(e.touches[0].clientY - startY);
 
     if (dx > dy) {
-      e.preventDefault(); // 👉 모바일 세로 스크롤 방지
+      e.preventDefault();
     }
   }, { passive: false });
 
@@ -641,12 +640,12 @@ function enableSlider(slidesEl) {
 
   slidesEl.addEventListener('mousemove', e => {
     if (!isDown) return;
-    e.preventDefault();       // 👉 PC 드래그 정상작동
+    e.preventDefault();
     currentX = e.clientX;
   });
 
   slidesEl.addEventListener('mouseleave', () => {
-    isDown = false;           // 👉 영역 벗어나면 드래그 종료
+    isDown = false;
   });
 
   slidesEl.addEventListener('mouseup', () => {
@@ -656,10 +655,13 @@ function enableSlider(slidesEl) {
     if (startX - currentX < -50) setIndex(index - 1);
   });
 
+  /* 🔥 화살표 버튼 기능 */
   const leftBtn = slidesEl.parentElement.querySelector('.slider-arrow.left');
   const rightBtn = slidesEl.parentElement.querySelector('.slider-arrow.right');
+
   leftBtn.addEventListener('click', () => setIndex(index - 1));
   rightBtn.addEventListener('click', () => setIndex(index + 1));
+}   // ← ★★★★★ 여기서 enableSlider 함수가 끝난다! ★★★★★
 /* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
   showSection('about', document.querySelector('.hero-nav .btn'));
@@ -667,6 +669,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
