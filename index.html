@@ -336,8 +336,17 @@ img {
 @media (max-width: 768px) {
   .slider-arrow {
     display: none !important;
+}
+@media (max-width: 768px) {
+  .gallery-slider {
+    height: 260px !important;     /* 모바일에서 슬라이더 박스 고정 */
+  }
+  .gallery-slider .slide img {
+    height: 100% !important;      /* 박스 안을 꽉 채움 */
+    object-fit: cover !important; /* 그림 비율 유지하며 잘 맞게 */
   }
 }
+
 </style>
 </head>
 <body>
@@ -694,6 +703,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
