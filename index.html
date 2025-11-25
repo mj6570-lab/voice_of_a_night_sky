@@ -623,40 +623,48 @@ function enableSlider(slidesEl) {
     index = Math.max(0, Math.min(i, total - 1));
     slidesEl.style.transform = `translateX(${-index * 100}%)`;
   }
-
   /* === 모바일 스와이프 기능 === */
-  slidesEl.addEventListener('touchstart', e => {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-  });
+slidesEl.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+  currentX = startX;
+});
 
-  slidesEl.addEventListener('touchmove', e => {
-  currentX = e.touches[0].clientX;
-  const dx = Math.abs(currentX - startX);
-  const dy = Math.abs(e.touches[0].clientY - startY);
+slidesEl.addEventListener("touchmove", e => {
+  const x = e.touches[0].clientX;
+  const y = e.touches[0].clientY;
 
-  // 너무 작은 이동은 무시 — 탭으로 처리
-  if (dx < 10 && dy < 10) return;
+  const dx = x - startX;
+  const dy = y - startY;
 
-  // 좌우 스와이프가 명확한 경우만 세로 스크롤 방지
-  if (dx > dy) {
-    e.preventDefault();
-  }
+  // 진짜 스와이프인지 판단용
+  const absDx = Math.abs(dx);
+  const absDy = Math.abs(dy);
+
+  currentX = x;
+
+  // 작은 흔들림 (탭) — 아무것도 하지 않음
+  if (absDx < 10 && absDy < 10) return;
+
+  // 세로 스크롤이 더 크면 스크롤 우선 → preventDefault 금지
+  if (absDy > absDx) return;
+
+  // 좌우 스와이프가 확실할 때만 세로 스크롤 방지
+  if (absDx > 25) e.preventDefault();
+
 }, { passive: false });
 
-  slidesEl.addEventListener('touchend', () => {
+slidesEl.addEventListener("touchend", () => {
   const dx = currentX - startX;
-  const threshold = 40; // 스와이프 최소 거리 (크면 더 확실한 제스처만 허용)
+  const absDx = Math.abs(dx);
 
-  // 오른쪽 → 왼쪽 스와이프
-  if (dx < -threshold) {
-    setIndex(index + 1);
-  }
-  // 왼쪽 → 오른쪽 스와이프
-  else if (dx > threshold) {
-    setIndex(index - 1);
-  }
-  // threshold 미만이면 "탭"으로 판단 → 아무 동작 X
+  // threshold 보다 작으면 탭 또는 불확실한 스와이프 → 무시
+  if (absDx < 40) return;
+
+  // 오른쪽 → 왼쪽
+  if (dx < 0) setIndex(index + 1);
+  // 왼쪽 → 오른쪽
+  else setIndex(index - 1);
 });
   /* === PC 화살표 기능 === */
   const leftBtn = slidesEl.parentElement.querySelector('.slider-arrow.left');
@@ -672,6 +680,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
