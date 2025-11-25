@@ -337,6 +337,14 @@ img {
   .slider-arrow {
     display: none !important;
 }
+/* 모바일 화살표 크기 조절 */
+@media (max-width: 768px) {
+  .slider-arrow {
+    padding: 4px 6px;
+    font-size: 12px;
+    opacity: 0.8; /* 모바일에서도 보이게 */
+  }
+}
 </style>
 </head>
 <body>
@@ -600,9 +608,6 @@ document.addEventListener('contextmenu', function(e) {
   }
 });
 function enableSlider(slidesEl) {
-  let startX = 0;
-  let startY = 0;
-  let currentX = 0;
   let index = 0;
   const total = slidesEl.children.length;
 
@@ -611,75 +616,7 @@ function enableSlider(slidesEl) {
     slidesEl.style.transform = `translateX(${-index * 100}%)`;
   }
 
-  let isSwiping = false;
-
-  /* ============================
-     📱 모바일 스와이프
-     ============================ */
-
-  slidesEl.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    currentX = startX;
-    isSwiping = true;
-
-    // 스크롤 완전 차단
-    document.body.style.overflow = "hidden";
-  });
-
-  slidesEl.addEventListener(
-    "touchmove",
-    (e) => {
-      if (!isSwiping) return;
-
-      const x = e.touches[0].clientX;
-      const y = e.touches[0].clientY;
-
-      const dx = x - startX;
-      const dy = y - startY;
-
-      const absDx = Math.abs(dx);
-      const absDy = Math.abs(dy);
-
-      currentX = x;
-
-      // 스와이프 판단이 되기 전 작은 움직임
-      if (absDx < 10 && absDy < 10) return;
-
-      // 📌 세로가 더 강하면 스와이프 취소 → 정상 스크롤 허용
-      if (absDy > absDx + 10) {
-        isSwiping = false;
-        document.body.style.overflow = "";
-        return;
-      }
-
-      // 좌우 이동 확실하면 가로 스와이프만 진행
-      if (absDx > absDy) {
-        e.preventDefault(); // 세로 스크롤 차단 유지
-      }
-    },
-    { passive: false }
-  );
-
-  slidesEl.addEventListener("touchend", () => {
-    const dx = currentX - startX;
-
-    // 스크롤 복원
-    document.body.style.overflow = "";
-    if (!isSwiping) return;
-
-    // 의미 없는 작은 움직임(탭)
-    if (Math.abs(dx) < 40) return;
-
-    if (dx < 0) setIndex(index + 1);
-    else setIndex(index - 1);
-
-    isSwiping = false;
-  });
-
-  /* ============================
-     🖥 PC 화살표
-     ============================ */
+  /* === PC & 모바일 공통: 화살표 버튼으로만 넘기기 === */
   const leftBtn = slidesEl.parentElement.querySelector(".slider-arrow.left");
   const rightBtn = slidesEl.parentElement.querySelector(".slider-arrow.right");
 
@@ -693,6 +630,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
