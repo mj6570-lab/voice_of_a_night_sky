@@ -282,6 +282,45 @@ img {
 #about img {
     pointer-events: none; /* 이미지 위에서 터치해도 부모로 이벤트 전달 */
 }
+.gallery-slider {
+  position: relative;
+  overflow: hidden;
+}
+
+.slider-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.slides {
+  display: flex;
+  transition: transform 0.35s ease;
+}
+
+.slide {
+  min-width: 100%;
+  position: relative;
+}
+
+.slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.slide-desc {
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  right: 12px;
+  padding: 6px 10px;
+  font-size: 13px;
+  color: #fff;
+  background: rgba(0,0,0,0.35);
+  border-radius: 6px;
+}
 </style>
 </head>
 <body>
@@ -385,12 +424,22 @@ const discs = [
   {id:13, title:'시그음치 Album. 평화의 시작', year:2023, cover:'img/sgmc.jpeg', desc:'(작·편곡)', audio:'#', link:'https://www.youtube.com/playlist?list=PLTFZNAqZm4U90-OneA7QrH_gWFj5Ew_LS'},
   {id:14, title:'퍼플키스 - 전선을 간다', year:2022, cover:'img/warpath.jpg', desc:'광고음악 (편곡)', audio:'#', link:'https://www.youtube.com/watch?v=HSTDT8zfRU0&list=RDHSTDT8zfRU0&start_radio=1'},
 ];
-
 const galleryItem = [
-  {id:1, title:'덧니', year:2025, cover:'img/dutni.jpg', desc:'', audio:'#', link:'https://www.instagram.com/p/DRb9BjXEkm6/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=='},
-  {id:2, title:'조망 효과', year:2025, cover:'img/thumb.jpg', desc:'', audio:'#', link:'#'},
+  {
+    id: 1,
+    title: '덧니',
+    year: 2025,
+    images: ['img/dutni1.jpg','img/dutni2.jpg','img/dutni3.jpg'],
+  },
+  {
+    id: 2,
+    title: '조망 효과',
+    year: 2025,
+    images: ['img/thumb1.jpg','img/thumb2.jpg'],
+  }
 ];
 
+];
 const discGrid = document.getElementById('discGrid');
 const galleryGrid = document.getElementById('galleryGrid');
 
@@ -414,18 +463,31 @@ function createCard(d){
   return el;
 }
 discs.forEach(d => discGrid.appendChild(createCard(d)));
-
-function createGalleryCard(d){
+function createGalleryCard(d) {
   const el = document.createElement('article');
-  el.className='card';
+  el.className = 'card gallery-slider';
+
+  const slides = d.images.map((src, i) => `
+    <div class="slide">
+      <img src="${src}" alt="">
+      <p class="slide-desc">${d.desc?.[i] || ''}</p>
+    </div>
+  `).join('');
+
   el.innerHTML = `
-    <img class="card-media" src="${d.cover}" alt="${d.title} image">
+    <div class="slider-wrapper">
+      <div class="slides" data-index="0">
+        ${slides}
+      </div>
+    </div>
     <div class="card-body">
       <div class="meta">${d.year}</div>
       <h4 class="title">${d.title}</h4>
-      <p class="muted" style="margin:0 0 12px 0;">${d.desc.length>80?d.desc.slice(0,76)+'…':d.desc}</p>
     </div>
   `;
+
+  enableSlider(el.querySelector('.slides'));
+
   return el;
 }
 galleryItem.forEach(d=> galleryGrid.appendChild(createGalleryCard(d)));
@@ -520,6 +582,49 @@ document.addEventListener('contextmenu', function(e) {
     alert('이미지는 복사/저장이 불가합니다.');
   }
 });
+function enableSlider(slidesEl) {
+  let startX = 0;
+  let currentX = 0;
+  let index = 0;
+  const total = slidesEl.children.length;
+
+  function setIndex(i) {
+    index = Math.max(0, Math.min(i, total - 1));
+    slidesEl.style.transform = `translateX(${-index * 100}%)`;
+    slidesEl.dataset.index = index;
+  }
+
+  slidesEl.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+  });
+
+  slidesEl.addEventListener('touchmove', e => {
+    currentX = e.touches[0].clientX;
+  });
+
+  slidesEl.addEventListener('touchend', () => {
+    if (startX - currentX > 50) setIndex(index + 1);
+    if (startX - currentX < -50) setIndex(index - 1);
+  });
+
+  let isDown = false;
+  slidesEl.addEventListener('mousedown', e => {
+    isDown = true;
+    startX = e.clientX;
+  });
+
+  slidesEl.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    currentX = e.clientX;
+  });
+
+  slidesEl.addEventListener('mouseup', () => {
+    if (!isDown) return;
+    isDown = false;
+    if (startX - currentX > 50) setIndex(index + 1);
+    if (startX - currentX < -50) setIndex(index - 1);
+  });
+}
 /* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
   showSection('about', document.querySelector('.hero-nav .btn'));
@@ -527,3 +632,4 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
