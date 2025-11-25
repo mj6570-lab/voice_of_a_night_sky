@@ -337,18 +337,27 @@ img {
   .slider-arrow {
     padding: 4px 6px;
     font-size: 12px;
-    opacity: 0.8; /* 모바일에서도 보이게 */
+  }
 }
-/* 모바일에서 화살표 기본 숨김 */
+
+/* 모바일에서 화살표 기본 숨김 + 탭 시 표시 */
 @media (max-width: 768px) {
   .gallery-slider .slider-arrow {
     opacity: 0;
     transition: opacity 0.25s ease;
   }
+
   .gallery-slider.show-arrows .slider-arrow {
-    opacity: 0.9;  /* 탭했을 때만 나타남 */
+    opacity: 0.9;
   }
 }
+
+/* 인덱스 끝 화살표 숨김 */
+.slider-arrow.hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 </style>
 </head>
 <body>
@@ -615,19 +624,35 @@ function enableSlider(slidesEl) {
   let index = 0;
   const total = slidesEl.children.length;
 
-  function setIndex(i) {
-    index = Math.max(0, Math.min(i, total - 1));
-    slidesEl.style.transform = `translateX(${-index * 100}%)`;
-  }
-
-  /* === PC & 모바일 공통: 화살표 버튼으로만 넘기기 === */
   const leftBtn = slidesEl.parentElement.querySelector(".slider-arrow.left");
   const rightBtn = slidesEl.parentElement.querySelector(".slider-arrow.right");
 
+  /* === 인덱스에 따라 화살표 숨김/표시 === */
+  function updateArrows() {
+    if (index === 0) {
+      leftBtn.classList.add("hidden");
+    } else {
+      leftBtn.classList.remove("hidden");
+    }
+
+    if (index === total - 1) {
+      rightBtn.classList.add("hidden");
+    } else {
+      rightBtn.classList.remove("hidden");
+    }
+  }
+
+  function setIndex(i) {
+    index = Math.max(0, Math.min(i, total - 1));
+    slidesEl.style.transform = `translateX(${-index * 100}%)`;
+    updateArrows();
+  }
+
+  /* === PC & 모바일 공통: 화살표 클릭으로 이동 === */
   if (leftBtn) leftBtn.addEventListener("click", () => setIndex(index - 1));
   if (rightBtn) rightBtn.addEventListener("click", () => setIndex(index + 1));
-}
-    /* === 모바일: 탭해서 화살표 보이기 === */
+
+  /* === 모바일: 탭하면 화살표 2초 동안 보임 === */
   slidesEl.parentElement.addEventListener("click", () => {
     const slider = slidesEl.parentElement.parentElement;
 
@@ -640,6 +665,10 @@ function enableSlider(slidesEl) {
       }, 2000);
     }
   });
+
+  /* === 초기 상태에서 화살표 업데이트 === */
+  updateArrows();
+}
 /* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
   showSection('about', document.querySelector('.hero-nav .btn'));
@@ -647,24 +676,3 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
