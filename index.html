@@ -54,6 +54,7 @@ body{
   display:flex;flex-direction:column;align-items:center;gap:16px;
   transform: translateY(-10%);
 }
+/* replaced text title with logo image */
 .brand-logo{
   width:300px;
   height:300px;
@@ -62,6 +63,8 @@ body{
   display:block;
   box-shadow: 0 8px 30px rgba(0,0,0,0.25);
 }
+
+/* small subtitle area (kept) */
 .brand-sub {
   color: #ffffff;
   text-shadow: 0 2px 10px rgba(0,0,0,0.35);
@@ -91,6 +94,7 @@ body{
   color:#fff;
   border-color: var(--accent);
 }
+
 /* ---------- MAIN ---------- */
 main.app{
   max-width:1100px; margin: -120px auto 80px; padding:36px; position:relative; z-index:2;
@@ -109,22 +113,27 @@ main.app{
 }
 h2.section-title{ margin:0 0 10px 0; font-size:20px; letter-spacing:0.06em }
 p.lead{ color:var(--muted); margin:0 0 8px 0 }
+
 /* ---------- DISC GRID ---------- */
 #discGrid {
   display:grid;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(3,1fr); /* desktop: 3열 */
   gap:18px;
 }
+
 #galleryGrid {
   display:grid;
   grid-template-columns: repeat(3,1fr);
   gap:18px;
 }
+
+/* responsive: mobile 1열 */
 @media (max-width:980px){
   #discGrid, #galleryGrid {
     grid-template-columns: repeat(2,1fr);
   }
 }
+/* 아주 작은 핸드폰 (600px 이하)에서는 여전히 1열로 */
 @media (max-width:599px){
   #discGrid, #galleryGrid {
     grid-template-columns: repeat(1,1fr);
@@ -134,36 +143,152 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
   display:flex; flex-direction:column; align-items:stretch }
 .card:hover{ transform: translateY(-6px); box-shadow:0 18px 40px rgba(18,22,30,0.08) }
 .card-body{ padding:14px }
+#storyList .card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.9));
+  border-radius:12px;
+  padding:12px;
+  margin-bottom:10px;
+  border:1px solid rgba(16,24,40,0.04);
+}
+.meta{ font-size:13px; color:var(--muted); margin-bottom:6px }
+.title{ font-weight:500; font-size:16px; margin:0 0 8px 0 }
+.cta-row{ display:flex; gap:10px; align-items:center }
+.small-btn{ padding:8px 12px; border-radius:8px; border:none; cursor:pointer; font-weight:500 }
+.small-btn.primary{ background: linear-gradient(90deg,var(--accent),#c8a2ff); color:#fff }
+.small-btn.ghost{ background:transparent; border:1px solid rgba(16,24,40,0.06); color:var(--text-1) }
+
 /* ---------- MODAL ---------- */
 .modal-root{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:120; }
 .modal-backdrop{ position:absolute; inset:0; background: rgba(10,12,20,0.45); backdrop-filter: blur(2px); }
 .modal-content{ position:relative; width:100%; max-width:720px; background:#fff; border-radius:12px; overflow:hidden; transform: translateY(12px) scale(.98); opacity:0; transition: all .22s ease; box-shadow:0 30px 80px rgba(10,12,20,0.25) }
+
+/* iPad/tablet specific: smaller modal only for tablets (768-1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .modal-content {
+    max-width: 480px;
+    border-radius: 10px;
+  }
+}
+
+/* 작은 태블릿 (600~767px) */
+@media (min-width: 600px) and (max-width: 767px) {
+  .modal-content {
+    max-width: 420px;
+    border-radius: 10px;
+  }
+}
+
+/* 핸드폰용 (<600px) */
+@media (max-width: 599px) {
+  .modal-content {
+    width: 85%;
+    max-width: 320px;
+    border-radius: 8px;
+    transform: scale(0.92);
+    overflow: hidden;
+    padding: 0;
+    display: block;
+  }
+
+  .modal-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .modal-cover {
+    width: 100%;
+    display: block;
+    height: auto;
+    object-fit: cover;
+    margin: 0;
+  }
+}
+
 .modal-content.show{ transform:none; opacity:1 }
 .modal-grid{ display:grid; grid-template-columns: 1fr 1fr }
 .modal-cover{ width:100%; height:100%; object-fit:cover }
 .modal-body{ padding:20px }
 .modal-close{ position:absolute; top:12px; right:12px; background:transparent; border:none; font-weight:800; font-size:18px; cursor:pointer }
-/* responsive... (원본 그대로) */
-@media (max-width: 1024px) and (min-width: 768px) {.modal-content { max-width: 480px; }}
-@media (min-width: 600px) and (max-width: 767px) {.modal-content { max-width: 420px; }}
-@media (max-width: 599px) {
-  .modal-content { width: 85%; max-width: 320px; transform: scale(0.92); }
-  .modal-grid { grid-template-columns: 1fr; }
-  .modal-cover { width:100%; height:auto; }
+
+@media (max-width:980px){
+  .grid{ grid-template-columns: repeat(2,1fr) }
+  .modal-grid{ grid-template-columns: 1fr }
 }
-/* content grid ... 원본 그대로 */
-#contentGrid { display:grid; gap:18px; grid-template-columns:repeat(3,1fr);}
-@media (max-width:980px){#contentGrid{grid-template-columns:repeat(2,1fr);}}
-@media (max-width:599px){#contentGrid{grid-template-columns:repeat(1,1fr);}}
-#contentGrid .card img{width:100%;display:block;object-fit:cover;}
-img{-webkit-user-drag:none;user-select:none;pointer-events:auto;}
-#discGrid .card img,#galleryGrid .card img,#about img{pointer-events:none;}
+@media (max-width:640px){
+  .hero{ min-height:520px; justify-content:flex-start; padding-top:60px }
+  .brand-logo{ width:200px; height:200px; }
+  main.app{ margin:-60px 18px 60px; padding:18px }
+  .grid{ grid-template-columns: 1fr }
+  .card-body{ padding:12px }
+  .hero-inner{ padding:18px; transform:translateY(0) }
+  .hero-nav{ gap:10px }
+  .btn{ padding:8px 14px }
+  .panel{ padding:18px }
+}
+
+.muted{ color:var(--muted) }
+a.link{ color:var(--accent); text-decoration:none }
+
+/* small form tweaks */
+.content-form input, .content-form textarea {
+  font-size:14px;
+  line-height:1.3;
+}
+.content-form textarea { resize: none; } /* 사용자가 크기 조절 못하게 고정 */
+/* ---------- CONTENT GRID 최적화 ---------- */
+#contentGrid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, 1fr); /* PC 3열 */
+}
+
+@media (max-width: 980px){
+  #contentGrid {
+    grid-template-columns: repeat(2, 1fr); /* 태블릿/모바일에서 2열 */
+  }
+}
+/* CONTENT GRID: 모바일 1열 */
+@media (max-width:599px){
+  #contentGrid {
+    grid-template-columns: repeat(1,1fr);
+  }
+}
+#contentGrid .card {
+  border-radius: 12px;
+  overflow: hidden;
+  min-height: 180px; /* 카드 최소 높이 */
+  background: #fff; /* 카드 배경 */
+}
+
+#contentGrid .card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover; /* 필요 시 */
+}
+
+img {
+  -webkit-user-drag: none;   /* 사파리/크롬 드래그 방지 */
+  -khtml-user-drag: none;    
+  -moz-user-drag: none;      /* 파이어폭스 */
+  -o-user-drag: none;        
+  user-drag: none;           
+  user-select: none;          /* 선택 금지 */
+  -webkit-touch-callout: none;    /* iOS 길게 누름 메뉴 방지 */
+  pointer-events: auto;       /* 클릭은 가능하게 */
+}
+#discGrid .card img,
+#galleryGrid .card img,
+#about img {
+    pointer-events: none; /* 이미지 위에서 터치해도 부모로 이벤트 전달 */
+}
 </style>
 </head>
 <body>
 
 <header class="hero" role="banner">
   <div class="hero-inner">
+    <!-- 로고: 프로젝트에 img/skylogo.png 업로드 -->
     <img src="img/skylogo.png" alt="밤하늘의 소리 로고" class="brand-logo" id="brandLogo">
     <p class="brand-sub"></p>
     <nav class="hero-nav" aria-label="primary">
@@ -179,55 +304,60 @@ img{-webkit-user-drag:none;user-select:none;pointer-events:auto;}
 <main class="app" role="main" style="display:none;">
   <section id="about" class="panel">
     <h2 id="aboutTitle" class="section-title">History</h2>
-    <p class="lead">2018년 … (원문 그대로)</p>
+    <p class="lead">2018년, 서울의 작은 반지하 단칸방에서 창작을 시작한 이후 영화음악, 광고음악, OST, 대중음악 등 다양한 분야에서 작·편곡가로 활동했으며, 현재는 '밤하늘의 소리'로 자신만의 음악적 색깔과 예술적 가치관을 담은 싱어송라이터로 활동하고 있다.</p>
     <div style="display:flex;gap:18px;align-items:center;margin-top:18px;flex-wrap:wrap">
       <img src="img/pf.jpg" alt="artist" style="width:160px;height:160px;object-fit:cover;border-radius:12px;border:1px solid rgba(16,24,40,0.04)">
       <div style="flex:1;min-width:200px">
-        <p>음원 제작자 · 뮤지션</p>
-        <p>활동명: 밤하늘의 소리</p>
-        <p>장르: 인디 / 락 / Soul</p>
+        <p style="margin:0 0 8px 0">음원 제작자 · 뮤지션</p>
+        <p style="margin:0 0 8px 0">활동명: 밤하늘의 소리</p>
+        <p style="margin:0 0 8px 0">장르: 인디 / 락 / Soul</p>
+        <p class="muted" style="margin:0"></p>
       </div>
     </div>
   </section>
 
   <section id="discography" class="panel">
-    <h2 class="section-title">Discography</h2>
-    <p class="lead">아래의 작품들은 …</p>
+    <h2 id="discTitle" class="section-title">Discography</h2>
+    <p class="lead">아래의 작품들은 ‘밤하늘의 소리’가 음원제작에 참여한 작품들입니다.</p>
     <div class="grid" id="discGrid"></div>
   </section>
 
   <section id="gallery" class="panel">
-    <h2 class="section-title">Gallery</h2>
+    <h2 id="galleryTitle" class="section-title">Gallery</h2>
     <p class="lead">'밤하늘의 소리'의 온라인 개인전입니다.</p>
     <div class="grid" id="galleryGrid"></div>
   </section>
 
+  <!-- Content 섹션: 이미지 링크 그리드 -->
   <section id="content" class="panel">
     <h2 class="section-title">Contents</h2>
-    <p class="lead">그림을 누르시면 …</p>
+    <p class="lead">그림을 누르시면 콘텐츠 참여 링크로 이동합니다.</p>
+
     <div id="contentGrid" class="grid" style="margin-top:18px; gap:18px;"></div>
   </section>
 
   <section id="contact" class="panel">
-    <h2 class="section-title">E-mail</h2>
+    <h2 id="contactTitle" class="section-title">E-mail</h2>
     <p class="muted">voice_of_a_night_sky@naver.com</p>
   </section>
 </main>
 
-<!-- Modal -->
 <div id="modalRoot" class="modal-root" style="display:none;">
   <div class="modal-backdrop" onclick="closeModal()" aria-hidden="true"></div>
-  <div id="modalContent" class="modal-content">
-    <button class="modal-close" onclick="closeModal()">✕</button>
+  <div id="modalContent" class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" aria-label="닫기" onclick="closeModal()">✕</button>
     <div class="modal-grid">
       <div><img id="modalCover" class="modal-cover" src="" alt="Album cover"></div>
       <div class="modal-body">
-        <h3 id="modalTitle"></h3>
+        <h3 id="modalTitle" style="margin-top:0"></h3>
         <p id="modalDesc" class="muted"></p>
-        <audio id="modalAudio" controls preload="none" style="width:100%">
-          <source id="modalAudioSrc" src="" type="audio/mpeg">
-        </audio>
-        <div style="margin-top:12px;">
+        <div style="margin-top:14px">
+          <audio id="modalAudio" controls preload="none" style="width:100%">
+            <source id="modalAudioSrc" src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;align-items:center;justify-content:flex-start">
           <a id="linkStore" class="link" href="#" target="_blank">Streaming</a>
         </div>
       </div>
@@ -236,48 +366,51 @@ img{-webkit-user-drag:none;user-select:none;pointer-events:auto;}
 </div>
 
 <script>
-/*---------------------------*/
+/* ------------------------------
+  Disc / Gallery data
+-------------------------------*/
 const discs = [
   {id:1, title:'밤하늘의 소리 - Sunroof', year:2025, cover:'img/sunroof.jpg', desc:'(작사·곡, 편곡)', audio:'Music/sunroof.mp3', link:'https://youtu.be/h-2VvxUEV24'},
   {id:2, title:'밤하늘의 소리 - 비밀정원', year:2025, cover:'img/scgd.jpg', desc:'(작사·곡, 편곡)', audio:'Music/scr.mp3', link:'https://youtu.be/ykkKX2pMibE'},
   {id:3, title:'밤하늘의 소리 - Swing swing (Mixtape)', year:2024, cover:'img/swingswing.png', desc:'(작사·곡, 편곡)', audio:'Music/swingswing.mp3', link:'#'},
   {id:4, title:'퓨어뮤직 - 눈(雪) (Mixtape)', year:2023, cover:'img/snow.png', desc:'Day6 성진 Demo (편곡)', audio:'Music/snow.mp3', link:'#'},
   {id:5, title:'엄마의 자리', year:2022, cover:'img/moov.jpg', desc:'장편영화 (작·편곡)', audio:'Music/movvvvv.mp3', link:'https://www.asianpopupcinema.org/season-15-calendar/mothers-place'},
-  {id:6, title:'사서고생', year:2022, cover:'img/ssgsms.jpg', desc:'네이버 웹툰 (작·편곡)', audio:'Music/msmsmsm ssgs.mp3', link:'https://m.comic.naver.com/...'},
-  {id:7, title:'김광석 - 바람이 불어오는 곳', year:2024, cover:'img/babu.jpg', desc:'노무현 대통령…', audio:'Music/windy.mp3', link:'https://www.youtube.com/watch?v=vpQVuUOxd7g'},
-  {id:8, title:'나의 연애코치', year:2025, cover:'img/nyc.jpg', desc:'뮤지컬 (편곡)', audio:'#', link:'https://youtube.com/...'},
-  {id:9, title:'나는 제주로 출근한다', year:2022, cover:'img/njj.png', desc:'Jeju MBC 예능', audio:'Music/bababababnzmzbmbm.mp3', link:'https://www.youtube.com/...'},
-  {id:10, title:'Kkoj - O$D', year:2020, cover:'img/freestyle.jpeg', desc:'Freestyle OST', audio:'Music/kkojond.mp3', link:'https://fs2.joycity.com/...'},
-  {id:11, title:'Kkoj - Ga', year:2020, cover:'img/ga.jpeg', desc:'(편곡·프로듀싱)', audio:'Music/kkojga.mp3', link:'https://www.youtube.com/...'},
-  {id:12, title:'Chan2 - Feeling Alright', year:2020, cover:'img/feelingalright.jpeg', desc:'(편곡·프로듀싱)', audio:'Music/feelingalright.mp3', link:'https://www.youtube.com/...'},
-  {id:13, title:'시그음치 Album', year:2023, cover:'img/sgmc.jpeg', desc:'(작·편곡)', audio:'#', link:'https://www.youtube.com/...'},
-  {id:14, title:'퍼플키스 - 전선을 간다', year:2022, cover:'img/warpath.jpg', desc:'광고음악 (편곡)', audio:'#', link:'https://www.youtube.com/...'},
+  {id:6, title:'사서고생', year:2022, cover:'img/ssgsms.jpg', desc:'네이버 웹툰 (작·편곡)', audio:'Music/msmsmsm ssgs.mp3', link:'https://m.comic.naver.com/webtoon/detail?titleId=780845&no=48&week=sat&listSortOrder=ASC&listPage=2'},
+  {id:7, title:'김광석 - 바람이 불어오는 곳', year:2024, cover:'img/babu.jpg', desc:'노무현 대통령 서거 15주기 추도식 (편곡)', audio:'Music/windy.mp3', link:'https://www.youtube.com/watch?v=vpQVuUOxd7g&list=RDvpQVuUOxd7g&start_radio=1'},
+  {id:8, title:'나의 연애코치', year:2025, cover:'img/nyc.jpg', desc:'뮤지컬 (편곡)', audio:'#', link:'https://youtube.com/playlist?list=PLTFZNAqZm4U_bVe6I1M_41nilamn4Oumy&si=LULfrv0qlCXIqs3N'},
+  {id:9, title:'나는 제주로 출근한다', year:2022, cover:'img/njj.png', desc:'Jeju MBC 예능 (작·편곡)', audio:'Music/bababababnzmzbmbm.mp3', link:'https://www.youtube.com/watch?v=oui2_HS3XXE'},
+  {id:10, title:'Kkoj - O$D', year:2020, cover:'img/freestyle.jpeg', desc:'Freestyle Hiphop OST 공모전 대상 (편곡·프로듀싱)', audio:'Music/kkojond.mp3', link:'https://fs2.joycity.com/web/news/notice/view.do?seq=40796&pageIndex=4&searchBdsubcate=&searchCondition=T&searchKeyword=%EA%B2%B0%EA%B3%BC'},
+  {id:11, title:'Kkoj - Ga', year:2020, cover:'img/ga.jpeg', desc:'(편곡·프로듀싱)', audio:'Music/kkojga.mp3', link:'https://www.youtube.com/watch?v=mLnwjkz2xPE&list=RDmLnwjkz2xPE&start_radio=1'},
+  {id:12, title:'Chan2 - Feeling Alright (Feat. 강주은)', year:2020, cover:'img/feelingalright.jpeg', desc:'(편곡·프로듀싱)', audio:'Music/feelingalright.mp3', link:'https://www.youtube.com/watch?v=NV5DuKSvGlc&list=RDNV5DuKSvGlc&start_radio=1'},
+  {id:13, title:'시그음치 Album. 평화의 시작', year:2023, cover:'img/sgmc.jpeg', desc:'(작·편곡)', audio:'#', link:'https://www.youtube.com/playlist?list=PLTFZNAqZm4U90-OneA7QrH_gWFj5Ew_LS'},
+  {id:14, title:'퍼플키스 - 전선을 간다', year:2022, cover:'img/warpath.jpg', desc:'광고음악 (편곡)', audio:'#', link:'https://www.youtube.com/watch?v=HSTDT8zfRU0&list=RDHSTDT8zfRU0&start_radio=1'},
 ];
 
 const galleryItem = [
-  {id:1, title:'덧니', year:2025, cover:'img/dutni.jpg', desc:'', audio:'#', link:'https://www.instagram.com/...'},
+  {id:1, title:'덧니', year:2025, cover:'img/dutni.jpg', desc:'', audio:'#', link:'https://www.instagram.com/p/DRb9BjXEkm6/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=='},
   {id:2, title:'조망 효과', year:2025, cover:'img/thumb.jpg', desc:'', audio:'#', link:'#'},
 ];
 
 const discGrid = document.getElementById('discGrid');
 const galleryGrid = document.getElementById('galleryGrid');
 
-/* 카드 생성 */
+/* Disc / Gallery 카드 생성 */
 function createCard(d){
   const el = document.createElement('article');
   el.className = 'card';
   el.innerHTML = `
-    <img class="card-media" src="${d.cover}" alt="">
+    <img class="card-media" src="${d.cover}" alt="${d.title} cover">
     <div class="card-body">
       <div class="meta">${d.year}</div>
       <h4 class="title">${d.title}</h4>
-      <p class="muted" style="margin:0 0 12px 0;">${d.desc}</p>
+      <p class="muted" style="margin:0 0 12px 0;">${d.desc.length>80?d.desc.slice(0,76)+'…':d.desc}</p>
       <div class="cta-row">
         <button class="small-btn primary">자세히 보기</button>
       </div>
     </div>
   `;
-  el.querySelector('button').addEventListener('click', ()=> openModal(d));
+  const btn = el.querySelector('button');
+  btn.addEventListener('click', ()=> openModal(d));
   return el;
 }
 discs.forEach(d => discGrid.appendChild(createCard(d)));
@@ -286,31 +419,34 @@ function createGalleryCard(d){
   const el = document.createElement('article');
   el.className='card';
   el.innerHTML = `
-    <img class="card-media" src="${d.cover}" alt="">
+    <img class="card-media" src="${d.cover}" alt="${d.title} image">
     <div class="card-body">
       <div class="meta">${d.year}</div>
       <h4 class="title">${d.title}</h4>
-      <p class="muted">${d.desc}</p>
+      <p class="muted" style="margin:0 0 12px 0;">${d.desc.length>80?d.desc.slice(0,76)+'…':d.desc}</p>
     </div>
   `;
   return el;
 }
 galleryItem.forEach(d=> galleryGrid.appendChild(createGalleryCard(d)));
 
-/* Section */
+/* 섹션 전환 */
 function showSection(id, btn){
   const main = document.querySelector('main.app');
-  if (!main) return;
   main.style.display = 'block';
-
-  main.querySelectorAll('section').forEach(sec=>{
-    sec.style.display = sec.id === id ? 'block' : 'none';
-    sec.classList.toggle('show', sec.id===id);
+  const sections = main.querySelectorAll('section');
+  sections.forEach(sec => {
+    if(sec.id===id){
+      sec.style.display='block';
+      setTimeout(()=>sec.classList.add('show'),10);
+    } else {
+      sec.style.display='none';
+      sec.classList.remove('show');
+    }
   });
-
-  document.querySelectorAll('.hero-nav .btn').forEach(b=>b.classList.remove('active'));
+  const buttons = document.querySelectorAll('.hero-nav .btn');
+  buttons.forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-
   const target = document.getElementById(id);
   if(target) target.scrollIntoView({behavior:'smooth'});
 }
@@ -318,86 +454,76 @@ function showSection(id, btn){
 /* Modal */
 const modalRoot = document.getElementById('modalRoot');
 const modalContent = document.getElementById('modalContent');
-const modalCover = document.getElementById('modalCover');
 const modalTitle = document.getElementById('modalTitle');
 const modalDesc = document.getElementById('modalDesc');
+const modalCover = document.getElementById('modalCover');
 const modalAudioSrc = document.getElementById('modalAudioSrc');
 const modalAudio = document.getElementById('modalAudio');
 const linkStore = document.getElementById('linkStore');
 
 function openModal(d){
-  if(!modalRoot) return;
-  modalRoot.style.display='flex';
-  modalCover.src = d.cover;
-  modalTitle.textContent = d.title + " — " + d.year;
+  modalTitle.textContent = d.title+' — '+d.year;
   modalDesc.textContent = d.desc;
+  modalCover.src = d.cover;
   modalAudioSrc.src = d.audio || '';
-  try { modalAudio.load(); } catch(e){}
-  linkStore.href = d.link || '#';
-  modalContent.classList.add('show');
+  try{ modalAudio.load(); }catch(e){}
+  if (!d.link || d.link === '#') {
+    linkStore.removeAttribute('href');
+    linkStore.style.pointerEvents = 'none';
+    linkStore.style.opacity = '0.4';
+  } else {
+    linkStore.href = d.link;
+    linkStore.style.pointerEvents = 'auto';
+    linkStore.style.opacity = '1';
+  }
+  modalRoot.style.display='flex';
+  requestAnimationFrame(()=> modalContent.classList.add('show'));
   document.body.style.overflow='hidden';
 }
 function closeModal(){
   modalContent.classList.remove('show');
-  setTimeout(()=> modalRoot.style.display='none', 200);
+  setTimeout(()=> modalRoot.style.display='none',220);
   try{ modalAudio.pause(); modalAudio.currentTime=0; }catch(e){}
   document.body.style.overflow='';
 }
-window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+window.addEventListener('keydown',(e)=>{if(e.key==='Escape') closeModal();});
 
-/* 콘텐츠 그리드 */
+// Content grid (links)
 const contentItems = [
   {id:1, img:'img/le.png', link:'https://forms.gle/XtUqVKc1MyLHSdUi6'},
   {id:2, img:'img/youtube02.jpg', link:'https://www.youtube.com/@Voice_of_a_night_sky'}
 ];
 const contentGrid = document.getElementById('contentGrid');
-contentItems.forEach(item=>{
+contentItems.forEach(item => {
   const card = document.createElement('article');
-  card.className='card';
-  card.innerHTML = `<a href="${item.link}" target="_blank"><img src="${item.img}" class="card-media"></a>`;
+  card.className = 'card';
+  const a = document.createElement('a');
+  a.href = item.link; a.target = '_blank';
+  const img = document.createElement('img');
+  img.src = item.img; img.alt = '';
+  img.className = 'card-media';
+  a.appendChild(img);
+  card.appendChild(a);
   contentGrid.appendChild(card);
 });
-
-/* 이미지 저장 방지 */
-document.addEventListener('contextmenu', function(e){
-  if(e.target.tagName === 'IMG' && !e.target.closest('a')){
+// 모바일 길게 눌러 이미지 저장 방지 (수정)
+document.addEventListener('touchstart', function(e) {
+  // contentGrid 안의 이미지는 터치 허용
+  if(e.target.tagName === 'IMG' && !e.target.closest('#contentGrid')) {
     e.preventDefault();
+  }
+}, { passive: false });
+
+document.addEventListener('contextmenu', function(e) {
+  if(e.target.tagName === 'IMG'){
+    e.preventDefault();  // 오른쪽 클릭 방지
     alert('이미지는 복사/저장이 불가합니다.');
   }
 });
-
-/* 첫 화면 */
-let initialized = false;
+/* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
-  if(initialized) return;
-  initialized = true;
   showSection('about', document.querySelector('.hero-nav .btn'));
 });
 </script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
