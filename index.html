@@ -310,17 +310,6 @@ img {
   object-fit: cover;
 }
 
-.slide-desc {
-  position: absolute;
-  bottom: 8px;
-  left: 12px;
-  right: 12px;
-  padding: 6px 10px;
-  font-size: 13px;
-  color: #fff;
-  background: rgba(0,0,0,0.35);
-  border-radius: 6px;
-}
 /* === 슬라이더 화살표 버튼 === */
 .slider-arrow {
   position: absolute;
@@ -496,7 +485,6 @@ function createGalleryCard(d) {
   const slides = d.images.map((src, i) => `
     <div class="slide">
       <img src="${src}" alt="">
-      <p class="slide-desc">${d.desc?.[i] || ''}</p>
     </div>
   `).join('');
 
@@ -704,6 +692,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
