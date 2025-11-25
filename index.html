@@ -482,11 +482,11 @@ function createGalleryCard(d) {
   const el = document.createElement('article');
   el.className = 'card gallery-slider';
 
-  const slides = d.images.map((src, i) => `
-    <div class="slide">
-      <img src="${src}" alt="">
-    </div>
-  `).join('');
+const slides = d.images.map((src) => `
+  <div class="slide">
+    <img src="${src}" alt="">
+  </div>
+`).join('');
 
 el.innerHTML = `
   <div class="slider-wrapper">
@@ -692,6 +692,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
