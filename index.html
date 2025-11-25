@@ -338,6 +338,15 @@ img {
     padding: 4px 6px;
     font-size: 12px;
     opacity: 0.8; /* 모바일에서도 보이게 */
+}
+/* 모바일에서 화살표 기본 숨김 */
+@media (max-width: 768px) {
+  .gallery-slider .slider-arrow {
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .gallery-slider.show-arrows .slider-arrow {
+    opacity: 0.9;  /* 탭했을 때만 나타남 */
   }
 }
 </style>
@@ -618,6 +627,19 @@ function enableSlider(slidesEl) {
   if (leftBtn) leftBtn.addEventListener("click", () => setIndex(index - 1));
   if (rightBtn) rightBtn.addEventListener("click", () => setIndex(index + 1));
 }
+    /* === 모바일: 탭해서 화살표 보이기 === */
+  slidesEl.parentElement.addEventListener("click", () => {
+    const slider = slidesEl.parentElement.parentElement;
+
+    if (window.innerWidth <= 768) {
+      slider.classList.add("show-arrows");
+
+      clearTimeout(slider.hideTimer);
+      slider.hideTimer = setTimeout(() => {
+        slider.classList.remove("show-arrows");
+      }, 2000);
+    }
+  });
 /* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
   showSection('about', document.querySelector('.hero-nav .btn'));
@@ -625,6 +647,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
