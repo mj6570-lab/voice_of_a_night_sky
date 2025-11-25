@@ -623,55 +623,79 @@ function enableSlider(slidesEl) {
     index = Math.max(0, Math.min(i, total - 1));
     slidesEl.style.transform = `translateX(${-index * 100}%)`;
   }
-  /* === 모바일 스와이프 기능 === */
-slidesEl.addEventListener("touchstart", e => {
-  startX = e.touches[0].clientX;
-  startY = e.touches[0].clientY;
-  currentX = startX;
-});
 
-slidesEl.addEventListener("touchmove", e => {
-  const x = e.touches[0].clientX;
-  const y = e.touches[0].clientY;
+  /* ============================
+     📱 모바일 전용 스와이프 처리
+     ============================ */
 
-  const dx = x - startX;
-  const dy = y - startY;
+  slidesEl.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    currentX = startX;
 
-  // 진짜 스와이프인지 판단용
-  const absDx = Math.abs(dx);
-  const absDy = Math.abs(dy);
+    // 갤러리 안에서 스크롤 잠시 중지 → 좌우 스와이프 안정적으로 인식
+    document.body.style.overflow = "hidden";
+  });
 
-  currentX = x;
+  slidesEl.addEventListener(
+    "touchmove",
+    (e) => {
+      const x = e.touches[0].clientX;
+      const y = e.touches[0].clientY;
 
-  // 작은 흔들림 (탭) — 아무것도 하지 않음
-  if (absDx < 10 && absDy < 10) return;
+      const dx = x - startX;
+      const dy = y - startY;
 
-  // 세로 스크롤이 더 크면 스크롤 우선 → preventDefault 금지
-  if (absDy > absDx) return;
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
 
-  // 좌우 스와이프가 확실할 때만 세로 스크롤 방지
-  if (absDx > 25) e.preventDefault();
+      currentX = x;
 
-}, { passive: false });
+      // 작은 움직임(탭)은 무시
+      if (absDx < 10 && absDy < 10) return;
 
-slidesEl.addEventListener("touchend", () => {
-  const dx = currentX - startX;
-  const absDx = Math.abs(dx);
+      // 세로 스크롤이 명확하면 좌우 스와이프 해제
+      if (absDy > absDx) {
+        document.body.style.overflow = ""; // 스크롤 다시 활성화
+        return;
+      }
 
-  // threshold 보다 작으면 탭 또는 불확실한 스와이프 → 무시
-  if (absDx < 40) return;
+      // 좌우 스와이프 확실하면 브라우저 세로 스크롤 방지
+      if (absDx > 25) {
+        e.preventDefault();
+      }
+    },
+    { passive: false }
+  );
 
-  // 오른쪽 → 왼쪽
-  if (dx < 0) setIndex(index + 1);
-  // 왼쪽 → 오른쪽
-  else setIndex(index - 1);
-});
-  /* === PC 화살표 기능 === */
-  const leftBtn = slidesEl.parentElement.querySelector('.slider-arrow.left');
-  const rightBtn = slidesEl.parentElement.querySelector('.slider-arrow.right');
+  slidesEl.addEventListener("touchend", () => {
+    const dx = currentX - startX;
+    const absDx = Math.abs(dx);
+    const threshold = 40;
 
-  if (leftBtn) leftBtn.addEventListener('click', () => setIndex(index - 1));
-  if (rightBtn) rightBtn.addEventListener('click', () => setIndex(index + 1));
+    // 갤러리 영역 벗어나면 스크롤 원상복구
+    document.body.style.overflow = "";
+
+    // threshold 미만은 탭 → 슬라이드 넘기지 않음
+    if (absDx < threshold) return;
+
+    if (dx < 0) setIndex(index + 1); // 오른쪽 → 왼쪽 스와이프
+    else setIndex(index - 1);        // 왼쪽 → 오른쪽 스와이프
+  });
+
+  /* ============================
+      🖥 PC 화살표 클릭 전용
+     ============================ */
+
+  const leftBtn = slidesEl.parentElement.querySelector(".slider-arrow.left");
+  const rightBtn = slidesEl.parentElement.querySelector(".slider-arrow.right");
+
+  if (leftBtn) {
+    leftBtn.addEventListener("click", () => setIndex(index - 1));
+  }
+  if (rightBtn) {
+    rightBtn.addEventListener("click", () => setIndex(index + 1));
+  }
 }
 /* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
@@ -680,6 +704,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
