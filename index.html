@@ -582,6 +582,7 @@ document.addEventListener('contextmenu', function(e) {
 });
 function enableSlider(slidesEl) {
   let startX = 0;
+  let startY = 0;
   let currentX = 0;
   let index = 0;
   const total = slidesEl.children.length;
@@ -589,23 +590,24 @@ function enableSlider(slidesEl) {
   function setIndex(i) {
     index = Math.max(0, Math.min(i, total - 1));
     slidesEl.style.transform = `translateX(${-index * 100}%)`;
-    slidesEl.dataset.index = index;
   }
 
   slidesEl.addEventListener('touchstart', e => {
     startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY; // 👉 추가
   });
 
   slidesEl.addEventListener('touchmove', e => {
     currentX = e.touches[0].clientX;
-  });
 
-  slidesEl.addEventListener('touchend', () => {
-    if (startX - currentX > 50) setIndex(index + 1);
-    if (startX - currentX < -50) setIndex(index - 1);
-  });
+    const dx = Math.abs(currentX - startX);
+    const dy = Math.abs(e.touches[0].clientY - startY);
 
-  let isDown = false;
+    if (dx > dy) {
+      e.preventDefault(); // 👉 모바일 세로 스크롤 방지
+    }
+  }, { passive: false });
+
   slidesEl.addEventListener('mousedown', e => {
     isDown = true;
     startX = e.clientX;
@@ -613,7 +615,12 @@ function enableSlider(slidesEl) {
 
   slidesEl.addEventListener('mousemove', e => {
     if (!isDown) return;
+    e.preventDefault();       // 👉 PC 드래그 정상작동
     currentX = e.clientX;
+  });
+
+  slidesEl.addEventListener('mouseleave', () => {
+    isDown = false;           // 👉 영역 벗어나면 드래그 종료
   });
 
   slidesEl.addEventListener('mouseup', () => {
@@ -630,6 +637,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
