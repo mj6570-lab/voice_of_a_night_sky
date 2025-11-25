@@ -631,21 +631,33 @@ function enableSlider(slidesEl) {
   });
 
   slidesEl.addEventListener('touchmove', e => {
-    currentX = e.touches[0].clientX;
+  currentX = e.touches[0].clientX;
+  const dx = Math.abs(currentX - startX);
+  const dy = Math.abs(e.touches[0].clientY - startY);
 
-    const dx = Math.abs(currentX - startX);
-    const dy = Math.abs(e.touches[0].clientY - startY);
+  // 너무 작은 이동은 무시 — 탭으로 처리
+  if (dx < 10 && dy < 10) return;
 
-    if (dx > dy) {
-      e.preventDefault(); // 세로 스크롤 방해 최소화
-    }
-  }, { passive: false });
+  // 좌우 스와이프가 명확한 경우만 세로 스크롤 방지
+  if (dx > dy) {
+    e.preventDefault();
+  }
+}, { passive: false });
 
   slidesEl.addEventListener('touchend', () => {
-    if (startX - currentX > 50) setIndex(index + 1);
-    if (startX - currentX < -50) setIndex(index - 1);
-  });
+  const dx = currentX - startX;
+  const threshold = 40; // 스와이프 최소 거리 (크면 더 확실한 제스처만 허용)
 
+  // 오른쪽 → 왼쪽 스와이프
+  if (dx < -threshold) {
+    setIndex(index + 1);
+  }
+  // 왼쪽 → 오른쪽 스와이프
+  else if (dx > threshold) {
+    setIndex(index - 1);
+  }
+  // threshold 미만이면 "탭"으로 판단 → 아무 동작 X
+});
   /* === PC 화살표 기능 === */
   const leftBtn = slidesEl.parentElement.querySelector('.slider-arrow.left');
   const rightBtn = slidesEl.parentElement.querySelector('.slider-arrow.right');
@@ -660,6 +672,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
