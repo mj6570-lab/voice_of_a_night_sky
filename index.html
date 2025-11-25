@@ -343,6 +343,12 @@ img {
 
 .slider-arrow.left { left: 6px; }
 .slider-arrow.right { right: 6px; }
+/* 모바일에서는 화살표 숨기기 */
+@media (max-width: 768px) {
+  .slider-arrow {
+    display: none !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -618,6 +624,7 @@ function enableSlider(slidesEl) {
     slidesEl.style.transform = `translateX(${-index * 100}%)`;
   }
 
+  /* === 모바일 스와이프 기능 === */
   slidesEl.addEventListener('touchstart', e => {
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
@@ -625,43 +632,27 @@ function enableSlider(slidesEl) {
 
   slidesEl.addEventListener('touchmove', e => {
     currentX = e.touches[0].clientX;
+
     const dx = Math.abs(currentX - startX);
     const dy = Math.abs(e.touches[0].clientY - startY);
 
     if (dx > dy) {
-      e.preventDefault();
+      e.preventDefault(); // 세로 스크롤 방해 최소화
     }
   }, { passive: false });
 
-  slidesEl.addEventListener('mousedown', e => {
-    isDown = true;
-    startX = e.clientX;
-  });
-
-  slidesEl.addEventListener('mousemove', e => {
-    if (!isDown) return;
-    e.preventDefault();
-    currentX = e.clientX;
-  });
-
-  slidesEl.addEventListener('mouseleave', () => {
-    isDown = false;
-  });
-
-  slidesEl.addEventListener('mouseup', () => {
-    if (!isDown) return;
-    isDown = false;
+  slidesEl.addEventListener('touchend', () => {
     if (startX - currentX > 50) setIndex(index + 1);
     if (startX - currentX < -50) setIndex(index - 1);
   });
 
-  /* 🔥 화살표 버튼 기능 */
+  /* === PC 화살표 기능 === */
   const leftBtn = slidesEl.parentElement.querySelector('.slider-arrow.left');
   const rightBtn = slidesEl.parentElement.querySelector('.slider-arrow.right');
 
-  leftBtn.addEventListener('click', () => setIndex(index - 1));
-  rightBtn.addEventListener('click', () => setIndex(index + 1));
-}   // ← ★★★★★ 여기서 enableSlider 함수가 끝난다! ★★★★★
+  if (leftBtn) leftBtn.addEventListener('click', () => setIndex(index - 1));
+  if (rightBtn) rightBtn.addEventListener('click', () => setIndex(index + 1));
+}
 /* 초기 렌더 & show default section (About) */
 document.addEventListener('DOMContentLoaded', function(){
   showSection('about', document.querySelector('.hero-nav .btn'));
@@ -669,6 +660,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
