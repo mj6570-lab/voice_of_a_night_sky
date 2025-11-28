@@ -447,70 +447,75 @@ img {
 </header>
 
 <main class="app" role="main" style="display:none;">
-  <section id="about" class="panel">
-    <h2 id="aboutTitle" class="section-title">Self introduction</h2>
-    <p class="lead"></p>
-    <div style="display:flex;gap:18px;align-items:center;margin-top:18px;flex-wrap:wrap">
-      <img src="img/pf.jpg" alt="artist" style="width:160px;height:160px;object-fit:cover;border-radius:12px;border:1px solid rgba(16,24,40,0.04)">
-      <div style="flex:1;min-width:200px">
-        <p style="margin:0 0 8px 0">음원 제작자 · 뮤지션</p>
-        <p style="margin:0 0 8px 0">출생년도: 1996. 03. 13 (쥐띠)</p>        
-        <p style="margin:0 0 8px 0">본명: 김민준</p>
-        <p style="margin:0 0 8px 0">활동명: 밤하늘의 소리</p>
-        <p style="margin:0 0 8px 0">장르: 인디 / 락 / Soul</p>
-        <p class="muted" style="margin:0"></p>
-        </div> <!-- ← 프로필 오른쪽 정보 영역 닫기 -->
-</div> <!-- ← 프로필 + 정보 묶어주는 div 닫기 -->
-</section> <!-- ← ★ 여기 About 섹션 닫기 추가!! ★ -->
-  
-<!-- ===== ABOUT STORY TEMPLATE (이제 완전히 밖에 위치) ===== -->
-<section class="panel about-story">
-  <h2 class="section-title">History</h2>
+<section id="about" class="panel">
+  <h2 id="aboutTitle" class="section-title">Self introduction</h2>
   <p class="lead"></p>
 
-  <!-- === BLOCK 1 : TEXT LEFT / IMAGE RIGHT === -->
-  <div class="story-block right-img">
-    <div class="story-text">
-      <h3>2018년, 어느 반지하 단칸방</h3>
-      <p>군 전역후 충청북도 청주에서 서울로 올라와 250/30의 반지하 단칸방에서 창작활동을 시작했다.</p>
-      <p>전문적인 교육과정을 받지 못하고 독학으로 배웠기 때문에 더 오래, 더 많이 창작활동에 매진했다.</p>
-      <p>하루에 10곡씩 히트곡을 분석하는 연습을 시작으로 작사·곡보다는 카피, 편곡에 힘을 쏟았다.</p>
-    </div>
-    <div class="story-img">
-      <img src="img/logic.png" alt="">
-    </div>
-  </div>
-
-  <!-- === BLOCK 2 : IMAGE LEFT / TEXT RIGHT === -->
-  <div class="story-block left-img">
-    <div class="story-img">
-      <img src="img/story2.jpg" alt="">
-    </div>
-    <div class="story-text">
-      <h3>스토리 타이틀 2</h3>
-      <p>여기에 스토리 텍스트를 적어주세요.</p>
+  <!-- 프로필 영역 -->
+  <div style="display:flex;gap:18px;align-items:center;margin-top:18px;flex-wrap:wrap">
+    <img src="img/pf.jpg" alt="artist"
+         style="width:160px;height:160px;object-fit:cover;border-radius:12px;border:1px solid rgba(16,24,40,0.04)">
+    <div style="flex:1;min-width:200px">
+      <p style="margin:0 0 8px 0">음원 제작자 · 뮤지션</p>
+      <p style="margin:0 0 8px 0">출생년도: 1996. 03. 13 (쥐띠)</p>
+      <p style="margin:0 0 8px 0">본명: 김민준</p>
+      <p style="margin:0 0 8px 0">활동명: 밤하늘의 소리</p>
+      <p style="margin:0 0 8px 0">장르: 인디 / 락 / Soul</p>
     </div>
   </div>
 
-  <!-- === BLOCK 3 : TEXT LEFT / IMAGE RIGHT === -->
-  <div class="story-block right-img">
-    <div class="story-text">
-      <h3>스토리 타이틀 3</h3>
-      <p>여기에 스토리 텍스트를 적어주세요.</p>
-    </div>
-    <div class="story-img">
-      <img src="img/story3.jpg" alt="">
-    </div>
-  </div>
 
-  <!-- === BLOCK 4 : IMAGE LEFT / TEXT RIGHT === -->
-  <div class="story-block left-img">
-    <div class="story-img">
-      <img src="img/story4.jpg" alt="">
+  <!-- ============================= -->
+  <!-- =====  여기부터 Story ====== -->
+  <!-- ============================= -->
+
+  <div class="about-story">
+    <h2 class="section-title" style="margin-top:32px;">History</h2>
+
+    <!-- === BLOCK 1 : TEXT LEFT / IMAGE RIGHT === -->
+    <div class="story-block right-img">
+      <div class="story-text">
+        <h3>2018년, 어느 반지하 단칸방</h3>
+        <p>군 전역후 충청북도 청주에서 서울로 올라와 250/30의 반지하 단칸방에서 창작활동을 시작했다.</p>
+        <p>전문적인 교육과정을 받지 못하고 독학으로 배웠기 때문에 더 오래, 더 많이 창작활동에 매진했다.</p>
+        <p>하루에 10곡씩 히트곡을 분석하는 연습을 시작으로 작사·곡보다는 카피, 편곡에 힘을 쏟았다.</p>
+      </div>
+      <div class="story-img">
+        <img src="img/logic.png" alt="">
+      </div>
     </div>
-    <div class="story-text">
-      <h3>스토리 타이틀 4</h3>
-      <p>여기에 스토리 텍스트를 적어주세요.</p>
+
+    <!-- === BLOCK 2 : IMAGE LEFT / TEXT RIGHT === -->
+    <div class="story-block left-img">
+      <div class="story-img">
+        <img src="img/story2.jpg" alt="">
+      </div>
+      <div class="story-text">
+        <h3>스토리 타이틀 2</h3>
+        <p>여기에 스토리 텍스트를 적어주세요.</p>
+      </div>
+    </div>
+
+    <!-- === BLOCK 3 : TEXT LEFT / IMAGE RIGHT === -->
+    <div class="story-block right-img">
+      <div class="story-text">
+        <h3>스토리 타이틀 3</h3>
+        <p>여기에 스토리 텍스트를 적어주세요.</p>
+      </div>
+      <div class="story-img">
+        <img src="img/story3.jpg" alt="">
+      </div>
+    </div>
+
+    <!-- === BLOCK 4 : IMAGE LEFT / TEXT RIGHT === -->
+    <div class="story-block left-img">
+      <div class="story-img">
+        <img src="img/story4.jpg" alt="">
+      </div>
+      <div class="story-text">
+        <h3>스토리 타이틀 4</h3>
+        <p>여기에 스토리 텍스트를 적어주세요.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -795,6 +800,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
