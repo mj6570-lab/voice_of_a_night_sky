@@ -428,10 +428,12 @@ img {
 }
 /* === ABOUT 프로필 이미지 전용 === */
 #about img.profile {
-  width: auto;
-  height: 160px;
+  width: auto;        /* 원본 비율 유지 */
+  height: auto;       /* 세로 고정 제거 */
+  max-width: 200px;   /* 너무 커지지 않게 최대너비만 제한 */
   object-fit: contain;
   display: block;
+  border-radius: 12px;
 }
   
 </style>
@@ -814,6 +816,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
