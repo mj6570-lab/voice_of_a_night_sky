@@ -370,17 +370,15 @@ img {
   gap: 24px;
   margin-bottom: 40px;
 }
-
-/* 이미지 */
 .story-img img {
-  width: 320px;
-  height: 320px;
+  width: 100%;
+  max-width: 320px;  /* 최대 크기만 제한 */
+  height: auto;      /* 정사각형 강제 X → 원본비율 */
   object-fit: cover;
   border-radius: 12px;
   border: 1px solid rgba(16,24,40,0.08);
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
-
 /* 텍스트 */
 .story-text {
   flex: 1;
@@ -816,6 +814,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
