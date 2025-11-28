@@ -427,6 +427,14 @@ img {
     max-width: 100%;
   }
 }
+/* === ABOUT 프로필 이미지 전용 === */
+#about img.profile {
+  width: auto;
+  height: 160px;
+  object-fit: contain;
+  display: block;
+}
+  
 </style>
 </head>
 <body>
@@ -453,8 +461,8 @@ img {
 
   <!-- 프로필 영역 -->
   <div style="display:flex;gap:18px;align-items:center;margin-top:18px;flex-wrap:wrap">
-    <img src="img/pf.jpg" alt="artist"
-         style="width:160px;height:160px;object-fit:cover;border-radius:12px;border:1px solid rgba(16,24,40,0.04)">
+      <img src="img/pf.jpg" alt="artist" class="profile"
+      style="border-radius:12px;border:1px solid rgba(16,24,40,0.04)">
     <div style="flex:1;min-width:200px">
       <p style="margin:0 0 8px 0">음원 제작자 · 뮤지션</p>
       <p style="margin:0 0 8px 0">출생년도: 1996. 03. 13 (쥐띠)</p>
@@ -800,6 +808,7 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
 
 
