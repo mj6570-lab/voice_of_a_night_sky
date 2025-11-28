@@ -357,7 +357,76 @@ img {
   opacity: 0 !important;
   pointer-events: none !important;
 }
+/* ===== ABOUT STORY BLOCK ===== */
 
+.about-story {
+  margin-top: 32px;
+}
+
+/* 기본 레이아웃 */
+.story-block {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+/* 이미지 */
+.story-img img {
+  width: 320px;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(16,24,40,0.08);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* 텍스트 */
+.story-text {
+  flex: 1;
+  max-width: 520px;
+}
+
+.story-text h3 {
+  margin: 0 0 6px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.story-text p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* 방향 설정 */
+.story-block.right-img {
+  flex-direction: row;
+}
+
+.story-block.left-img {
+  flex-direction: row-reverse;
+}
+
+/* 반응형 */
+@media (max-width: 860px) {
+  .story-block {
+    flex-direction: column !important;
+    text-align: left;
+    gap: 16px;
+  }
+
+  .story-img img {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+  }
+
+  .story-text {
+    max-width: 100%;
+  }
+}
 </style>
 </head>
 <body>
@@ -388,9 +457,55 @@ img {
         <p style="margin:0 0 8px 0">활동명: 밤하늘의 소리</p>
         <p style="margin:0 0 8px 0">장르: 인디 / 락 / Soul</p>
         <p class="muted" style="margin:0"></p>
-      </div>
+        <!-- ABOUT STORY TEMPLATE -->
+<section class="panel about-story">
+  <h2 class="section-title">Story</h2>
+  <p class="lead">아래 콘텐츠는 템플릿이며, 이미지와 텍스트는 자유롭게 수정하시면 됩니다.</p>
+
+  <!-- === BLOCK 1 : TEXT LEFT / IMAGE RIGHT === -->
+  <div class="story-block right-img">
+    <div class="story-text">
+      <h3>스토리 타이틀 1</h3>
+      <p>여기에 스토리 텍스트를 적어주세요.</p>
     </div>
-  </section>
+    <div class="story-img">
+      <img src="img/story1.jpg" alt="">
+    </div>
+  </div>
+
+  <!-- === BLOCK 2 : IMAGE LEFT / TEXT RIGHT === -->
+  <div class="story-block left-img">
+    <div class="story-img">
+      <img src="img/story2.jpg" alt="">
+    </div>
+    <div class="story-text">
+      <h3>스토리 타이틀 2</h3>
+      <p>여기에 스토리 텍스트를 적어주세요.</p>
+    </div>
+  </div>
+
+  <!-- === BLOCK 3 : TEXT LEFT / IMAGE RIGHT === -->
+  <div class="story-block right-img">
+    <div class="story-text">
+      <h3>스토리 타이틀 3</h3>
+      <p>여기에 스토리 텍스트를 적어주세요.</p>
+    </div>
+    <div class="story-img">
+      <img src="img/story3.jpg" alt="">
+    </div>
+  </div>
+
+  <!-- === BLOCK 4 : IMAGE LEFT / TEXT RIGHT === -->
+  <div class="story-block left-img">
+    <div class="story-img">
+      <img src="img/story4.jpg" alt="">
+    </div>
+    <div class="story-text">
+      <h3>스토리 타이틀 4</h3>
+      <p>여기에 스토리 텍스트를 적어주세요.</p>
+    </div>
+  </div>
+</section>
 
   <section id="discography" class="panel">
     <h2 id="discTitle" class="section-title">Discography</h2>
@@ -682,4 +797,5 @@ document.addEventListener('DOMContentLoaded', function(){
 </script>
 </body>
 </html>
+
 
