@@ -742,24 +742,24 @@ img {
     height:300px;
   }
 }
-/* Gallery – 설명문 아래 공백 완전 제거 */
+/* ⬇ Gallery Entrance(문) 보이도록 복구 */
 #galleryEntrance {
-  display: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  height: 0 !important;
-  min-height: 0 !important;
+  display: block !important;
+  padding-top: 12px !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 6px !important;
+  height: auto !important;
+  min-height: auto !important;
 }
 
-/* Gallery 패널 내부 상단 여백 줄이기 */
-#gallery.panel {
-  padding-top: 20px !important; /* 기본 28px → 20px */
-  padding-bottom: 20px !important;
+/* ⬇ '밤하늘의 소리의 개인전입니다.' 아래 간격 줄이기 */
+#gallery .lead {
+  margin-bottom: 8px !important;
 }
 
-/* Gallery Floor 를 위로 당김 */
+/* ⬇ Entrance 아래 Floor 붙이기 */
 #galleryFloor {
-  margin-top: -25px !important;
+  margin-top: 0 !important;
   padding-top: 0 !important;
 }
 </style>
@@ -1345,6 +1345,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
