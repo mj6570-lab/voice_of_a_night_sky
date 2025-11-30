@@ -959,42 +959,58 @@ const galleryItem = [
 
 /* 층 / 방 구조
    → 여기서 floor, room을 추가/수정하면 UI가 알아서 생성됨 */
+/* 층 / 방 구조 (정상 버전) */
 const galleryFloors = [
   {
     id: 1,
-    name: '1층 로비',
-    caption: '자유롭게 표현하고 싶은 것들을 표현한 그림입니다.',
+    name: "1층 로비",
+    caption: "자유롭게 표현하고 싶은 것들을 표현한 그림입니다.",
     rooms: [
       {
-        id:'1-left',
-        side:'left',
-        title:'1층 1번방',
-        subtitle:'',
-        galleryItemIds:[1,2,3]
-      },
+        id: "1-left",
+        side: "left",
+        title: "1층 1번방",
+        subtitle: "",
+        galleryItemIds: [1, 2, 3]
+      }
+    ]
+  },
+
   {
     id: 2,
-    name: '2층 로비',
-    caption: '#',
+    name: "2층 로비",
+    caption: "#",
     rooms: [
       {
-        id:'2-left',
-        side:'left',
-        title:'2층 1번방',
-        subtitle:'코드에서 galleryFloors[1].rooms[0]을 수정해 전시를 채울 수 있습니다.',
-        galleryItemIds:[]
+        id: "2-left",
+        side: "left",
+        title: "2층 1번방",
+        subtitle: "코드에서 galleryFloors[1].rooms[0]을 수정해 전시를 채울 수 있습니다.",
+        galleryItemIds: []
       },
-  {
-    id: 3,
-    name: '3층 로비',
-    caption: '#',
-    rooms: [
-      // 필요하면 여기 rooms 배열에 방을 추가
-      // { id:'3-left', side:'left', title:'3층 왼쪽 방', subtitle:'...', galleryItemIds:[] }
+      {
+        id: "2-right",
+        side: "right",
+        title: "2층 2번방",
+        subtitle: "아직 전시가 준비되지 않았습니다.",
+        galleryItemIds: []
+      }
     ]
   }
 ];
-// 앞으로 4층, 5층을 만들고 싶으면 위 배열에 객체를 추가하면 됨.
+
+/* 4층 이상을 만들고 싶으면 아래처럼 추가
+galleryFloors.push({
+  id: 4,
+  name: "4층 로비",
+  caption: "#",
+  rooms: [
+    { id:"4-left", side:"left", title:"4층 왼쪽 방", subtitle:"", galleryItemIds:[] },
+    { id:"4-right", side:"right", title:"4층 오른쪽 방", subtitle:"", galleryItemIds:[] }
+  ]
+});
+*/
+
 
 /* DOM refs */
 const discGrid = document.getElementById('discGrid');
@@ -1337,6 +1353,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
