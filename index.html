@@ -23,6 +23,7 @@ body{
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
 }
+
 /* ---------- HERO ---------- */
 .hero{
   height:100vh;
@@ -441,10 +442,7 @@ img {
   top:0;
   width:50%;
   height:100%;
-  background:#f6f1e8;
-  background-image:
-    url("img/door-texture-crack.png"),
-    linear-gradient(180deg, rgba(0,0,0,0.04), transparent 40%, rgba(0,0,0,0.08));
+  background-color:#f6f1e8;
   background-size:cover, 100% 100%;
   background-position:center;
   box-shadow: inset 0 0 30px rgba(0,0,0,0.18);
@@ -454,11 +452,19 @@ img {
   left:0;
   border-right:1px solid rgba(0,0,0,0.08);
   transform-origin:left center;
+  /* 문 이미지 C - 왼쪽 */
+  background-image:
+    url("img/door-C-left.png"),
+    linear-gradient(180deg, rgba(0,0,0,0.04), transparent 40%, rgba(0,0,0,0.08));
 }
 .door-panel.right{
   right:0;
   border-left:1px solid rgba(0,0,0,0.08);
   transform-origin:right center;
+  /* 문 이미지 C - 오른쪽 */
+  background-image:
+    url("img/door-C-right.png"),
+    linear-gradient(180deg, rgba(0,0,0,0.04), transparent 40%, rgba(0,0,0,0.08));
 }
 .door-handle{
   position:absolute;
@@ -554,7 +560,8 @@ img {
   content:"";
   position:absolute;
   inset:0;
-  background-image:url("img/wall-texture-crack.png");
+  /* 벽 질감 텍스처 3번 */
+  background-image:url("img/wall-texture-3.png");
   background-size:300px;
   background-repeat:repeat;
   mix-blend-mode:multiply;
@@ -663,7 +670,8 @@ img {
   content:"";
   position:absolute;
   inset:-40%;
-  background-image:url("img/wall-texture-crack.png");
+  /* 벽 질감 텍스처 3번 */
+  background-image:url("img/wall-texture-3.png");
   background-size:260px;
   background-repeat:repeat;
   mix-blend-mode:multiply;
@@ -957,25 +965,22 @@ const galleryItem = [
   }
 ];
 
-/* 층 / 방 구조
-   → 여기서 floor, room을 추가/수정하면 UI가 알아서 생성됨 */
 /* 층 / 방 구조 (정상 버전) */
 const galleryFloors = [
   {
     id: 1,
     name: "1층 로비",
-    caption: "",
+    caption: "자유롭게 표현하고 싶은 것들을 표현한 그림입니다.",
     rooms: [
       {
         id: "1-left",
         side: "left",
-        title: "1층 1번방'자유로운 그림입니다.'",
-        subtitle: "",
-        galleryItemIds: [1, 2, 3]
+        title: "1층 1번방",
+        subtitle: "덧니 / 조망 효과 / 두 세계",
+        galleryItemIds: [1, 2, 3]  // ← 그림 3개 모두 1층 왼쪽 방
       }
     ]
   },
-
   {
     id: 2,
     name: "2층 로비",
@@ -996,21 +1001,22 @@ const galleryFloors = [
         galleryItemIds: []
       }
     ]
+  },
+  {
+    id: 3,
+    name: "3층 로비",
+    caption: "#",
+    rooms: [
+      {
+        id: "3-left",
+        side: "left",
+        title: "3층 1번방",
+        subtitle: "필요하면 galleryFloors[2].rooms[0].galleryItemIds를 채워주세요.",
+        galleryItemIds: []
+      }
+    ]
   }
 ];
-
-/* 4층 이상을 만들고 싶으면 아래처럼 추가
-galleryFloors.push({
-  id: 4,
-  name: "4층 로비",
-  caption: "#",
-  rooms: [
-    { id:"4-left", side:"left", title:"4층 왼쪽 방", subtitle:"", galleryItemIds:[] },
-    { id:"4-right", side:"right", title:"4층 오른쪽 방", subtitle:"", galleryItemIds:[] }
-  ]
-});
-*/
-
 
 /* DOM refs */
 const discGrid = document.getElementById('discGrid');
@@ -1149,13 +1155,7 @@ contentItems.forEach(item => {
   contentGrid.appendChild(card);
 });
 
-/* 이미지 저장 방지 */
-document.addEventListener('touchstart', function(e) {
-  if(e.target.tagName === 'IMG' && !e.target.closest('#contentGrid')) {
-    e.preventDefault();
-  }
-}, { passive: false });
-
+/* 이미지 저장 방지 (우클릭만 막음: 터치 스크롤은 그대로 가능) */
 document.addEventListener('contextmenu', function(e) {
   if(e.target.tagName === 'IMG'){
     e.preventDefault();
@@ -1191,9 +1191,16 @@ function enableSlider(slidesEl) {
     updateArrows();
   }
 
-  if (leftBtn) leftBtn.addEventListener("click", () => setIndex(index - 1));
-  if (rightBtn) rightBtn.addEventListener("click", () => setIndex(index + 1));
+  if (leftBtn) leftBtn.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    setIndex(index - 1);
+  });
+  if (rightBtn) rightBtn.addEventListener("click", (ev) => {
+    ev.stopPropagation();
+    setIndex(index + 1);
+  });
 
+  // 모바일에서 슬라이더 터치 시 스크롤 방해하지 않도록, 단순 클릭만 처리
   slidesEl.parentElement.addEventListener("click", () => {
     const slider = slidesEl.parentElement.parentElement;
     if (window.innerWidth <= 768) {
@@ -1353,44 +1360,3 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
