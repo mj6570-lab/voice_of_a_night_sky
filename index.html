@@ -867,16 +867,6 @@ img {
       <div class="gallery-floor-body">
         <div class="gallery-door-column" id="galleryDoorLeft"></div>
         <div class="gallery-door-column" id="galleryDoorRight"></div>
-        <div class="gallery-floor-actions">
-          <div class="stairs-card">
-            <p class="stairs-title">STAIRS</p>
-            <p class="stairs-desc" id="galleryStairsDesc">위층으로 천천히 올라가 다음 전시 공간을 둘러봅니다.</p>
-            <button class="stairs-btn" id="galleryStairsBtn">
-              <span>↗</span> 다음 층으로 올라가기
-            </button>
-          </div>
-          <p class="stairs-note" id="galleryFloorNote">각 층과 방은 코드에서 자유롭게 추가/수정할 수 있습니다.</p>
-        </div>
       </div>
     </div>
 
@@ -969,50 +959,15 @@ const galleryItem = [
 const galleryFloors = [
   {
     id: 1,
-    name: "1층 로비",
+    name: "로비",
     caption: "",
     rooms: [
       {
         id: "1-left",
         side: "left",
-        title: "1층 '자유로운 방'",
+        title: "자유로운 방",
         subtitle: "",
         galleryItemIds: [1, 2, 3]  // ← 그림 3개 모두 1층 왼쪽 방
-      }
-    ]
-  },
-  {
-    id: 2,
-    name: "2층 로비",
-    caption: "#",
-    rooms: [
-      {
-        id: "2-left",
-        side: "left",
-        title: "2층 1번방",
-        subtitle: "코드에서 galleryFloors[1].rooms[0]을 수정해 전시를 채울 수 있습니다.",
-        galleryItemIds: []
-      },
-      {
-        id: "2-right",
-        side: "right",
-        title: "2층 2번방",
-        subtitle: "아직 전시가 준비되지 않았습니다.",
-        galleryItemIds: []
-      }
-    ]
-  },
-  {
-    id: 3,
-    name: "3층 로비",
-    caption: "#",
-    rooms: [
-      {
-        id: "3-left",
-        side: "left",
-        title: "3층 1번방",
-        subtitle: "필요하면 galleryFloors[2].rooms[0].galleryItemIds를 채워주세요.",
-        galleryItemIds: []
       }
     ]
   }
@@ -1360,4 +1315,5 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
