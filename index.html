@@ -829,12 +829,12 @@ img {
   <!-- GALLERY: 전시장 구조 -->
   <section id="gallery" class="panel">
     <h2 id="galleryTitle" class="section-title">Gallery</h2>
-    <p class="lead">'밤하늘의 소리'의 개인전입니다. 문을 열고 천천히 전시장을 걸어보세요.</p>
+    <p class="lead">'밤하늘의 소리'의 개인전입니다.</p>
 
     <!-- Entrance -->
     <div id="galleryEntrance" class="gallery-state">
       <div class="gallery-entrance-inner">
-        <p class="gallery-entrance-caption">VOICE OF A NIGHT SKY · EXHIBITION</p>
+        <p class="gallery-entrance-caption">EXHIBITION</p>
         <div class="gallery-door-wrapper" id="galleryDoorTrigger">
           <div class="door-panel left">
             <div class="door-handle left"></div>
@@ -844,7 +844,7 @@ img {
           </div>
           <div class="door-light"></div>
         </div>
-        <p class="gallery-entrance-sub">한국 갤러리의 흰 양문을 조심스레 밀고, 작은 방으로 들어가는 느낌.</p>
+        <p class="gallery-entrance-sub"></p>
       </div>
     </div>
 
@@ -963,49 +963,31 @@ const galleryFloors = [
   {
     id: 1,
     name: '1층 로비',
-    caption: '첫 번째 전시 공간입니다. 왼쪽 방에서 현재 작업 중인 시리즈를 관람할 수 있습니다.',
+    caption: '자유롭게 표현하고 싶은 것들을 표현한 그림입니다.',
     rooms: [
       {
         id:'1-left',
         side:'left',
-        title:'1층 왼쪽 방 · 현재 작업 시리즈',
-        subtitle:'덧니 · 조망 효과 · 두 세계',
+        title:'1층 1번방',
+        subtitle:'',
         galleryItemIds:[1,2,3]
       },
-      {
-        id:'1-right',
-        side:'right',
-        title:'1층 오른쪽 방',
-        subtitle:'추가 전시 준비 중입니다.',
-        galleryItemIds:[]
-      }
-    ]
-  },
   {
     id: 2,
     name: '2층 로비',
-    caption: '조금 더 올라온 시선에서 다른 이야기를 만날 수 있는 층입니다.',
+    caption: '#',
     rooms: [
       {
         id:'2-left',
         side:'left',
-        title:'2층 왼쪽 방',
+        title:'2층 1번방',
         subtitle:'코드에서 galleryFloors[1].rooms[0]을 수정해 전시를 채울 수 있습니다.',
         galleryItemIds:[]
       },
-      {
-        id:'2-right',
-        side:'right',
-        title:'2층 오른쪽 방',
-        subtitle:'원하는 카테고리의 작품을 자유롭게 구성해보세요.',
-        galleryItemIds:[]
-      }
-    ]
-  },
   {
     id: 3,
     name: '3층 로비',
-    caption: '가장 높은 층, 아직은 비어 있지만 새로운 전시를 기다리고 있습니다.',
+    caption: '#',
     rooms: [
       // 필요하면 여기 rooms 배열에 방을 추가
       // { id:'3-left', side:'left', title:'3층 왼쪽 방', subtitle:'...', galleryItemIds:[] }
@@ -1355,6 +1337,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
