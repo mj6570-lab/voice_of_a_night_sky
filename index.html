@@ -742,22 +742,17 @@ img {
     height:300px;
   }
 }
-/* ⬇ Gallery Entrance(문) 보이도록 복구 */
+/* Gallery Entrance 완전 제거 */
 #galleryEntrance {
-  display: block !important;
-  padding-top: 12px !important;
-  padding-bottom: 0 !important;
-  margin-bottom: 6px !important;
-  height: auto !important;
-  min-height: auto !important;
+  display: none !important;
 }
 
-/* ⬇ '밤하늘의 소리의 개인전입니다.' 아래 간격 줄이기 */
+/* Gallery 설명문 아래 간격 최소화 */
 #gallery .lead {
-  margin-bottom: 8px !important;
+  margin-bottom: 6px !important;
 }
 
-/* ⬇ Entrance 아래 Floor 붙이기 */
+/* Floor를 위로 붙이기 */
 #galleryFloor {
   margin-top: 0 !important;
   padding-top: 0 !important;
@@ -1345,6 +1340,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
