@@ -742,20 +742,20 @@ img {
     height:300px;
   }
 }
-/* Gallery Entrance 완전 제거 */
-#galleryEntrance {
-  display: none !important;
-}
-
-/* Gallery 설명문 아래 간격 최소화 */
+/* Gallery 설명문 아래 간격 줄이기 */
 #gallery .lead {
   margin-bottom: 6px !important;
 }
 
-/* Floor를 위로 붙이기 */
+/* Entrance 아래 공백 줄이기 */
+#galleryEntrance {
+  padding-top: 14px !important;
+  padding-bottom: 8px !important;
+}
+
+/* Floor와 Entrance 사이 간격 줄이기 */
 #galleryFloor {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
+  margin-top: -6px !important;
 }
 </style>
 </head>
@@ -1340,6 +1340,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
