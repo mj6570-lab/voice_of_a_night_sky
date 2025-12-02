@@ -989,6 +989,7 @@ const galleryItem = [
 ];
 
 const galleryFloors = [
+  const galleryFloors = [
   {
     id: 1,
     rooms: [
@@ -997,6 +998,7 @@ const galleryFloors = [
         side: "left",
         title: "자유로운 방",
         subtitle: "",
+        doorImage: "img/doorrroom.jpg",   // ← 문 이미지
         galleryItemIds: [1, 2, 3]
       },
       {
@@ -1004,11 +1006,27 @@ const galleryFloors = [
         side: "right",
         title: "사연 있는 방",
         subtitle: "",
-        galleryItemIds: [4,]
+        doorImage: "img/tworoom.jpg",   // ← 문 이미지
+        galleryItemIds: [4]
+      }
+    ]
+  },
+
+  {
+    id: 2,
+    rooms: [
+      {
+        id: "2-left",
+        side: "left",
+        title: "관찰의 방",
+        subtitle: "",
+        doorImage: "img/doors/room_C.jpg",  // 새 이미지
+        galleryItemIds: []
       }
     ]
   }
 ];
+
 /* DOM refs */
 const discGrid = document.getElementById('discGrid');
 
@@ -1269,13 +1287,16 @@ function showFloor(idx){
   galleryDoorRightEl.innerHTML = '';
 
   if(leftRoom){
-    const door = document.createElement('div');
-    door.className = 'gallery-door';
-    door.innerHTML = `
-      <div class="gallery-door-core"></div>
-      <h3 class="gallery-door-label-title">${leftRoom.title}</h3>
-      <p class="gallery-door-label-sub">${leftRoom.subtitle || ''}</p>
-    `;
+const door = document.createElement('div');
+door.className = 'gallery-door';
+
+door.innerHTML = `
+  <div class="gallery-door-core" 
+       style="background-image:url('${room.doorImage || "img/doors/default.jpg"}');">
+  </div>
+  <h3 class="gallery-door-label-title">${room.title}</h3>
+  <p class="gallery-door-label-sub">${room.subtitle || ''}</p>
+`;
     door.addEventListener('click', ()=> openRoom(idx, leftRoom));
     galleryDoorLeftEl.appendChild(door);
   }
@@ -1351,6 +1372,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
