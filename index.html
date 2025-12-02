@@ -979,10 +979,15 @@ const galleryItem = [
     title: '두 세계',
     year: 2025,
     images: ['img/artm03/001.png','img/artm03/002.png','img/artm03/003.png','img/artm03/004.png','img/artm03/005.png','img/artm03/006.png','img/artm03/007.png']
-  }
+  },
+  {
+    id: 4,
+    title: '머무름',
+    year: 2025,
+    images: ['img/artm04/001.png','img/artm04/002.png','img/artm04/003.png','img/artm04/004.png','img/artm04/005.png','img/artm04/006.png','img/artm04/007.png']
+  },
 ];
 
-/* 층 / 방 구조 (정상 버전) */
 const galleryFloors = [
   {
     id: 1,
@@ -990,14 +995,20 @@ const galleryFloors = [
       {
         id: "1-left",
         side: "left",
-        title: "'자유로운 방'",
+        title: "'자유로운'방",
         subtitle: "",
-        galleryItemIds: [1, 2, 3]  // ← 그림 3개 모두 1층 왼쪽 방
+        galleryItemIds: [1, 2, 3]
+      },
+      {
+        id: "1-right",
+        side: "right",
+        title: "'사연있어요'방",
+        subtitle: "",
+        galleryItemIds: [4,]
       }
     ]
   }
 ];
-
 /* DOM refs */
 const discGrid = document.getElementById('discGrid');
 
@@ -1340,6 +1351,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
