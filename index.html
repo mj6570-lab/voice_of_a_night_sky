@@ -987,18 +987,18 @@ const galleryItem = [
     images: ['img/artm04/001.png','img/artm04/002.png','img/artm04/003.png','img/artm04/004.png','img/artm04/005.png','img/artm04/006.png','img/artm04/007.png']
   },
 ];
-
 const galleryFloors = [
-  const galleryFloors = [
   {
     id: 1,
+    name: "1층 로비",
+    caption: "",
     rooms: [
       {
         id: "1-left",
         side: "left",
         title: "자유로운 방",
         subtitle: "",
-        doorImage: "img/doorrroom.jpg",   // ← 문 이미지
+        doorImage: "img/doorrroom.jpg",
         galleryItemIds: [1, 2, 3]
       },
       {
@@ -1006,27 +1006,27 @@ const galleryFloors = [
         side: "right",
         title: "사연 있는 방",
         subtitle: "",
-        doorImage: "img/tworoom.jpg",   // ← 문 이미지
+        doorImage: "img/tworoom.jpg",
         galleryItemIds: [4]
       }
     ]
   },
-
   {
     id: 2,
+    name: "2층 로비",
+    caption: "",
     rooms: [
       {
         id: "2-left",
         side: "left",
         title: "관찰의 방",
         subtitle: "",
-        doorImage: "img/doors/room_C.jpg",  // 새 이미지
+        doorImage: "img/doors/room_C.jpg",
         galleryItemIds: []
       }
     ]
   }
 ];
-
 /* DOM refs */
 const discGrid = document.getElementById('discGrid');
 
@@ -1264,8 +1264,6 @@ function resetGalleryView(){
   // 문 상태 초기화
   galleryDoorTrigger.classList.remove('open');
 }
-
-/* 층 로비 그리기 */
 function showFloor(idx){
   const floor = galleryFloors[idx];
   if(!floor) return;
@@ -1279,7 +1277,6 @@ function showFloor(idx){
   galleryFloorTitleEl.textContent = floor.name;
   galleryFloorCaptionEl.textContent = floor.caption || '';
 
-  // left/right 방 찾기
   const leftRoom = floor.rooms.find(r => r.side === 'left');
   const rightRoom = floor.rooms.find(r => r.side === 'right');
 
@@ -1287,16 +1284,17 @@ function showFloor(idx){
   galleryDoorRightEl.innerHTML = '';
 
   if(leftRoom){
-const door = document.createElement('div');
-door.className = 'gallery-door';
+    const door = document.createElement('div');
+    door.className = 'gallery-door';
 
-door.innerHTML = `
-  <div class="gallery-door-core" 
-       style="background-image:url('${room.doorImage || "img/doors/default.jpg"}');">
-  </div>
-  <h3 class="gallery-door-label-title">${room.title}</h3>
-  <p class="gallery-door-label-sub">${room.subtitle || ''}</p>
-`;
+    door.innerHTML = `
+      <div class="gallery-door-core" 
+           style="background-image:url('${leftRoom.doorImage || "img/doors/default.jpg"}');">
+      </div>
+      <h3 class="gallery-door-label-title">${leftRoom.title}</h3>
+      <p class="gallery-door-label-sub">${leftRoom.subtitle || ''}</p>
+    `;
+
     door.addEventListener('click', ()=> openRoom(idx, leftRoom));
     galleryDoorLeftEl.appendChild(door);
   }
@@ -1304,27 +1302,19 @@ door.innerHTML = `
   if(rightRoom){
     const door = document.createElement('div');
     door.className = 'gallery-door';
+
     door.innerHTML = `
-      <div class="gallery-door-core"></div>
+      <div class="gallery-door-core" 
+           style="background-image:url('${rightRoom.doorImage || "img/doors/default.jpg"}');">
+      </div>
       <h3 class="gallery-door-label-title">${rightRoom.title}</h3>
       <p class="gallery-door-label-sub">${rightRoom.subtitle || ''}</p>
     `;
+
     door.addEventListener('click', ()=> openRoom(idx, rightRoom));
     galleryDoorRightEl.appendChild(door);
   }
-
-  // 계단 (다음 층이 있는지)
-  if(idx < galleryFloors.length - 1){
-    const nextFloor = galleryFloors[idx+1];
-    galleryStairsBtn.style.display = 'inline-flex';
-    galleryStairsDescEl.textContent = `${nextFloor.name}로 올라가 다음 전시 공간을 둘러봅니다.`;
-    galleryStairsBtn.onclick = () => showFloor(idx+1);
-  } else {
-    galleryStairsBtn.style.display = 'none';
-    galleryStairsDescEl.textContent = '마지막 층입니다. 아래 층의 방들을 다시 돌아볼 수 있습니다.';
-  }
 }
-
 /* 방 내부 보여주기 */
 function openRoom(floorIndex, room){
   currentFloorIndex = floorIndex;
@@ -1372,6 +1362,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
