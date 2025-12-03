@@ -48,7 +48,7 @@ body{
 /* ---------- HERO ---------- */
 .hero{
   height:100vh;
-  display:fx;
+  display:flex;
   align-items:center;
   justify-content:center;
   position:relative;
@@ -63,7 +63,7 @@ body{
   background-image: url('/mnt/data/IMG_3292.JPG');
   background-size:cover;
   background-position:center;
-  transform: sca(1.03);
+  transform: scale(1.03);
   filter: saturate(0.9) contrast(1) blur(0.4px);
 }
 .hero::after{
@@ -73,7 +73,7 @@ body{
 }
 .hero-inner{
   position:relative; z-index:3; text-align:center; width:100%; max-width:1100px; padding:36px;
-  display:fx;fx-direction:column;align-items:center;gap:16px;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
   transform: translateY(-10%);
 }
 /* replaced text tit with logo image */
@@ -92,7 +92,7 @@ body{
   text-shadow: 0 2px 10px rgba(0,0,0,0.35);
 }
 .hero-nav{
-  display:fx;gap:14px; margin-top:10px; flex-wrap:wrap; justify-content:center;
+  display:flex;gap:14px; margin-top:10px; flex-wrap:wrap; justify-content:center;
 }
 .btn{
   background: rgba(58, 57, 57, 0.15);
@@ -1534,6 +1534,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
