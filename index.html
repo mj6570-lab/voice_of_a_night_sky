@@ -961,6 +961,17 @@ img {
   height: auto;
   display: block;
 }
+/* ===============================
+   HERO 배경을 전체 아이보리로 통일
+=============================== */
+.hero::before,
+.hero::after {
+  display: none !important;   /* 배경이미지와 그라데이션 제거 */
+}
+
+.hero {
+  background: #f7f5ee !important;   /* hero도 아이보리 */
+}
 </style>
 </head>
 <body>
@@ -1606,6 +1617,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
