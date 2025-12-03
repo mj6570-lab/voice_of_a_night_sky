@@ -795,6 +795,9 @@ img {
   object-fit: cover;      /* 여백 없이 꽉 차게 */
   display: block;
 }
+.gallery-floor-header {
+  display: none !important;
+}
 </style>
 </head>
 <body>
@@ -1027,6 +1030,10 @@ const galleryItem = [
 ];
 const galleryFloors = [
   {
+    id: 1,
+    name: "1층 로비",
+    caption: "전시를 선택하세요.",
+    rooms: [
       {
         id: "1-left",
         side: "left",
@@ -1044,7 +1051,7 @@ const galleryFloors = [
         galleryItemIds: [4]
       }
     ]
-  },
+  }
 ];
 /* DOM refs */
 const discGrid = document.getElementById('discGrid');
@@ -1378,48 +1385,3 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
