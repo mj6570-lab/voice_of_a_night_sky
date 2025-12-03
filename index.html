@@ -838,6 +838,9 @@ img {
   text-align:center;
   font-size:16px;
   font-weight:600;
+  position: relative;
+  z-index: 20;
+  pointer-events: none;
 }
 
 .gallery-door-sub{
@@ -845,6 +848,9 @@ img {
   text-align:center;
   font-size:13px;
   color:var(--muted);
+  position: relative;
+  z-index: 20;
+  pointer-events: none;
 }
 /* ============================================
    방 전용 문(입구 문과 동일 디자인)
@@ -1536,6 +1542,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
