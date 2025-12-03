@@ -778,13 +778,13 @@ img {
 #galleryFloor {
   margin-top: -6px !important;
 }
-
-/* ===== 갤러리 로비 문 2:1 비율 고정 ===== */
 .gallery-door-core {
   width: 100%;
-  aspect-ratio: 2 / 1;       /* 문 이미지(1000x500)와 동일한 2:1 비율 유지 */
-  background-size: cover;    /* 이미지 꽉 채우기 */
+  aspect-ratio: 2 / 1;
+  background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
+  background-color: #f6f1e8;
   border-radius: 12px;
 }
 </style>
@@ -1377,6 +1377,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
