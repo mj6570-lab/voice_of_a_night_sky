@@ -1019,9 +1019,11 @@ img {
           <div class="door-panel left">
             <div class="door-handle left"></div>
           </div>
+              
           <div class="door-panel right">
             <div class="door-handle right"></div>
           </div>
+              
           <div class="door-light"></div>
         </div>
         <p class="gallery-entrance-sub"></p>
@@ -1415,40 +1417,50 @@ function showFloor(idx){
   galleryDoorLeftEl.innerHTML = '';
   galleryDoorRightEl.innerHTML = '';
 
-if(leftRoom){
+if (leftRoom) {
   const door = document.createElement('div');
   door.className = 'room-door-wrapper';
   door.innerHTML = `
-    <div class="door-panel left"></div>
-    <div class="door-panel right"></div>
-    <div class="door-handle left"></div>
-    <div class="door-handle right"></div>
+    <div class="door-panel left">
+      <div class="door-handle left"></div>
+    </div>
+
+    <div class="door-panel right">
+      <div class="door-handle right"></div>
+    </div>
+
     <div class="door-light"></div>
+
     <h3 class="gallery-door-title">${leftRoom.title}</h3>
     <p class="gallery-door-sub">${leftRoom.subtitle}</p>
   `;
   door.addEventListener('click', () => {
     door.classList.add('open');
-    setTimeout(()=> openRoom(idx, leftRoom), 900);
+    setTimeout(() => openRoom(idx, leftRoom), 900);
   });
   galleryDoorLeftEl.appendChild(door);
 }
 
-if(rightRoom){
+if (rightRoom) {
   const door = document.createElement('div');
   door.className = 'room-door-wrapper';
   door.innerHTML = `
-    <div class="door-panel left"></div>
-    <div class="door-panel right"></div>
-    <div class="door-handle left"></div>
-    <div class="door-handle right"></div>
+    <div class="door-panel left">
+      <div class="door-handle left"></div>
+    </div>
+
+    <div class="door-panel right">
+      <div class="door-handle right"></div>
+    </div>
+
     <div class="door-light"></div>
+
     <h3 class="gallery-door-title">${rightRoom.title}</h3>
     <p class="gallery-door-sub">${rightRoom.subtitle}</p>
   `;
   door.addEventListener('click', () => {
     door.classList.add('open');
-    setTimeout(()=> openRoom(idx, rightRoom), 900);
+    setTimeout(() => openRoom(idx, rightRoom), 900);
   });
   galleryDoorRightEl.appendChild(door);
 }
@@ -1502,5 +1514,6 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
