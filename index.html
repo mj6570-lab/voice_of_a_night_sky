@@ -945,6 +945,24 @@ img {
   font-size: 13px;
   color: var(--muted);
 }
+/* ============================================
+   CONTENTS 카드 전용: 이미지 아래 흰색 박스 깔끔하게
+============================================ */
+#contentGrid .card {
+  background: #ffffff !important;   /* 완전 흰색 */
+  border: 1px solid rgba(0,0,0,0.06);  
+  border-radius: 12px;
+  box-shadow: none !important;      /* 그림자 완전 제거 */
+  overflow: hidden;
+}
+
+/* 이미지 영역은 기존처럼 유지 */
+#contentGrid .card img {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  display: block;
+}
 </style>
 </head>
 <body>
@@ -1590,6 +1608,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
