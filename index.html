@@ -4,6 +4,27 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>밤하늘의 소리 Official</title>
+<!-- ============================
+      FAVICON & APP ICONS
+============================= -->
+
+<!-- 기본 파비콘 -->
+<link rel="icon" type="image/png" sizes="16x16" href="img/icon_16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/icon_32.png">
+
+<!-- 애플 (iOS Safari) -->
+<link rel="apple-touch-icon" sizes="180x180" href="img/icon_180.png">
+
+<!-- 안드로이드 & PWA -->
+<link rel="icon" type="image/png" sizes="192x192" href="img/icon_192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="img/icon_512.png">
+
+<!-- Manifest (원하면 사용) -->
+<link rel="manifest" href="manifest.json">
+
+<!-- 브라우저 색상 (선택) -->
+<meta name="theme-color" content="#ffffff">
+  
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Inter:wght@300;400;600&display=swap">
 <style>
 :root{
@@ -757,6 +778,15 @@ img {
 #galleryFloor {
   margin-top: -6px !important;
 }
+
+/* ===== 갤러리 로비 문 2:1 비율 고정 ===== */
+.gallery-door-core {
+  width: 100%;
+  aspect-ratio: 2 / 1;       /* 문 이미지(1000x500)와 동일한 2:1 비율 유지 */
+  background-size: cover;    /* 이미지 꽉 채우기 */
+  background-position: center;
+  border-radius: 12px;
+}
 </style>
 </head>
 <body>
@@ -1347,6 +1377,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
