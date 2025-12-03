@@ -1306,37 +1306,35 @@ function showFloor(idx){
   galleryDoorLeftEl.innerHTML = '';
   galleryDoorRightEl.innerHTML = '';
 
-if (leftRoom) {
-  const door = document.createElement('div');
-  door.className = 'gallery-door';
+  if(leftRoom){
+    const door = document.createElement('div');
+    door.className = 'gallery-door';
+    door.innerHTML = `
+      <div class="gallery-door-core">
+        <img src="${leftRoom.doorImage}" alt="${leftRoom.title}">
+      </div>
+      <h3 class="gallery-door-label-title">${leftRoom.title}</h3>
+      <p class="gallery-door-label-sub">${leftRoom.subtitle}</p>
+    `;
+    door.addEventListener('click', () => openRoom(idx, leftRoom));
+    galleryDoorLeftEl.appendChild(door);
+  }
 
-  door.innerHTML = `
-    <div class="gallery-door-core">
-      <img src="${leftRoom.doorImage}" alt="${leftRoom.title}">
-    </div>
-    <h3 class="gallery-door-label-title">${leftRoom.title}</h3>
-    <p class="gallery-door-label-sub">${leftRoom.subtitle}</p>
-  `;
+  if(rightRoom){
+    const door = document.createElement('div');
+    door.className = 'gallery-door';
+    door.innerHTML = `
+      <div class="gallery-door-core">
+        <img src="${rightRoom.doorImage}" alt="${rightRoom.title}">
+      </div>
+      <h3 class="gallery-door-label-title">${rightRoom.title}</h3>
+      <p class="gallery-door-label-sub">${rightRoom.subtitle}</p>
+    `;
+    door.addEventListener('click', () => openRoom(idx, rightRoom));
+    galleryDoorRightEl.appendChild(door);
+  }
+}  // ← showFloor 함수는 여기서 끝
 
-  door.addEventListener('click', () => openRoom(idx, leftRoom));
-  galleryDoorLeftEl.appendChild(door);
-}
-
-if (rightRoom) {
-  const door = document.createElement('div');
-  door.className = 'gallery-door';
-
-  door.innerHTML = `
-    <div class="gallery-door-core">
-      <img src="${rightRoom.doorImage}" alt="${rightRoom.title}">
-    </div>
-    <h3 class="gallery-door-label-title">${rightRoom.title}</h3>
-    <p class="gallery-door-label-sub">${rightRoom.subtitle}</p>
-  `;
-
-  door.addEventListener('click', () => openRoom(idx, rightRoom));
-  galleryDoorRightEl.appendChild(door);
-}
 /* 방 내부 보여주기 */
 function openRoom(floorIndex, room){
   currentFloorIndex = floorIndex;
@@ -1384,6 +1382,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
