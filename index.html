@@ -504,8 +504,24 @@ img {
   background:radial-gradient(circle at 30% 30%, #fef3d9, #bba57f);
   box-shadow:0 0 8px rgba(0,0,0,0.4);
 }
-.door-handle.left{ right:18px; }
-.door-handle.right{ left:18px; }
+.gallery-door-wrapper .door-handle.left {
+  right: 18px;
+  left: auto;
+}
+
+.gallery-door-wrapper .door-handle.right {
+  left: 18px;
+  right: auto;
+}
+.room-door-wrapper .door-handle.left { 
+  right:18px; 
+  left:auto;
+}
+
+.room-door-wrapper .door-handle.right { 
+  left:18px; 
+  right:auto;
+}
 .door-light{
   position:absolute;
   inset:8% 10%;
@@ -1521,6 +1537,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
