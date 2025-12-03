@@ -929,6 +929,22 @@ img {
   opacity:0.4;
   pointer-events:none;
 }
+.gallery-door-wrapper-outer{
+  text-align:center;
+  margin-bottom: 40px;
+}
+
+.gallery-door-title{
+  margin: 10px 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.gallery-door-sub{
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
 </style>
 </head>
 <body>
@@ -1446,6 +1462,11 @@ function showFloor(idx){
   galleryDoorRightEl.innerHTML = '';
 
 if (leftRoom) {
+  // 전체 컨테이너
+  const wrapper = document.createElement('div');
+  wrapper.className = "gallery-door-wrapper-outer";
+
+  // 방문 (문)
   const door = document.createElement('div');
   door.className = 'room-door-wrapper';
   door.innerHTML = `
@@ -1458,18 +1479,34 @@ if (leftRoom) {
     </div>
 
     <div class="door-light"></div>
-
-    <h3 class="gallery-door-title">${leftRoom.title}</h3>
-    <p class="gallery-door-sub">${leftRoom.subtitle}</p>
   `;
+
   door.addEventListener('click', () => {
     door.classList.add('open');
     setTimeout(() => openRoom(idx, leftRoom), 900);
   });
-  galleryDoorLeftEl.appendChild(door);
-}
 
+  // 방 제목
+  const title = document.createElement('h3');
+  title.className = 'gallery-door-title';
+  title.textContent = leftRoom.title;
+
+  // 부제
+  const sub = document.createElement('p');
+  sub.className = 'gallery-door-sub';
+  sub.textContent = leftRoom.subtitle || "";
+
+  // 문 + 텍스트 조립
+  wrapper.appendChild(door);
+  wrapper.appendChild(title);
+  wrapper.appendChild(sub);
+
+  galleryDoorLeftEl.appendChild(wrapper);
+}
 if (rightRoom) {
+  const wrapper = document.createElement('div');
+  wrapper.className = "gallery-door-wrapper-outer";
+
   const door = document.createElement('div');
   door.className = 'room-door-wrapper';
   door.innerHTML = `
@@ -1482,15 +1519,26 @@ if (rightRoom) {
     </div>
 
     <div class="door-light"></div>
-
-    <h3 class="gallery-door-title">${rightRoom.title}</h3>
-    <p class="gallery-door-sub">${rightRoom.subtitle}</p>
   `;
+
   door.addEventListener('click', () => {
     door.classList.add('open');
     setTimeout(() => openRoom(idx, rightRoom), 900);
   });
-  galleryDoorRightEl.appendChild(door);
+
+  const title = document.createElement('h3');
+  title.className = 'gallery-door-title';
+  title.textContent = rightRoom.title;
+
+  const sub = document.createElement('p');
+  sub.className = 'gallery-door-sub';
+  sub.textContent = rightRoom.subtitle || "";
+
+  wrapper.appendChild(door);
+  wrapper.appendChild(title);
+  wrapper.appendChild(sub);
+
+  galleryDoorRightEl.appendChild(wrapper);
 }
 }  // ← showFloor() 끝
 
@@ -1542,6 +1590,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
