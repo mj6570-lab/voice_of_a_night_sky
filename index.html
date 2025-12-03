@@ -1029,16 +1029,21 @@ img {
     </div>
 
     <!-- Floor Lobby -->
-    <div id="galleryFloor" class="gallery-state">
-      <div class="gallery-floor-header">
-        <div>
-          <p class="gallery-floor-name" id="galleryFloorTitle"></p>
-          <p class="gallery-floor-caption" id="galleryFloorCaption"></p>
-        </div>
-      </div>
-      <div class="gallery-floor-body">
-      </div>
+<div id="galleryFloor" class="gallery-state">
+  <div class="gallery-floor-header">
+    <div>
+      <p class="gallery-floor-name" id="galleryFloorTitle"></p>
+      <p class="gallery-floor-caption" id="galleryFloorCaption"></p>
     </div>
+  </div>
+
+  <div class="gallery-floor-body">
+
+    <!-- ⭐ 여기 두 개가 반드시 있어야 함 -->
+    <div id="galleryDoorLeft" class="gallery-door-column"></div>
+    <div id="galleryDoorRight" class="gallery-door-column"></div>
+  </div>
+</div>
 
     <!-- Room View -->
     <div id="galleryRoom" class="gallery-state">
@@ -1446,7 +1451,11 @@ if(rightRoom){
   });
   galleryDoorRightEl.appendChild(door);
 }
-/* 방 내부 보여주기 */
+}  // ← showFloor() 끝
+
+/* ============================================
+   방 내부 보여주기 (openRoom)
+============================================ */
 function openRoom(floorIndex, room){
   currentFloorIndex = floorIndex;
   currentRoomConfig = room;
@@ -1469,11 +1478,10 @@ function openRoom(floorIndex, room){
   } else {
     const empty = document.createElement('p');
     empty.className = 'muted';
-    empty.textContent = '아직 전시가 준비되지 않은 방입니다. 코드에서 galleryItemIds를 채워 전시를 구성할 수 있습니다.';
+    empty.textContent = '아직 전시가 준비되지 않은 방입니다.';
     galleryRoomFramesEl.appendChild(empty);
   }
 }
-
 /* 방에서 로비로 돌아가기 */
 galleryBackToFloorBtn.addEventListener('click', () => {
   showFloor(currentFloorIndex);
