@@ -778,14 +778,22 @@ img {
 #galleryFloor {
   margin-top: -6px !important;
 }
+/* 문 카드 비율 유지 (2:1 = 1000x500) */
 .gallery-door-core {
   width: 100%;
   aspect-ratio: 2 / 1;
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: #f6f1e8;
   border-radius: 12px;
+  overflow: hidden;       /* 이미지를 둥근 모서리에 맞게 자르기 */
+  background: none !important;
+  padding: 0;
+}
+
+/* 이미지가 완벽하게 문 영역에 맞게 들어가도록 */
+.gallery-door-core img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* 여백 없이 꽉 차게 */
+  display: block;
 }
 </style>
 </head>
@@ -1302,13 +1310,13 @@ function showFloor(idx){
     const door = document.createElement('div');
     door.className = 'gallery-door';
 
-    door.innerHTML = `
-      <div class="gallery-door-core" 
-           style="background-image:url('${leftRoom.doorImage || "img/doors/default.jpg"}');">
-      </div>
-      <h3 class="gallery-door-label-title">${leftRoom.title}</h3>
-      <p class="gallery-door-label-sub">${leftRoom.subtitle || ''}</p>
-    `;
+door.innerHTML = `
+  <div class="gallery-door-core">
+    <img src="${room.doorImage}" alt="${room.title}">
+  </div>
+  <h3 class="gallery-door-label-title">${room.title}</h3>
+  <p class="gallery-door-label-sub">${room.subtitle}</p>
+`;
 
     door.addEventListener('click', ()=> openRoom(idx, leftRoom));
     galleryDoorLeftEl.appendChild(door);
@@ -1377,6 +1385,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
