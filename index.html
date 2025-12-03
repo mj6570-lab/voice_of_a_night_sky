@@ -1251,14 +1251,13 @@ const galleryFloors = [
   }
 ];
 /* DOM refs */
-const discGrid = document.getElementById('discGrid');
-
-/* Disc 카드 생성 */
 function createCard(d){
   const el = document.createElement('article');
   el.className = 'card';
   el.innerHTML = `
-    <img class="card-media" src="${d.cover}" alt="${d.title} cover">
+    <div class="disc-card-image-wrapper">
+      <img class="card-media" src="${d.cover}" alt="${d.title} cover">
+    </div>
     <div class="card-body">
       <div class="meta">${d.year}</div>
       <h4 class="title">${d.title}</h4>
@@ -1272,6 +1271,7 @@ function createCard(d){
   btn.addEventListener('click', ()=> openModal(d));
   return el;
 }
+
 discs.forEach(d => discGrid.appendChild(createCard(d)));
 
 /* Gallery 작품 카드 (슬라이더 포함) */
@@ -1636,6 +1636,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
