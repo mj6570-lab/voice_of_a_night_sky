@@ -1614,6 +1614,9 @@ if (room.galleryItemIds && room.galleryItemIds.length) {
   empty.textContent = '아직 전시가 준비되지 않은 방입니다.';
   galleryRoomFramesEl.appendChild(empty);
 }
+
+} // ✅ 이 한 줄을 추가해서 openRoom() 함수 닫기
+
 /* 방에서 로비로 돌아가기 */
 galleryBackToFloorBtn.addEventListener('click', () => {
   showFloor(currentFloorIndex);
@@ -1623,7 +1626,6 @@ galleryBackToFloorBtn.addEventListener('click', () => {
 galleryDoorTrigger.addEventListener('click', () => {
   if(galleryDoorTrigger.classList.contains('open')) return;
   galleryDoorTrigger.classList.add('open');
-  // 문 열리는 애니메이션을 살짝 기다렸다가 1층으로 이동
   setTimeout(() => {
     showFloor(0);
   }, 950);
@@ -1633,3 +1635,4 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
