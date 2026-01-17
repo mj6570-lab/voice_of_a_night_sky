@@ -1173,6 +1173,7 @@ img {
   </div>
 </div>
 
+
 <script>
 /* ------------------------------
   Disc / Gallery data
@@ -1240,6 +1241,8 @@ const galleryFloors = [
   }
 ];
 /* DOM refs */
+const discGrid = document.getElementById('discGrid');
+
 function createCard(d){
   const el = document.createElement('article');
   el.className = 'card';
@@ -1259,7 +1262,9 @@ function createCard(d){
   return el;
 }
 
-discs.forEach(d => discGrid.appendChild(createCard(d)));
+if (discGrid) {
+  discs.forEach(d => discGrid.appendChild(createCard(d)));
+}
 
 /* Gallery 작품 카드 (슬라이더 포함) */
 function createGalleryCard(d) {
@@ -1590,19 +1595,24 @@ function openRoom(floorIndex, room){
 
   galleryRoomFramesEl.innerHTML = '';
 
-  if(room.galleryItemIds && room.galleryItemIds.length){
-    room.galleryItemIds.forEach(id => {
-      const data = galleryItem.find(g => g.id === id);
-      if(!data) return;
-      const card = createGalleryCard(data);
-      galleryRoomFramesEl.appendChild(card);
-    });
-  } else {
-    const empty = document.createElement('p');
-    empty.className = 'muted';
-    empty.textContent = '아직 전시가 준비되지 않은 방입니다.';
-    galleryRoomFramesEl.appendChild(empty);
-  }
+if (room.galleryItemIds && room.galleryItemIds.length) {
+
+  const ids = room.galleryItemIds
+    .slice()
+    .sort((a, b) => b - a); // 큰 id(최신) 먼저 = 위로
+
+  ids.forEach(id => {
+    const data = galleryItem.find(g => g.id === id);
+    if (!data) return;
+    const card = createGalleryCard(data);
+    galleryRoomFramesEl.appendChild(card);
+  });
+
+} else {
+  const empty = document.createElement('p');
+  empty.className = 'muted';
+  empty.textContent = '아직 전시가 준비되지 않은 방입니다.';
+  galleryRoomFramesEl.appendChild(empty);
 }
 /* 방에서 로비로 돌아가기 */
 galleryBackToFloorBtn.addEventListener('click', () => {
@@ -1623,33 +1633,3 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
