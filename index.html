@@ -1179,9 +1179,9 @@ img {
   Disc / Gallery data
 -------------------------------*/
 const discs = [
-  {id:1, title:'밤하늘의 소리 - Sunroof', year:2025, cover:'img/sunroof.jpg', desc:'(작사·곡, 편곡)', audio:'Music/sunroof.mp3', link:'https://youtu.be/h-2VvxUEV24'},
-  {id:2, title:'밤하늘의 소리 - 비밀정원', year:2025, cover:'img/scgd.jpg', desc:'(작사·곡, 편곡)', audio:'Music/scr.mp3', link:'https://youtu.be/ykkKX2pMibE'},
-  {id:3, title:'밤하늘의 소리 - Swing swing (Mixtape)', year:2024, cover:'img/swingswing.png', desc:'(작사·곡, 편곡)', audio:'Music/swingswing.mp3', link:'#'},
+  {id:1, title:'Sunroof', year:2025, cover:'img/sunroof.jpg', desc:'(작사·곡, 편곡)', audio:'Music/sunroof.mp3', link:'https://youtu.be/h-2VvxUEV24'},
+  {id:2, title:'비밀정원', year:2025, cover:'img/scgd.jpg', desc:'(작사·곡, 편곡)', audio:'Music/scr.mp3', link:'https://youtu.be/ykkKX2pMibE'},
+  {id:3, title:'Swing swing (Mixtape)', year:2024, cover:'img/swingswing.png', desc:'(작사·곡, 편곡)', audio:'Music/swingswing.mp3', link:'#'},
   {id:4, title:'눈(雪) (Mixtape)', year:2023, cover:'img/snow.png', desc:'(편곡)', audio:'Music/snow.mp3', link:'#'},
 ];
 
@@ -1216,6 +1216,18 @@ const galleryItem = [
     year: 2025,
     images: ['img/DN/001.jpg','img/DN/002.jpg','img/DN/003.jpg']
   },
+  {
+    id: 1000,
+    title: '우리 집',
+    year: 2026,
+    images: ['img/3rd ds 01/001.jpg','img/DN/002.jpg','img/DN/003.jpg']
+  },
+  {
+    id: 1001,
+    title: '멀어짐',
+    year: 2026,
+    images: ['img/3rd ds 02/001.jpg','img/DN/002.jpg','img/DN/003.jpg']
+  },
 ];
 const galleryFloors = [
   {
@@ -1235,7 +1247,7 @@ const galleryFloors = [
         side: "right",
         title: "외딴섬",
         subtitle: "3rd Digital single",
-        galleryItemIds: []
+        galleryItemIds: [1000, 1001]
       }
     ]
   }
@@ -1635,5 +1647,6 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
