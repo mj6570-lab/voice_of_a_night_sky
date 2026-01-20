@@ -174,61 +174,95 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
   margin-bottom:10px;
   border:1px solid rgba(16,24,40,0.04);
 }
-
 /* ---------- MODAL ---------- */
-.modal-root{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:120; }
-.modal-backdrop{ position:absolute; inset:0; background: rgba(10,12,20,0.45); backdrop-filter: blur(2px); }
-.modal-content{ position:relative; width:100%; max-width:720px; background:#fff; border-radius:12px; overflow:hidden; transform: translateY(12px) scale(.98); opacity:0; transition: all .22s ease; box-shadow:0 30px 80px rgba(10,12,20,0.25) }
+.modal-root{
+  position:fixed; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  z-index:120;
+}
+.modal-backdrop{
+  position:absolute; inset:0;
+  background: rgba(10,12,20,0.45);
+  backdrop-filter: blur(2px);
+}
 
-/* iPad/tablet specific */
+/* scale 값을 변수로 관리 */
+.modal-content{
+  --mScale: .98;
+  position:relative;
+  width:100%;
+  max-width:720px;
+  background:#fff;
+  border-radius:12px;
+  overflow:hidden;
+  transform: translateY(12px) scale(var(--mScale));
+  opacity:0;
+  transition: transform .22s ease, opacity .22s ease;
+  box-shadow:0 30px 80px rgba(10,12,20,0.25);
+}
+
+/* show일 때도 scale 유지 */
+.modal-content.show{
+  transform: translateY(0) scale(var(--mScale));
+  opacity:1;
+}
+
+.modal-grid{ display:grid; grid-template-columns: 1fr 1fr; }
+.modal-cover{ width:100%; height:100%; object-fit:cover; display:block; }
+.modal-body{ padding:20px }
+.modal-close{
+  position:absolute; top:12px; right:12px;
+  background:transparent; border:none;
+  font-weight:800; font-size:18px;
+  cursor:pointer
+}
+
+/* iPad/tablet */
 @media (max-width: 1024px) and (min-width: 768px) {
-  .modal-content {
-    max-width: 480px;
-    border-radius: 10px;
-  }
+  .modal-content { max-width: 480px; border-radius: 10px; }
 }
 
-/* 작은 태블릿 (600~767px) */
+/* 작은 태블릿 */
 @media (min-width: 600px) and (max-width: 767px) {
-  .modal-content {
-    max-width: 420px;
-    border-radius: 10px;
-  }
+  .modal-content { max-width: 420px; border-radius: 10px; }
 }
 
-/* 핸드폰용 (<600px) */
+/* 핸드폰용 */
 @media (max-width: 599px) {
-  .modal-content {
+
+  /* 인스타/사파리 in-app: 상단바 때문에 세로가 짧아짐 -> root가 스크롤 받게 */
+  .modal-root{
+    align-items:flex-start;
+    overflow-y:auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 0;
+  }
+
+  .modal-content{
+    --mScale: .92;
     width: 85%;
     max-width: 320px;
     border-radius: 8px;
-    transform: scale(0.92);
-    overflow: hidden;
-    padding: 0;
-    display: block;
+    max-height: 92vh;
+    overflow: auto;
   }
 
-  .modal-grid {
+  .modal-grid{
     grid-template-columns: 1fr;
     gap: 0;
   }
 
-  .modal-cover {
-    width: 100%;
-    display: block;
+  /* 모바일에서는 커버가 안 잘리게 */
+  .modal-cover{
     height: auto;
-    object-fit: contain;   /* 핵심: cover -> contain */
-    margin: 0;
-    background: #fff;      /* 여백 생기면 흰색 */
+    object-fit: contain;
+    background: #fff;
+  }
+
+  .modal-grid > div:first-child{
+    background:#fff;
   }
 }
-
-.modal-content.show{ transform:none; opacity:1 }
-.modal-grid{ display:grid; grid-template-columns: 1fr 1fr }
-.modal-cover{ width:100%; height:100%; object-fit:cover }
-.modal-body{ padding:20px }
-.modal-close{ position:absolute; top:12px; right:12px; background:transparent; border:none; font-weight:800; font-size:18px; cursor:pointer }
-
 @media (max-width:980px){
   .grid{ grid-template-columns: repeat(2,1fr) }
   .modal-grid{ grid-template-columns: 1fr }
@@ -1814,5 +1848,6 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
