@@ -974,7 +974,7 @@ img {
 .hero {
   background: #f7f5ee !important;   /* hero도 아이보리 */
 }
-/* ===== Custom Audio Player (Modal) ===== */
+/* ===== Custom Audio Player (Modal) - Icon Controls ===== */
 .player{
   display:flex;
   gap:10px;
@@ -982,18 +982,43 @@ img {
   margin-top:10px;
 }
 
+.pcontrols{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+/* 버튼 기본 */
 .pbtn{
-  padding:8px 12px;
   border-radius:10px;
   border:1px solid rgba(16,24,40,0.12);
   background:#fff;
   cursor:pointer;
-  font-weight:600;
 }
 
-.pseek{
-  flex:1;
+/* 아이콘 버튼 */
+.pbtn.icon{
+  width:36px;
+  height:36px;
+  padding:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
 }
+
+.pbtn.icon svg{
+  width:18px;
+  height:18px;
+  fill: currentColor;
+}
+
+/* 비활성 상태 */
+.pbtn:disabled{
+  opacity:0.35;
+  cursor:not-allowed;
+}
+
+.pseek{ flex:1; }
 
 .ptime{
   font-size:13px;
@@ -1194,8 +1219,32 @@ img {
   </audio>
 
   <!-- 커스텀 컨트롤 UI -->
+  <!-- 커스텀 컨트롤 UI (아이콘 3버튼) -->
   <div class="player">
-    <button id="pPlay" class="pbtn" type="button">재생</button>
+    <div class="pcontrols">
+      <!-- 재생 ▶ -->
+      <button id="pPlay" class="pbtn icon" type="button" aria-label="재생">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <polygon points="8,5 19,12 8,19"></polygon>
+        </svg>
+      </button>
+
+      <!-- 일시정지 ❚❚ -->
+      <button id="pPause" class="pbtn icon" type="button" aria-label="일시정지">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="6" y="5" width="4" height="14"></rect>
+          <rect x="14" y="5" width="4" height="14"></rect>
+        </svg>
+      </button>
+
+      <!-- 완전 멈춤 ■ (0초로 리셋) -->
+      <button id="pStop" class="pbtn icon" type="button" aria-label="정지">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="7" y="7" width="10" height="10"></rect>
+        </svg>
+      </button>
+    </div>
+
     <input id="pSeek" class="pseek" type="range" min="0" max="100" value="0" step="0.1">
     <span id="pTime" class="ptime">0:00 / 0:00</span>
   </div>
@@ -1419,16 +1468,23 @@ function closeModal(){
   syncUI(); // 추가: 닫을 때 UI 리셋 표시
   document.body.style.overflow='';
 }
-/* ===== Custom Player Controls ===== */
-const pPlay = document.getElementById('pPlay');
-const pSeek = document.getElementById('pSeek');
-const pTime = document.getElementById('pTime');
+/* ===== Custom Player Controls (3 icon buttons) ===== */
+const pPlay  = document.getElementById('pPlay');
+const pPause = document.getElementById('pPause');
+const pStop  = document.getElementById('pStop');
+const pSeek  = document.getElementById('pSeek');
+const pTime  = document.getElementById('pTime');
 
 function fmt(t){
   if(!isFinite(t)) return "0:00";
   const m = Math.floor(t/60);
   const s = Math.floor(t%60).toString().padStart(2,'0');
   return `${m}:${s}`;
+}
+
+function stopAudio(){
+  try { modalAudio.pause(); } catch(e) {}
+  try { modalAudio.currentTime = 0; } catch(e) {}
 }
 
 function syncUI(){
@@ -1438,13 +1494,31 @@ function syncUI(){
 
   if (pSeek) pSeek.value = pct;
   if (pTime) pTime.textContent = `${fmt(cur)} / ${fmt(dur)}`;
-  if (pPlay) pPlay.textContent = modalAudio.paused ? "재생" : "일시정지";
+
+  const isPlaying = !modalAudio.paused && !modalAudio.ended;
+
+  // 3개의 아이콘을 "항상 보이게" 두되, 상황에 맞게 비활성 처리
+  if (pPlay)  pPlay.disabled  = isPlaying;       // 재생 중이면 Play 비활성
+  if (pPause) pPause.disabled = !isPlaying;      // 재생 중일 때만 Pause 가능
+  if (pStop)  pStop.disabled  = (cur === 0);     // 0초면 Stop 비활성
 }
 
 if (pPlay) {
   pPlay.addEventListener('click', () => {
-    if(modalAudio.paused) modalAudio.play();
-    else modalAudio.pause();
+    modalAudio.play();
+  });
+}
+
+if (pPause) {
+  pPause.addEventListener('click', () => {
+    modalAudio.pause();
+  });
+}
+
+if (pStop) {
+  pStop.addEventListener('click', () => {
+    stopAudio();
+    syncUI();
   });
 }
 
@@ -1459,7 +1533,11 @@ modalAudio.addEventListener('timeupdate', syncUI);
 modalAudio.addEventListener('loadedmetadata', syncUI);
 modalAudio.addEventListener('play', syncUI);
 modalAudio.addEventListener('pause', syncUI);
-modalAudio.addEventListener('ended', syncUI);
+modalAudio.addEventListener('ended', () => {
+  // 곡이 끝나면 "정지 상태"처럼 보이게(0초로 리셋)
+  stopAudio();
+  syncUI();
+});
 window.addEventListener('keydown',(e)=>{if(e.key==='Escape') closeModal();});
 
 /* Content grid (links) */
@@ -1735,20 +1813,3 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
