@@ -217,8 +217,9 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
     width: 100%;
     display: block;
     height: auto;
-    object-fit:cover;
+    object-fit: contain;   /* 핵심: cover -> contain */
     margin: 0;
+    background: #fff;      /* 여백 생기면 흰색 */
   }
 }
 
@@ -1813,4 +1814,5 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
