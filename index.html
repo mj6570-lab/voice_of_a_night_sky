@@ -252,14 +252,18 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
     gap: 0;
   }
 
-  /* 모바일에서는 커버가 안 잘리게 */
-  .modal-cover{
-    height: auto;
-    object-fit: contain;
-    background: #fff;
+  /* 모바일: 커버 영역을 1:1 박스로 고정 + 이미지는 contain으로 전체 표시 */
+  .modal-cover-wrap{
+    width:100%;
+    aspect-ratio: 1 / 1;
+    background:#fff;
   }
 
-  .modal-grid > div:first-child{
+  #modalCover{
+    width:100% !important;
+    height:100% !important;
+    object-fit: contain !important;
+    display:block;
     background:#fff;
   }
 }
@@ -1242,7 +1246,7 @@ img {
   <div id="modalContent" class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <button class="modal-close" aria-label="닫기" onclick="closeModal()">✕</button>
     <div class="modal-grid">
-      <div><img id="modalCover" class="modal-cover" src="" alt="Album cover"></div>
+          <div class="modal-cover-wrap"><img id="modalCover" class="modal-cover" src="" alt="Album cover"></div>
       <div class="modal-body">
         <h3 id="modalTitle" style="margin-top:0"></h3>
         <p id="modalDesc" class="muted"></p>
@@ -1848,6 +1852,3 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
-
-
-
