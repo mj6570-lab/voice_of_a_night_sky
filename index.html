@@ -1523,6 +1523,35 @@ const modalCover = document.getElementById('modalCover');
 const modalAudioSrc = document.getElementById('modalAudioSrc');
 const modalAudio = document.getElementById('modalAudio');
 const linkStore = document.getElementById('linkStore');
+/* ===============================
+   iOS 포함: 모달 열릴 때 배경 스크롤 완전 고정
+=============================== */
+let __scrollY = 0;
+
+function lockScroll(){
+  __scrollY = window.scrollY || 0;
+  document.documentElement.classList.add('modal-open');
+  document.body.style.top = `-${__scrollY}px`;
+}
+
+function unlockScroll(){
+  document.documentElement.classList.remove('modal-open');
+  const y = __scrollY;
+  document.body.style.top = '';
+  window.scrollTo(0, y);
+}
+
+/* ===============================
+   모달 내부 터치 스와이프로 인한 바운스/전파 차단
+   (단, seek bar 드래그는 허용)
+=============================== */
+function preventModalTouchMove(e){
+  if (e.target && e.target.closest && e.target.closest('#pSeek')) return;
+  e.preventDefault();
+}
+
+modalRoot.addEventListener('touchmove', preventModalTouchMove, { passive:false });
+modalContent.addEventListener('touchmove', preventModalTouchMove, { passive:false });
 
 function openModal(d){
   modalTitle.textContent = d.title+' — '+d.year;
@@ -1542,14 +1571,14 @@ function openModal(d){
   }
   modalRoot.style.display='flex';
   requestAnimationFrame(()=> modalContent.classList.add('show'));
-  document.body.style.overflow='hidden';
+  lockScroll();
 }
 function closeModal(){
   modalContent.classList.remove('show');
   setTimeout(()=> modalRoot.style.display='none',220);
   try{ modalAudio.pause(); modalAudio.currentTime=0; }catch(e){}
   syncUI(); // 추가: 닫을 때 UI 리셋 표시
-  document.body.style.overflow='';
+  unlockScroll();
 }
 /* ===== Custom Player Controls (3 icon buttons) ===== */
 const pPlay  = document.getElementById('pPlay');
@@ -1896,6 +1925,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
