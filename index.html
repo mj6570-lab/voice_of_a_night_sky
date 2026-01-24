@@ -227,14 +227,14 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
   background:#fff;
   overflow:hidden;
   display:flex;
-  align-items:stretch;
-  justify-content:stretch;
+  align-items:center;     /* ✅ 가운데 정렬 */
+  justify-content:center; /* ✅ 가운데 정렬 */
 }
 
 #modalCover{
   width:100%;
   height:100%;
-  object-fit: cover;            /* 비율 유지 + 꽉 채우기 */
+  object-fit: contain; /* ✅ 모달에서도 크롭 없이 전체 보이게 */
   display:block;
   background:#fff;
 }
@@ -1204,12 +1204,12 @@ html.modal-open body{
   right:0;
   touch-action:none;
 }
-/* ===== Gallery Room 카드: 첫 이미지 1장만 보여주기 ===== */
+/* ===== Gallery Room 카드: 원본 비율(크롭 없이 전체 보이게) ===== */
 .gallery-frame .card-media{
-  width:100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
   display:block;
+  width:100%;
+  height:auto;        /* ✅ 원본 비율 유지 */
+  object-fit: contain;/* ✅ 혹시 높이가 잡혀도 크롭 방지 */
   background:#fff;
 }
 
@@ -1606,16 +1606,14 @@ function createGalleryCard(d){
   el.className = 'card gallery-frame';
 
   const thumb = (d.images && d.images.length) ? d.images[0] : '';
-  const desc = d.desc || '';
 
   el.innerHTML = `
     <img class="card-media" src="${thumb}" alt="${d.title}">
     <div class="card-body">
       <div class="meta">${d.year}</div>
       <h4 class="title">${d.title}</h4>
-      <p class="muted" style="margin:0 0 12px 0;">
-        ${desc.length > 80 ? (desc.slice(0, 76) + '…') : desc}
-      </p>
+
+      <!-- ✅ 겉에서는 설명을 아예 렌더하지 않음 -->
       <div class="cta-row">
         <button class="small-btn primary" type="button">자세히 보기</button>
       </div>
@@ -2136,12 +2134,3 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
