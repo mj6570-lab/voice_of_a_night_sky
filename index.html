@@ -348,8 +348,6 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
   .modal-content{ width: min(94vw, 640px); border-radius:10px; }
   .modal-body{ padding:16px; }
 }
-
-/* 모바일: 1열(커버 위, 본문 아래) + 커버는 1:1로 딱 */
 @media (max-width: 599px){
   .modal-root{ padding:10px; }
 
@@ -360,27 +358,37 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
     border-radius:10px;
   }
 
+  /* ✅ 모바일에서는 "이미지 높이 = 원본 비율"로 먼저 잡고,
+        아래 설명 영역이 남는 공간을 쓰도록 rows로 나눔 */
   .modal-grid{
     grid-template-columns: 1fr;
-  }
-
-  .modal-cover-wrap{
-    height:auto;
-    aspect-ratio: 1 / 1;        /* 커버는 모바일에서 정사각형 */
-  }
-
-  #modalCover{
+    grid-template-rows: auto 1fr;   /* ✅ 위(이미지)는 auto, 아래(본문)는 남은 공간 */
     height:100%;
+  }
+
+  /* ✅ 정사각형 강제 제거 */
+  .modal-cover-wrap{
+    height:auto;                    /* ✅ 100% 강제 제거 */
+    aspect-ratio: auto;             /* ✅ 1/1 제거 */
+    overflow:hidden;
+    display:block;                  /* ✅ 불필요한 flex 영향 제거 */
+  }
+
+  /* ✅ 이미지가 가로 100%로 꽉 차면서 원본비율 유지 */
+  #modalCover{
+    width:100%;
+    height:auto;                    /* ✅ 핵심 */
+    display:block;
   }
 
   .modal-body{
     padding:14px;
+    height:100%;
+    min-height:0;
   }
 
-  /* Seek는 가로 드래그가 자연스럽게 */
   #pSeek{ touch-action: pan-x; }
 }
-
 /* svh 미지원 fallback */
 @supports not (height: 100svh){
   .modal-content{ max-height: 94vh; }
@@ -2134,3 +2142,4 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
