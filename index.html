@@ -1747,8 +1747,11 @@ function openGalleryModal(item){
 
   // 타이틀/설명
   modalTitle.textContent = `${item.title} — ${item.year}`;
-  modalDesc.textContent  = item.desc || '';
+const desc = (item.desc && item.desc.trim())
+  ? item.desc.trim()
+  : '작품 설명을 여기에 작성하세요.';
 
+modalDesc.textContent = desc;
   // 대표 이미지(첫 장)
   const imgs = Array.isArray(item.images) ? item.images : [];
   const first = imgs.length ? imgs[0] : '';
@@ -2133,6 +2136,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
