@@ -209,6 +209,14 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
 
 .modal-grid{ display:grid; grid-template-columns: 1fr 1fr; }
 .modal-cover{ width:100%; height:100%; object-fit:cover; display:block; }
+/* --- (추가) Modal cover wrapper: 항상 존재하는 래퍼 --- */
+.modal-cover-wrap{
+  background:#fff;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 .modal-body{ padding:20px }
 .modal-close{
   position:absolute; top:12px; right:12px;
@@ -226,11 +234,9 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
 @media (min-width: 600px) and (max-width: 767px) {
   .modal-content { max-width: 420px; border-radius: 10px; }
 }
-
 /* 핸드폰용 */
 @media (max-width: 599px) {
 
-  /* 인스타/사파리 in-app: 상단바 때문에 세로가 짧아짐 -> root가 스크롤 받게 */
   .modal-root{
     align-items:flex-start;
     overflow-y:auto;
@@ -243,7 +249,9 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
     width: 85%;
     max-width: 320px;
     border-radius: 8px;
-    max-height: 92vh;
+
+    /* iOS 상단바/주소창 변동으로 vh 흔들릴 때 잘림 방지 */
+    max-height: calc(100svh - 28px);
     overflow: auto;
   }
 
@@ -252,19 +260,30 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
     gap: 0;
   }
 
-  /* 모바일: 커버 영역을 1:1 박스로 고정 + 이미지는 contain으로 전체 표시 */
+  /* 커버 영역: 정사각형 고정 제거 + 화면 높이 기준으로 안전하게 */
   .modal-cover-wrap{
     width:100%;
-    aspect-ratio: 1 / 1;
+    height: 52svh;
+    max-height: 360px;
+    padding: 10px;
     background:#fff;
   }
 
+  /* 이미지: 원본 비율 유지 + 전체 보이기 */
   #modalCover{
     width:100% !important;
     height:100% !important;
     object-fit: contain !important;
     display:block;
     background:#fff;
+  }
+}
+
+/* svh 미지원 브라우저 fallback */
+@supports not (height: 100svh){
+  @media (max-width: 599px){
+    .modal-content{ max-height: calc(100vh - 28px); }
+    .modal-cover-wrap{ height: 52vh; }
   }
 }
 @media (max-width:980px){
@@ -1852,3 +1871,4 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
