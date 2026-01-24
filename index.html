@@ -237,12 +237,13 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
 /* 핸드폰용 */
 @media (max-width: 599px) {
 
-  .modal-root{
-    align-items:flex-start;
-    overflow-y:auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 14px 0;
-  }
+.modal-root{
+  align-items:center;        /* 중앙 고정 */
+  overflow:hidden;           /* ✅ 모달 루트 스크롤 차단 */
+  padding: 0;
+  overscroll-behavior: contain;
+  touch-action: none;        /* ✅ 스와이프(스크롤/바운스) 차단 */
+}
 
   .modal-content{
     --mScale: .92;
@@ -1869,5 +1870,6 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
