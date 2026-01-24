@@ -174,126 +174,216 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
   margin-bottom:10px;
   border:1px solid rgba(16,24,40,0.04);
 }
-/* ---------- MODAL ---------- */
+/* ---------- MODAL (Fit-to-Viewport) ---------- */
 .modal-root{
   position:fixed; inset:0;
-  display:flex; align-items:center; justify-content:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   z-index:120;
+  padding:14px;                 /* 화면 가장자리 여백 */
+  overscroll-behavior: contain;
 }
+
 .modal-backdrop{
   position:absolute; inset:0;
   background: rgba(10,12,20,0.45);
   backdrop-filter: blur(2px);
 }
 
-/* scale 값을 변수로 관리 */
+/* 모달 카드 자체가 화면에 "딱" 들어오도록 */
 .modal-content{
   --mScale: .98;
   position:relative;
-  width:100%;
-  max-width:720px;
+  width: min(92vw, 860px);      /* 화면 너비에 맞춰 자동 축소 */
+  max-height: 92svh;            /* 화면 높이에 맞춰 자동 축소 */
   background:#fff;
   border-radius:12px;
   overflow:hidden;
+  display:flex;                 /* 내부를 꽉 채우기 */
+  flex-direction:column;
   transform: translateY(12px) scale(var(--mScale));
   opacity:0;
   transition: transform .22s ease, opacity .22s ease;
   box-shadow:0 30px 80px rgba(10,12,20,0.25);
 }
 
-/* show일 때도 scale 유지 */
 .modal-content.show{
   transform: translateY(0) scale(var(--mScale));
   opacity:1;
 }
 
-.modal-grid{ display:grid; grid-template-columns: 1fr 1fr; }
-.modal-cover{ width:100%; height:100%; object-fit:cover; display:block; }
-/* --- (추가) Modal cover wrapper: 항상 존재하는 래퍼 --- */
+/* 커버/본문 2열이 "높이 100%"로 맞춰지게 */
+.modal-grid{
+  display:grid;
+  grid-template-columns: 1.05fr 0.95fr; /* 커버 약간 넓게 */
+  height:100%;
+  min-height:0;
+}
+
+/* 왼쪽 커버 영역은 항상 모달 높이에 맞춰 꽉 */
 .modal-cover-wrap{
+  height:100%;
   background:#fff;
   overflow:hidden;
   display:flex;
+  align-items:stretch;
+  justify-content:stretch;
+}
+
+#modalCover{
+  width:100%;
+  height:100%;
+  object-fit: cover;            /* 비율 유지 + 꽉 채우기 */
+  display:block;
+  background:#fff;
+}
+
+/* 오른쪽 본문은 "남는 공간"을 활용하고, 넘치면 내부만 스크롤 */
+.modal-body{
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  height:100%;
+  min-height:0;                 /* 내부 스크롤을 위해 필수 */
+}
+
+#modalTitle{
+  margin:0;
+  font-size: clamp(16px, 2.2vw, 22px);
+  line-height:1.2;
+}
+
+#modalDesc{
+  margin:0;
+  color: var(--muted);
+  line-height:1.6;
+  flex:1;                       /* 남는 공간 차지 */
+  min-height:0;
+  overflow:auto;                /* 텍스트만 스크롤 */
+  -webkit-overflow-scrolling: touch;
+  padding-right:6px;            /* 스크롤바 여유 */
+}
+
+/* 플레이어: 화면에 맞게 줄바꿈/축소 */
+.player{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:6px;
+}
+
+.pcontrols{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex:0 0 auto;
+}
+
+.pbtn{
+  border-radius:10px;
+  border:1px solid rgba(16,24,40,0.12);
+  background:#fff;
+  cursor:pointer;
+}
+
+.pbtn.icon{
+  width:36px;
+  height:36px;
+  padding:0;
+  display:inline-flex;
   align-items:center;
   justify-content:center;
 }
-.modal-body{ padding:20px }
+
+.pbtn.icon svg{
+  width:18px;
+  height:18px;
+  fill: currentColor;
+}
+
+.pbtn:disabled{
+  opacity:0.35;
+  cursor:not-allowed;
+}
+
+.pseek{
+  flex: 1 1 180px;              /* 공간에 맞춰 늘었다 줄었다 */
+  min-width: 150px;
+}
+
+.ptime{
+  font-size:13px;
+  color: var(--muted);
+  flex:0 0 auto;
+  min-width:92px;
+  text-align:right;
+}
+
+/* Streaming 링크는 항상 "아래쪽"에 붙게 */
+.modal-links{
+  margin-top:auto;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:flex-start;
+  padding-top:10px;
+}
+
+/* 닫기 버튼 */
 .modal-close{
-  position:absolute; top:12px; right:12px;
-  background:transparent; border:none;
-  font-weight:800; font-size:18px;
-  cursor:pointer
+  position:absolute;
+  top:12px; right:12px;
+  background:transparent;
+  border:none;
+  font-weight:800;
+  font-size:18px;
+  cursor:pointer;
 }
 
-/* iPad/tablet */
-@media (max-width: 1024px) and (min-width: 768px) {
-  .modal-content { max-width: 480px; border-radius: 10px; }
+/* 태블릿: 모달 폭 조금 줄이기 */
+@media (max-width: 1024px){
+  .modal-content{ width: min(94vw, 640px); border-radius:10px; }
+  .modal-body{ padding:16px; }
 }
 
-/* 작은 태블릿 */
-@media (min-width: 600px) and (max-width: 767px) {
-  .modal-content { max-width: 420px; border-radius: 10px; }
-}
-/* 핸드폰용 */
-@media (max-width: 599px) {
+/* 모바일: 1열(커버 위, 본문 아래) + 커버는 1:1로 딱 */
+@media (max-width: 599px){
+  .modal-root{ padding:10px; }
 
-  /* 모달 루트: 스크롤러가 되지 않게 + 바운스 전파 차단 */
-  .modal-root{
-    align-items:center;
-    padding:0;
-    overflow:hidden;
-    overscroll-behavior: contain;
-    touch-action: none;
-    -webkit-overflow-scrolling: auto;
-  }
-
-  /* 모달 카드: 내부 스크롤 금지(움직이는 느낌 차단) */
   .modal-content{
     --mScale: .92;
-    width: 85%;
-    max-width: 320px;
-    border-radius: 8px;
-    max-height: calc(100svh - 28px);
-    overflow: hidden;
-    overscroll-behavior: contain;
-    touch-action: none;
+    width: min(94vw, 360px);
+    max-height: 94svh;
+    border-radius:10px;
   }
 
   .modal-grid{
     grid-template-columns: 1fr;
-    gap: 0;
   }
 
-  /* 모바일: 앨범아트는 1:1 고정 */
   .modal-cover-wrap{
-    width:100%;
-    aspect-ratio: 1 / 1;
-    padding:0;
-    background:#fff;
-    overflow:hidden;
+    height:auto;
+    aspect-ratio: 1 / 1;        /* 커버는 모바일에서 정사각형 */
   }
 
   #modalCover{
-    width:100% !important;
-    height:100% !important;
-    object-fit: cover !important;
-    display:block;
-    background:#fff;
+    height:100%;
   }
 
-  /* Seek bar만 가로 드래그 허용 */
-  #pSeek{
-    touch-action: pan-x;
+  .modal-body{
+    padding:14px;
   }
+
+  /* Seek는 가로 드래그가 자연스럽게 */
+  #pSeek{ touch-action: pan-x; }
 }
-/* svh 미지원 브라우저 fallback */
-/* svh 미지원 브라우저 fallback */
+
+/* svh 미지원 fallback */
 @supports not (height: 100svh){
-  @media (max-width: 599px){
-    .modal-content{
-      max-height: calc(100vh - 28px);
-    }
-  }
+  .modal-content{ max-height: 94vh; }
 }
 @media (max-width:980px){
   .grid{ grid-template-columns: repeat(2,1fr) }
@@ -1332,9 +1422,9 @@ html.modal-open body{
     <span id="pTime" class="ptime">0:00 / 0:00</span>
   </div>
 </div>
-        <div style="margin-top:12px;display:flex;gap:8px;align-items:center;justify-content:flex-start">
-          <a id="linkStore" class="link" href="#" target="_blank">Streaming</a>
-        </div>
+<div class="modal-links">
+  <a id="linkStore" class="link" href="#" target="_blank">Streaming</a>
+</div>
       </div>
     </div>
   </div>
@@ -1925,6 +2015,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
