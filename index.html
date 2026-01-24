@@ -237,34 +237,38 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
 /* 핸드폰용 */
 @media (max-width: 599px) {
 
-.modal-root{
-  align-items:center;        /* 중앙 고정 */
-  overflow:hidden;           /* ✅ 모달 루트 스크롤 차단 */
-  padding: 0;
-  overscroll-behavior: contain;
-  touch-action: none;        /* ✅ 스와이프(스크롤/바운스) 차단 */
-}
+  /* 모달 루트: 스크롤러가 되지 않게 + 바운스 전파 차단 */
+  .modal-root{
+    align-items:center;
+    padding:0;
+    overflow:hidden;
+    overscroll-behavior: contain;
+    touch-action: none;
+    -webkit-overflow-scrolling: auto;
+  }
 
+  /* 모달 카드: 내부 스크롤 금지(움직이는 느낌 차단) */
   .modal-content{
     --mScale: .92;
     width: 85%;
     max-width: 320px;
     border-radius: 8px;
-
-    /* iOS 상단바/주소창 변동으로 vh 흔들릴 때 잘림 방지 */
     max-height: calc(100svh - 28px);
-    overflow: auto;
+    overflow: hidden;
+    overscroll-behavior: contain;
+    touch-action: none;
   }
 
   .modal-grid{
     grid-template-columns: 1fr;
     gap: 0;
   }
-  /* 모바일: 앨범아트는 정사각형 프레임(1:1)으로 딱 */
+
+  /* 모바일: 앨범아트는 1:1 고정 */
   .modal-cover-wrap{
     width:100%;
-    aspect-ratio: 1 / 1;  /* ✅ 1:1 고정 */
-    padding:0;            /* ✅ 여백 제거 */
+    aspect-ratio: 1 / 1;
+    padding:0;
     background:#fff;
     overflow:hidden;
   }
@@ -272,17 +276,23 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
   #modalCover{
     width:100% !important;
     height:100% !important;
-    object-fit: cover !important;  /* ✅ 1:1 이미지면 절대 안 잘리고 꽉 참 */
+    object-fit: cover !important;
     display:block;
     background:#fff;
   }
-}
 
+  /* Seek bar만 가로 드래그 허용 */
+  #pSeek{
+    touch-action: pan-x;
+  }
+}
+/* svh 미지원 브라우저 fallback */
 /* svh 미지원 브라우저 fallback */
 @supports not (height: 100svh){
   @media (max-width: 599px){
-    .modal-content{ max-height: calc(100vh - 28px); }
-    .modal-cover-wrap{ height: 52vh; }
+    .modal-content{
+      max-height: calc(100vh - 28px);
+    }
   }
 }
 @media (max-width:980px){
@@ -1083,6 +1093,22 @@ img {
   min-width:100px;
   text-align:right;
 }
+/* ===============================
+   MODAL OPEN: 배경(페이지) 스크롤 완전 고정 (iOS 포함)
+=============================== */
+html.modal-open,
+html.modal-open body{
+  height:100%;
+  overflow:hidden;
+}
+
+html.modal-open body{
+  position:fixed;
+  width:100%;
+  left:0;
+  right:0;
+  touch-action:none;
+}
 </style>
 </head>
 <body>
@@ -1870,6 +1896,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
