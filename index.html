@@ -1204,6 +1204,49 @@ html.modal-open body{
   right:0;
   touch-action:none;
 }
+/* ===== Gallery Room 카드: 첫 이미지 1장만 보여주기 ===== */
+.gallery-frame .card-media{
+  width:100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display:block;
+  background:#fff;
+}
+
+/* ===== Modal Gallery Thumbnails ===== */
+.gthumbs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.gthumb{
+  width:56px;
+  height:56px;
+  padding:0;
+  border-radius:10px;
+  border:1px solid rgba(16,24,40,0.12);
+  background:#fff;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.gthumb img{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+}
+
+.gthumb.active{
+  outline:2px solid var(--accent);
+  border-color: transparent;
+}
+
+@media (max-width: 599px){
+  .gthumb{ width:52px; height:52px; }
+}
 </style>
 </head>
 <body>
@@ -1389,25 +1432,24 @@ html.modal-open body{
       <div class="modal-body">
         <h3 id="modalTitle" style="margin-top:0"></h3>
         <p id="modalDesc" class="muted"></p>
-<div style="margin-top:14px">
-  <!-- 기본 controls 제거: ... 메뉴가 사라지는 핵심 -->
+<!-- ✅ 갤러리 상세보기용: 썸네일들 (Disc 모달에서는 숨김) -->
+<div id="modalGalleryThumbs" class="gthumbs" style="display:none;"></div>
+
+<!-- ✅ Disc(음원)용 플레이어 래퍼 -->
+<div id="modalPlayerWrap" style="margin-top:14px">
   <audio id="modalAudio" preload="none">
     <source id="modalAudioSrc" src="" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
-  <!-- 커스텀 컨트롤 UI -->
-  <!-- 커스텀 컨트롤 UI (아이콘 3버튼) -->
   <div class="player">
     <div class="pcontrols">
-      <!-- 재생 ▶ -->
       <button id="pPlay" class="pbtn icon" type="button" aria-label="재생">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <polygon points="8,5 19,12 8,19"></polygon>
         </svg>
       </button>
 
-      <!-- 일시정지 ❚❚ -->
       <button id="pPause" class="pbtn icon" type="button" aria-label="일시정지">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect x="6" y="5" width="4" height="14"></rect>
@@ -1415,7 +1457,6 @@ html.modal-open body{
         </svg>
       </button>
 
-      <!-- 완전 멈춤 ■ (0초로 리셋) -->
       <button id="pStop" class="pbtn icon" type="button" aria-label="정지">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect x="7" y="7" width="10" height="10"></rect>
@@ -1427,6 +1468,7 @@ html.modal-open body{
     <span id="pTime" class="ptime">0:00 / 0:00</span>
   </div>
 </div>
+
 <div class="modal-links">
   <a id="linkStore" class="link" href="#" target="_blank">Streaming</a>
 </div>
@@ -1453,19 +1495,22 @@ const galleryItem = [
     id: 1000000002,
     title: '우리 집',
     year: 2026,
-    images: ['img/3rd ds 01/001.jpg','img/3rd ds 01/002.jpg','img/3rd ds 01/003.jpg']
+    desc: '작품 설명을 여기에 작성하세요.',
+    images: ['img/3rd ds 01/003.jpg']
   },
   {
     id: 1000000001,
     title: '서서히 잊혀져',
     year: 2026,
-    images: ['img/3rd ds 02/001.jpg','img/3rd ds 02/002.jpg','img/3rd ds 02/003.jpg']
+    desc: '작품 설명을 여기에 작성하세요.',
+    images: ['img/3rd ds 02/003.jpg']
   },
   {
     id: 1000000000,
     title: '경계선',
     year: 2026,
-    images: ['img/3rd ds 03/001.jpg','img/3rd ds 03/002.jpg','img/3rd ds 03/003.jpg']
+    desc: '작품 설명을 여기에 작성하세요.',
+    images: ['img/3rd ds 03/003.jpg']
   },
 
 
@@ -1476,31 +1521,36 @@ const galleryItem = [
     id: 5,
     title: '시선',
     year: 2025,
-    images: ['img/SS/001.jpg','img/SS/002.jpg','img/SS/003.jpg']
+    desc: '작품 설명을 여기에 작성하세요.',
+    images: ['img/SS/003.jpg']
   },
   {
     id: 4,
     title: '무력감',
     year: 2025,
-    images: ['img/MRG/001.jpg','img/MRG/002.jpg','img/MRG/003.jpg','img/MRG/004.jpg']
+    desc: '작품 설명을 여기에 작성하세요.',
+    images: ['img/MRG/004.jpg']
   },
   {
     id: 3,
     title: '꿈',
     year: 2025,
-    images: ['img/DRM/001.jpg','img/DRM/002.jpg','img/DRM/003.jpg','img/DRM/004.jpg']
+    desc: '작품 설명을 여기에 작성하세요.',
+    images: ['img/DRM/004.jpg']
   },
   {
     id: 2,
     title: '조망효과',
     year: 2025,
-    images: ['img/JMHG/001.jpg','img/JMHG/002.jpg','img/JMHG/003.jpg','img/JMHG/004.jpg']
+    desc: '작품 설명을 여기에 작성하세요.',
+    images: ['img/JMHG/004.jpg']
   },
   {
     id: 1,
     title: '덧니',
     year: 2025,
-    images: ['img/DN/001.jpg','img/DN/002.jpg','img/DN/003.jpg']
+    desc: '작품 설명을 여기에 작성하세요.',
+    images: ['img/DN/003.jpg']
   },
 ];
 const galleryFloors = [
@@ -1551,36 +1601,33 @@ function createCard(d){
 if (discGrid) {
   discs.forEach(d => discGrid.appendChild(createCard(d)));
 }
-
-/* Gallery 작품 카드 (슬라이더 포함) */
-function createGalleryCard(d) {
+function createGalleryCard(d){
   const el = document.createElement('article');
-  el.className = 'card gallery-slider gallery-frame';
+  el.className = 'card gallery-frame';
 
-  const slides = d.images.map((src) => `
-    <div class="slide">
-      <img src="${src}" alt="">
-    </div>
-  `).join('');
+  const thumb = (d.images && d.images.length) ? d.images[0] : '';
+  const desc = d.desc || '';
 
   el.innerHTML = `
-    <div class="slider-wrapper">
-      <div class="slides" data-index="0">
-        ${slides}
-      </div>
-      <div class="slider-arrow left">◀</div>
-      <div class="slider-arrow right">▶</div>
-    </div>
+    <img class="card-media" src="${thumb}" alt="${d.title}">
     <div class="card-body">
       <div class="meta">${d.year}</div>
       <h4 class="title">${d.title}</h4>
+      <p class="muted" style="margin:0 0 12px 0;">
+        ${desc.length > 80 ? (desc.slice(0, 76) + '…') : desc}
+      </p>
+      <div class="cta-row">
+        <button class="small-btn primary" type="button">자세히 보기</button>
+      </div>
     </div>
   `;
 
-  enableSlider(el.querySelector('.slides'));
+  el.querySelector('button').addEventListener('click', () => {
+    openGalleryModal(d);
+  });
+
   return el;
 }
-
 /* 섹션 전환 */
 function showSection(id, btn){
   const main = document.querySelector('main.app');
@@ -1618,6 +1665,9 @@ const modalCover = document.getElementById('modalCover');
 const modalAudioSrc = document.getElementById('modalAudioSrc');
 const modalAudio = document.getElementById('modalAudio');
 const linkStore = document.getElementById('linkStore');
+const modalPlayerWrap = document.getElementById('modalPlayerWrap');
+const modalLinksWrap  = document.querySelector('.modal-links');
+const modalGalleryThumbs = document.getElementById('modalGalleryThumbs');
 /* ===============================
    iOS 포함: 모달 열릴 때 배경 스크롤 완전 고정
 =============================== */
@@ -1649,6 +1699,15 @@ modalRoot.addEventListener('touchmove', preventModalTouchMove, { passive:false }
 modalContent.addEventListener('touchmove', preventModalTouchMove, { passive:false });
 
 function openModal(d){
+      
+  // ✅ 디스크(음원) 모드: 플레이어/Streaming 표시, 갤러리 썸네일 숨김
+  if (modalPlayerWrap) modalPlayerWrap.style.display = 'block';
+  if (modalLinksWrap)  modalLinksWrap.style.display  = 'flex';
+  if (modalGalleryThumbs){
+    modalGalleryThumbs.style.display = 'none';
+    modalGalleryThumbs.innerHTML = '';
+  }
+      
   modalTitle.textContent = d.title+' — '+d.year;
   modalDesc.textContent = d.desc;
   modalCover.src = d.cover;
@@ -1674,6 +1733,60 @@ function closeModal(){
   try{ modalAudio.pause(); modalAudio.currentTime=0; }catch(e){}
   syncUI(); // 추가: 닫을 때 UI 리셋 표시
   unlockScroll();
+}
+function openGalleryModal(item){
+  // ✅ 갤러리 모드: 플레이어/Streaming 숨기고, 썸네일 표시
+  if (modalPlayerWrap) modalPlayerWrap.style.display = 'none';
+  if (modalLinksWrap)  modalLinksWrap.style.display  = 'none';
+
+  // 오디오 완전 정지 + src 제거
+  try { modalAudio.pause(); modalAudio.currentTime = 0; } catch(e) {}
+  modalAudioSrc.src = '';
+  try { modalAudio.load(); } catch(e) {}
+  syncUI();
+
+  // 타이틀/설명
+  modalTitle.textContent = `${item.title} — ${item.year}`;
+  modalDesc.textContent  = item.desc || '';
+
+  // 대표 이미지(첫 장)
+  const imgs = Array.isArray(item.images) ? item.images : [];
+  const first = imgs.length ? imgs[0] : '';
+  modalCover.src = first;
+
+  // 썸네일 렌더
+  if (!modalGalleryThumbs) return;
+
+  modalGalleryThumbs.innerHTML = '';
+  if (imgs.length <= 1){
+    modalGalleryThumbs.style.display = 'none';
+  } else {
+    modalGalleryThumbs.style.display = 'flex';
+
+    imgs.forEach((src, idx) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'gthumb' + (idx === 0 ? ' active' : '');
+
+      const im = document.createElement('img');
+      im.src = src;
+      im.alt = '';
+      b.appendChild(im);
+
+      b.addEventListener('click', () => {
+        modalCover.src = src;
+        modalGalleryThumbs.querySelectorAll('.gthumb').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+      });
+
+      modalGalleryThumbs.appendChild(b);
+    });
+  }
+
+  // 모달 열기(공통)
+  modalRoot.style.display = 'flex';
+  requestAnimationFrame(() => modalContent.classList.add('show'));
+  lockScroll();
 }
 /* ===== Custom Player Controls (3 icon buttons) ===== */
 const pPlay  = document.getElementById('pPlay');
@@ -2020,6 +2133,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
