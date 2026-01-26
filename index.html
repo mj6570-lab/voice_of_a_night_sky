@@ -1350,14 +1350,13 @@ html.modal-open body{
 <main class="app" role="main" style="display:none;">
   <section id="about" class="panel">
     <h2 id="aboutTitle" class="section-title">Introduction</h2>
-<p class="lead preline"></p>
-
+<p id="aboutIntro" class="lead preline"></p>
     <!-- 프로필 영역 -->
     <div style="display:flex;gap:18px;align-items:center;margin-top:18px;flex-wrap:wrap">
       <img src="img/pf.jpg" alt="artist" class="profile"
            style="border-radius:12px;border:1px solid rgba(16,24,40,0.04)">
       <div style="flex:1;min-width:200px">
-        <p style="margin:0 0 8px 0">【뮤지션】</p>
+        <p style="margin:0 0 8px 0">【밤하늘의 소리】</p>
         <p style="margin:0 0 8px 0">밤하늘의 소리</p>
         <p style="margin:0 0 8px 0">인디 / 락 / Soul</p>
       </div>
@@ -2369,11 +2368,15 @@ galleryDoorTrigger.addEventListener('click', () => {
     showFloor(0);
   }, 950);
 });
-
 /* 초기 상태: 아무 섹션도 안 띄움 (버튼 눌렀을 때만 main 등장) */
+const aboutIntro = document.getElementById('aboutIntro');
+if (aboutIntro) {
+  aboutIntro.textContent = "첫 줄입니다.\n둘째 줄입니다.\n셋째 줄입니다.";
+} 
 </script>
 </body>
 </html>
+
 
 
 
