@@ -1634,7 +1634,8 @@ function createCard(d){
     <div class="card-body">
       <div class="meta">${d.year}</div>
       <h4 class="title">${d.title}</h4>
-      <p class="muted" style="margin:0 0 12px 0;">${d.desc.length>80?d.desc.slice(0,76)+'…':d.desc}</p>
+
+      <!-- ✅ 카드에서는 설명 숨김(모달에서만 보이게) -->
       <div class="cta-row">
         <button class="small-btn primary">자세히 보기</button>
       </div>
@@ -2382,6 +2383,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
