@@ -336,11 +336,24 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
 .modal-close{
   position:absolute;
   top:12px; right:12px;
-  background:transparent;
-  border:none;
+
+  z-index:9999;                 /* ✅ 이 한 줄이 핵심: 항상 최상단 */
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background: rgba(255,255,255,0.85);  /* 흰 배경 위에서도 안 사라지게 */
+  border:1px solid rgba(16,24,40,0.12);
+  border-radius:999px;
+
   font-weight:800;
   font-size:18px;
+  color:#111;                    /* 글자색 고정 */
   cursor:pointer;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* 태블릿: 모달 폭 조금 줄이기 */
@@ -2369,6 +2382,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
