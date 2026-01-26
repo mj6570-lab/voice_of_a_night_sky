@@ -424,6 +424,10 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
 }
 
 .muted{ color:var(--muted) }
+/* ✅ \n 줄바꿈을 화면에 그대로 보여주기 */
+.preline{
+  white-space: pre-line;
+}
 a.link{ color:var(--accent); text-decoration:none }
 
 /* small form tweaks */
@@ -1293,6 +1297,10 @@ html.modal-open body{
   align-items:initial !important;  /* 혹시 남아있는 flex 속성 무력화 */
   justify-content:initial !important;
 }
+/* ✅ 갤러리 모달에서만 \n 줄바꿈을 보여주기 위한 클래스 */
+#modalDesc.preline{
+  white-space: pre-line;
+}
 </style>
 </head>
 <body>
@@ -1315,7 +1323,7 @@ html.modal-open body{
 <main class="app" role="main" style="display:none;">
   <section id="about" class="panel">
     <h2 id="aboutTitle" class="section-title">Introduction</h2>
-    <p class="lead"></p>
+<p class="lead preline"></p>
 
     <!-- 프로필 영역 -->
     <div style="display:flex;gap:18px;align-items:center;margin-top:18px;flex-wrap:wrap">
@@ -1401,7 +1409,7 @@ html.modal-open body{
   <!-- GALLERY: 전시장 구조 -->
   <section id="gallery" class="panel">
     <h2 id="galleryTitle" class="section-title">Gallery</h2>
-    <p class="lead">'밤하늘의 소리'의 개인전입니다.</p>
+<p class="lead preline">'밤하늘의 소리'의 개인전입니다.</p>
 
     <!-- Entrance -->
     <div id="galleryEntrance" class="gallery-state">
@@ -1418,7 +1426,7 @@ html.modal-open body{
               
           <div class="door-light"></div>
         </div>
-        <p class="gallery-entrance-sub"></p>
+<p class="gallery-entrance-sub preline"></p>
       </div>
     </div>
 
@@ -1543,7 +1551,7 @@ const galleryItem = [
     id: 1000000002,
     title: '우리 집',
     year: 2026,
-    desc: '작품 설명을 여기에 작성하세요.',
+    desc: '충청북도 청주시, 제 본가입니다.',
     images: ['img/3rd ds 01/003.jpg']
   },
   {
@@ -1940,7 +1948,7 @@ function openModal(d){
     modalGalleryThumbs.style.display = 'none';
     modalGalleryThumbs.innerHTML = '';
   }
-      
+modalDesc.classList.remove('preline'); // ✅ 디스코 모달에서는 줄바꿈 모드 끔
   modalTitle.textContent = d.title+' — '+d.year;
   modalDesc.textContent = d.desc;
   modalCover.src = d.cover;
@@ -1989,7 +1997,7 @@ function openGalleryModal(item){
     ? item.desc.trim()
     : '작품 설명을 여기에 작성하세요.';
   modalDesc.textContent = desc;
-
+  modalDesc.classList.add('preline'); // ✅ 갤러리 모달에서만 \n 줄바꿈 적용
   // 대표 이미지(첫 장)
   const imgs = Array.isArray(item.images) ? item.images : [];
   const first = imgs.length ? imgs[0] : '';
@@ -2384,16 +2392,3 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
