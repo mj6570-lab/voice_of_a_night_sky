@@ -266,47 +266,33 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
   padding-right:6px; /* 스크롤바 여유 */
   white-space: pre-line;   /* ✅ 엔터(줄바꿈) 표시 */
 }
-
-/* =========================================
-   MODAL DESC: 스크롤바를 "심플하지만 확실히" 보이게
-   + 스크롤 가능 힌트(상/하단 그라데이션) 추가
-========================================= */
+/* ===============================
+   MODAL DESC: 스크롤바를 더 연하고 심플하게
+   (가장 아래에 넣어서 최종 덮어쓰기)
+=============================== */
 #modalDesc{
-  overflow: auto; /* 혹시 모를 덮어쓰기 방지 */
-  scrollbar-gutter: stable both-edges; /* 지원 브라우저에서 스크롤바 공간 확보 */
-  scrollbar-width: auto; /* Firefox: thin보다 더 잘 보이게 */
-  scrollbar-color: rgba(31,31,31,0.50) rgba(0,0,0,0.10);
-
-  /* 스크롤이 있는 영역이라는 '힌트' (오버레이 스크롤바가 안 보일 때도 도움) */
-  background-color: #fff;
-  background:
-    linear-gradient(#fff 30%, rgba(255,255,255,0)) 0 0/100% 22px,
-    linear-gradient(rgba(255,255,255,0), #fff 70%) 0 100%/100% 22px,
-    radial-gradient(farthest-side at 50% 0, rgba(0,0,0,0.14), transparent) 0 0/100% 10px,
-    radial-gradient(farthest-side at 50% 100%, rgba(0,0,0,0.14), transparent) 0 100%/100% 10px;
-  background-repeat: no-repeat;
-  background-attachment: local, local, scroll, scroll;
-
-  /* 스크롤바가 겹쳐 보이지 않게 약간 여유 */
-  padding-right: 10px;
+  overflow: auto;
+  scrollbar-gutter: stable both-edges; /* 지원 브라우저에서만 적용 */
+  scrollbar-width: thin;              /* Firefox */
+  scrollbar-color: rgba(17,17,17,0.28) transparent; /* Firefox: thumb / track */
+  padding-right: 10px;                /* 스크롤바와 글자 간격 */
 }
 
 /* Chrome / Edge / Safari */
 #modalDesc::-webkit-scrollbar{
-  width: 10px;
+  width: 8px;
 }
 #modalDesc::-webkit-scrollbar-track{
-  background: rgba(0,0,0,0.10);
-  border-radius: 999px;
+  background: transparent;
 }
 #modalDesc::-webkit-scrollbar-thumb{
-  background: rgba(31,31,31,0.42);
+  background: rgba(17,17,17,0.22);
   border-radius: 999px;
-  border: 2px solid rgba(255,255,255,0.75);
+  border: 2px solid rgba(255,255,255,0.7);
   background-clip: padding-box;
 }
 #modalDesc::-webkit-scrollbar-thumb:hover{
-  background: rgba(31,31,31,0.58);
+  background: rgba(17,17,17,0.32);
 }
 /* 플레이어: 화면에 맞게 줄바꿈/축소 */
 .player{
@@ -1764,6 +1750,17 @@ const linkStore = document.getElementById('linkStore');
 const modalPlayerWrap = document.getElementById('modalPlayerWrap');
 const modalLinksWrap  = document.querySelector('.modal-links');
 const modalGalleryThumbs = document.getElementById('modalGalleryThumbs');
+function resetModalDescScroll(){
+  if (!modalDesc) return;
+  modalDesc.scrollTop = 0;
+  modalDesc.scrollLeft = 0;
+
+  // display 전환/텍스트 갱신 타이밍 이슈 대비 (일부 브라우저)
+  requestAnimationFrame(() => {
+    modalDesc.scrollTop = 0;
+    modalDesc.scrollLeft = 0;
+  });
+}
 /* ===============================
    PINCH ZOOM for #modalCover (Mobile)
    - two-finger pinch: zoom in/out
@@ -1993,6 +1990,7 @@ function openModal(d){
 modalDesc.classList.remove('preline'); // ✅ 디스코 모달에서는 줄바꿈 모드 끔
   modalTitle.textContent = d.title+' — '+d.year;
   modalDesc.textContent = d.desc;
+resetModalDescScroll();            // ✅ 이 줄 추가
   modalCover.src = d.cover;
 // ✅ 추가: 모달 열 때 항상 줌 리셋
 resetZoom();
@@ -2039,6 +2037,7 @@ function openGalleryModal(item){
     ? item.desc.trim()
     : '작품 설명을 여기에 작성하세요.';
   modalDesc.textContent = desc;
+resetModalDescScroll();            // ✅ 이 줄 추가
   modalDesc.classList.add('preline'); // ✅ 갤러리 모달에서만 \n 줄바꿈 적용
   // 대표 이미지(첫 장)
   const imgs = Array.isArray(item.images) ? item.images : [];
@@ -2434,6 +2433,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
