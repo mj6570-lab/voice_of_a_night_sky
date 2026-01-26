@@ -267,6 +267,24 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
   white-space: pre-line;   /* ✅ 엔터(줄바꿈) 표시 */
 }
 
+/* ===== Modal Description: Minimal Scrollbar ===== */
+#modalDesc{
+  overscroll-behavior: contain;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(16,24,40,0.18) transparent; /* Firefox */
+}
+
+/* Chrome / Safari */
+#modalDesc::-webkit-scrollbar{
+  width: 6px;
+}
+#modalDesc::-webkit-scrollbar-thumb{
+  background: rgba(16,24,40,0.18);
+  border-radius: 999px;
+}
+#modalDesc::-webkit-scrollbar-track{
+  background: transparent;
+}
 /* 플레이어: 화면에 맞게 줄바꿈/축소 */
 .player{
   display:flex;
@@ -1933,7 +1951,8 @@ function unlockScroll(){
 }
 function preventModalTouchMove(e){
   if (e.target && e.target.closest && e.target.closest('#pSeek')) return;
-  if (e.target && e.target.closest && e.target.closest('#modalCoverWrap')) return; // ✅ 추가: 줌 영역은 막지 않음
+  if (e.target && e.target.closest && e.target.closest('#modalCoverWrap')) return; // 줌 영역 허용
+  if (e.target && e.target.closest && e.target.closest('#modalDesc')) return;      // ✅ 설명 스크롤 허용(핵심)
   e.preventDefault();
 }
 modalRoot.addEventListener('touchmove', preventModalTouchMove, { passive:false });
@@ -2392,6 +2411,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
