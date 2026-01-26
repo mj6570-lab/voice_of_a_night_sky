@@ -1255,6 +1255,20 @@ html.modal-open body{
 @media (max-width: 599px){
   .gthumb{ width:52px; height:52px; }
 }
+/* ===============================
+   MODAL IMAGE PINCH ZOOM
+=============================== */
+#modalCoverWrap{
+  position: relative;
+  overflow: hidden;                 /* 줌/패닝 시 밖으로 나간 부분 숨김 */
+  touch-action: none;               /* (지원 브라우저) 기본 제스처 대신 커스텀 사용 */
+}
+
+#modalCover.zoom-img{
+  will-change: transform;
+  transform: translate3d(0,0,0) scale(1);
+  transform-origin: 0 0;
+}
 </style>
 </head>
 <body>
@@ -1436,7 +1450,9 @@ html.modal-open body{
   <div id="modalContent" class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <button class="modal-close" aria-label="닫기" onclick="closeModal()">✕</button>
     <div class="modal-grid">
-          <div class="modal-cover-wrap"><img id="modalCover" class="modal-cover" src="" alt="Album cover"></div>
+<div class="modal-cover-wrap zoom-wrap" id="modalCoverWrap">
+  <img id="modalCover" class="modal-cover zoom-img" src="" alt="Album cover">
+</div>
       <div class="modal-body">
         <h3 id="modalTitle" style="margin-top:0"></h3>
         <p id="modalDesc" class="muted"></p>
@@ -1675,8 +1691,199 @@ const modalPlayerWrap = document.getElementById('modalPlayerWrap');
 const modalLinksWrap  = document.querySelector('.modal-links');
 const modalGalleryThumbs = document.getElementById('modalGalleryThumbs');
 /* ===============================
-   iOS 포함: 모달 열릴 때 배경 스크롤 완전 고정
+   PINCH ZOOM for #modalCover (Mobile)
+   - two-finger pinch: zoom in/out
+   - one-finger drag (when zoomed): pan
 =============================== */
+const modalCoverWrap = document.getElementById('modalCoverWrap');
+
+const ZOOM = {
+  min: 1,
+  max: 4,
+  scale: 1,
+  tx: 0,
+  ty: 0,
+
+  // internal
+  mode: null,            // 'pinch' | 'pan' | null
+  startScale: 1,
+  startTx: 0,
+  startTy: 0,
+  startDist: 0,
+  startMid: {x:0,y:0},
+  startLocal: {x:0,y:0},
+  panStart: {x:0,y:0},
+};
+
+function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+
+function getWrapRect(){
+  return modalCoverWrap.getBoundingClientRect();
+}
+
+function getBaseSize(){
+  // 현재 transform을 잠시 제거하고 "scale=1 기준" 렌더 크기를 측정
+  const prev = modalCover.style.transform;
+  modalCover.style.transform = 'none';
+  const r = modalCover.getBoundingClientRect();
+  modalCover.style.transform = prev;
+  return { w: r.width || 1, h: r.height || 1 };
+}
+
+function clampTranslate(scale, tx, ty){
+  const wrap = getWrapRect();
+  const base = getBaseSize();
+  const sw = base.w * scale;
+  const sh = base.h * scale;
+
+  // wrap 안에서 이미지가 벗어나지 않게 제한
+  // (이미지가 wrap보다 작아지는 경우(거의 없음)는 중앙 근처로 제한)
+  const minTx = Math.min(0, wrap.width - sw);
+  const minTy = Math.min(0, wrap.height - sh);
+  const maxTx = 0;
+  const maxTy = 0;
+
+  return {
+    tx: clamp(tx, minTx, maxTx),
+    ty: clamp(ty, minTy, maxTy),
+  };
+}
+
+function applyZoom(){
+  const fixed = clampTranslate(ZOOM.scale, ZOOM.tx, ZOOM.ty);
+  ZOOM.tx = fixed.tx;
+  ZOOM.ty = fixed.ty;
+  modalCover.style.transform = `translate3d(${ZOOM.tx}px, ${ZOOM.ty}px, 0) scale(${ZOOM.scale})`;
+  modalCover.style.transformOrigin = '0 0';
+}
+
+function resetZoom(){
+  ZOOM.scale = 1;
+  ZOOM.tx = 0;
+  ZOOM.ty = 0;
+  ZOOM.mode = null;
+  applyZoom();
+}
+
+function dist(t1, t2){
+  const dx = t2.clientX - t1.clientX;
+  const dy = t2.clientY - t1.clientY;
+  return Math.hypot(dx, dy);
+}
+
+function mid(t1, t2){
+  return { x: (t1.clientX + t2.clientX)/2, y: (t1.clientY + t2.clientY)/2 };
+}
+
+function onZoomTouchStart(e){
+  // 모달 이미지 영역에서만 제스처 처리
+  if (!modalRoot || modalRoot.style.display === 'none') return;
+
+  if (e.touches.length === 2){
+    e.preventDefault();
+
+    const wrap = getWrapRect();
+    const t1 = e.touches[0], t2 = e.touches[1];
+    const m = mid(t1, t2);
+
+    ZOOM.mode = 'pinch';
+    ZOOM.startScale = ZOOM.scale;
+    ZOOM.startTx = ZOOM.tx;
+    ZOOM.startTy = ZOOM.ty;
+    ZOOM.startDist = dist(t1, t2);
+    ZOOM.startMid = m;
+
+    // 핀치 중심점이 이미지의 어느 로컬 좌표를 가리키는지 저장
+    const mx = m.x - wrap.left;
+    const my = m.y - wrap.top;
+    ZOOM.startLocal = {
+      x: (mx - ZOOM.tx) / ZOOM.scale,
+      y: (my - ZOOM.ty) / ZOOM.scale,
+    };
+  }
+  else if (e.touches.length === 1 && ZOOM.scale > 1){
+    // 줌 상태일 때만 한 손가락 패닝
+    e.preventDefault();
+    const t = e.touches[0];
+    ZOOM.mode = 'pan';
+    ZOOM.panStart = { x: t.clientX, y: t.clientY };
+    ZOOM.startTx = ZOOM.tx;
+    ZOOM.startTy = ZOOM.ty;
+  }
+}
+
+function onZoomTouchMove(e){
+  if (!modalRoot || modalRoot.style.display === 'none') return;
+  if (!ZOOM.mode) return;
+
+  const wrap = getWrapRect();
+
+  if (ZOOM.mode === 'pinch' && e.touches.length === 2){
+    e.preventDefault();
+    const t1 = e.touches[0], t2 = e.touches[1];
+
+    const newDist = dist(t1, t2);
+    const ratio = newDist / (ZOOM.startDist || 1);
+    const newScale = clamp(ZOOM.startScale * ratio, ZOOM.min, ZOOM.max);
+
+    const m = mid(t1, t2);
+    const mx = m.x - wrap.left;
+    const my = m.y - wrap.top;
+
+    // 핀치 중심이 가리키는 로컬 좌표(startLocal)가 계속 같은 화면 좌표를 유지하도록 tx/ty를 계산
+    const newTx = mx - ZOOM.startLocal.x * newScale;
+    const newTy = my - ZOOM.startLocal.y * newScale;
+
+    ZOOM.scale = newScale;
+    ZOOM.tx = newTx;
+    ZOOM.ty = newTy;
+
+    applyZoom();
+  }
+
+  if (ZOOM.mode === 'pan' && e.touches.length === 1){
+    e.preventDefault();
+    const t = e.touches[0];
+    const dx = t.clientX - ZOOM.panStart.x;
+    const dy = t.clientY - ZOOM.panStart.y;
+
+    ZOOM.tx = ZOOM.startTx + dx;
+    ZOOM.ty = ZOOM.startTy + dy;
+
+    applyZoom();
+  }
+}
+
+function onZoomTouchEnd(e){
+  // 손가락이 0개면 종료
+  if (e.touches.length === 0){
+    ZOOM.mode = null;
+
+    // scale이 거의 1이면 완전 리셋 (가벼운 UX 보정)
+    if (ZOOM.scale <= 1.02){
+      resetZoom();
+    } else {
+      applyZoom(); // clamp만 한 번 더
+    }
+  }
+
+  // 핀치하다가 손가락 1개가 남으면 pan 모드로 자연 전환
+  if (e.touches.length === 1 && ZOOM.scale > 1){
+    const t = e.touches[0];
+    ZOOM.mode = 'pan';
+    ZOOM.panStart = { x: t.clientX, y: t.clientY };
+    ZOOM.startTx = ZOOM.tx;
+    ZOOM.startTy = ZOOM.ty;
+  }
+}
+
+// 이벤트 바인딩 (중복 바인딩 방지)
+if (modalCoverWrap){
+  modalCoverWrap.addEventListener('touchstart', onZoomTouchStart, { passive:false });
+  modalCoverWrap.addEventListener('touchmove', onZoomTouchMove, { passive:false });
+  modalCoverWrap.addEventListener('touchend', onZoomTouchEnd, { passive:false });
+  modalCoverWrap.addEventListener('touchcancel', onZoomTouchEnd, { passive:false });
+}
 let __scrollY = 0;
 
 function lockScroll(){
@@ -1691,19 +1898,11 @@ function unlockScroll(){
   document.body.style.top = '';
   window.scrollTo(0, y);
 }
-
-/* ===============================
-   모달 내부 터치 스와이프로 인한 바운스/전파 차단
-   (단, seek bar 드래그는 허용)
-=============================== */
 function preventModalTouchMove(e){
   if (e.target && e.target.closest && e.target.closest('#pSeek')) return;
+  if (e.target && e.target.closest && e.target.closest('#modalCoverWrap')) return; // ✅ 추가: 줌 영역은 막지 않음
   e.preventDefault();
 }
-
-modalRoot.addEventListener('touchmove', preventModalTouchMove, { passive:false });
-modalContent.addEventListener('touchmove', preventModalTouchMove, { passive:false });
-
 function openModal(d){
       
   // ✅ 디스크(음원) 모드: 플레이어/Streaming 표시, 갤러리 썸네일 숨김
@@ -1717,6 +1916,9 @@ function openModal(d){
   modalTitle.textContent = d.title+' — '+d.year;
   modalDesc.textContent = d.desc;
   modalCover.src = d.cover;
+// ✅ 추가: 모달 열 때 항상 줌 리셋
+resetZoom();
+modalCover.addEventListener('load', resetZoom, { once:true });
   modalAudioSrc.src = d.audio || '';
   try{ modalAudio.load(); }catch(e){}
   syncUI(); // 추가: 초기 UI 동기화
@@ -1738,6 +1940,7 @@ function closeModal(){
   setTimeout(()=> modalRoot.style.display='none',220);
   try{ modalAudio.pause(); modalAudio.currentTime=0; }catch(e){}
   syncUI(); // 추가: 닫을 때 UI 리셋 표시
+resetZoom();
   unlockScroll();
 }
 function openGalleryModal(item){
@@ -1762,7 +1965,9 @@ modalDesc.textContent = desc;
   const imgs = Array.isArray(item.images) ? item.images : [];
   const first = imgs.length ? imgs[0] : '';
   modalCover.src = first;
-
+// ✅ 추가: 갤러리 모달도 항상 줌 리셋
+resetZoom();
+modalCover.addEventListener('load', resetZoom, { once:true });
   // 썸네일 렌더
   if (!modalGalleryThumbs) return;
 
@@ -1782,7 +1987,16 @@ modalDesc.textContent = desc;
       im.alt = '';
       b.appendChild(im);
 
-      b.addEventListener('click', () => {
+b.addEventListener('click', () => {
+  modalCover.src = src;
+
+  // ✅ 썸네일로 이미지 바꿀 때마다 줌 리셋
+  resetZoom();
+  modalCover.addEventListener('load', resetZoom, { once:true });
+
+  modalGalleryThumbs.querySelectorAll('.gthumb').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+});
         modalCover.src = src;
         modalGalleryThumbs.querySelectorAll('.gthumb').forEach(x => x.classList.remove('active'));
         b.classList.add('active');
@@ -2142,4 +2356,5 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
