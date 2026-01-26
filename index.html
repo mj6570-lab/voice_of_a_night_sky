@@ -267,23 +267,46 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
   white-space: pre-line;   /* ✅ 엔터(줄바꿈) 표시 */
 }
 
-/* ===== Modal Description: Minimal Scrollbar ===== */
+/* =========================================
+   MODAL DESC: 스크롤바를 "심플하지만 확실히" 보이게
+   + 스크롤 가능 힌트(상/하단 그라데이션) 추가
+========================================= */
 #modalDesc{
-  overscroll-behavior: contain;
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: rgba(16,24,40,0.35) transparent; /* Firefox */
+  overflow: auto; /* 혹시 모를 덮어쓰기 방지 */
+  scrollbar-gutter: stable both-edges; /* 지원 브라우저에서 스크롤바 공간 확보 */
+  scrollbar-width: auto; /* Firefox: thin보다 더 잘 보이게 */
+  scrollbar-color: rgba(31,31,31,0.50) rgba(0,0,0,0.10);
+
+  /* 스크롤이 있는 영역이라는 '힌트' (오버레이 스크롤바가 안 보일 때도 도움) */
+  background-color: #fff;
+  background:
+    linear-gradient(#fff 30%, rgba(255,255,255,0)) 0 0/100% 22px,
+    linear-gradient(rgba(255,255,255,0), #fff 70%) 0 100%/100% 22px,
+    radial-gradient(farthest-side at 50% 0, rgba(0,0,0,0.14), transparent) 0 0/100% 10px,
+    radial-gradient(farthest-side at 50% 100%, rgba(0,0,0,0.14), transparent) 0 100%/100% 10px;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
+
+  /* 스크롤바가 겹쳐 보이지 않게 약간 여유 */
+  padding-right: 10px;
 }
 
-/* Chrome / Safari */
+/* Chrome / Edge / Safari */
 #modalDesc::-webkit-scrollbar{
-  width: 8px;
-}
-#modalDesc::-webkit-scrollbar-thumb{
-  background: rgba(16,24,40,0.35);
-  border-radius: 999px;
+  width: 10px;
 }
 #modalDesc::-webkit-scrollbar-track{
-  background: transparent;
+  background: rgba(0,0,0,0.10);
+  border-radius: 999px;
+}
+#modalDesc::-webkit-scrollbar-thumb{
+  background: rgba(31,31,31,0.42);
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.75);
+  background-clip: padding-box;
+}
+#modalDesc::-webkit-scrollbar-thumb:hover{
+  background: rgba(31,31,31,0.58);
 }
 /* 플레이어: 화면에 맞게 줄바꿈/축소 */
 .player{
@@ -2411,6 +2434,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
