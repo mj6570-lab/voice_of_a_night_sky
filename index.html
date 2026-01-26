@@ -263,7 +263,8 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
   min-height:0;
   overflow:auto;                /* 텍스트만 스크롤 */
   -webkit-overflow-scrolling: touch;
-  padding-right:6px;            /* 스크롤바 여유 */
+  padding-right:6px; /* 스크롤바 여유 */
+  white-space: pre-line;   /* ✅ 엔터(줄바꿈) 표시 */
 }
 
 /* 플레이어: 화면에 맞게 줄바꿈/축소 */
@@ -2383,6 +2384,7 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
 
