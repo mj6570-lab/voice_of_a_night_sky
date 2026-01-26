@@ -1269,6 +1269,16 @@ html.modal-open body{
   transform: translate3d(0,0,0) scale(1);
   transform-origin: 0 0;
 }
+/* ===============================
+   (권장) Pinch Zoom 안정화: flex 센터정렬 제거
+   - .modal-cover-wrap에 display:flex가 있어서 계산이 꼬일 수 있음
+   - #modalCoverWrap만 block으로 덮어써서 top-left 기준으로 안정화
+=============================== */
+#modalCoverWrap{
+  display:block !important;        /* 기존 .modal-cover-wrap의 display:flex 덮어쓰기 */
+  align-items:initial !important;  /* 혹시 남아있는 flex 속성 무력화 */
+  justify-content:initial !important;
+}
 </style>
 </head>
 <body>
@@ -1903,6 +1913,9 @@ function preventModalTouchMove(e){
   if (e.target && e.target.closest && e.target.closest('#modalCoverWrap')) return; // ✅ 추가: 줌 영역은 막지 않음
   e.preventDefault();
 }
+modalRoot.addEventListener('touchmove', preventModalTouchMove, { passive:false });
+modalContent.addEventListener('touchmove', preventModalTouchMove, { passive:false });
+
 function openModal(d){
       
   // ✅ 디스크(음원) 모드: 플레이어/Streaming 표시, 갤러리 썸네일 숨김
@@ -1956,54 +1969,54 @@ function openGalleryModal(item){
 
   // 타이틀/설명
   modalTitle.textContent = `${item.title} — ${item.year}`;
-const desc = (item.desc && item.desc.trim())
-  ? item.desc.trim()
-  : '작품 설명을 여기에 작성하세요.';
 
-modalDesc.textContent = desc;
+  const desc = (item.desc && item.desc.trim())
+    ? item.desc.trim()
+    : '작품 설명을 여기에 작성하세요.';
+  modalDesc.textContent = desc;
+
   // 대표 이미지(첫 장)
   const imgs = Array.isArray(item.images) ? item.images : [];
   const first = imgs.length ? imgs[0] : '';
   modalCover.src = first;
-// ✅ 추가: 갤러리 모달도 항상 줌 리셋
-resetZoom();
-modalCover.addEventListener('load', resetZoom, { once:true });
-  // 썸네일 렌더
-  if (!modalGalleryThumbs) return;
 
-  modalGalleryThumbs.innerHTML = '';
-  if (imgs.length <= 1){
-    modalGalleryThumbs.style.display = 'none';
-  } else {
-    modalGalleryThumbs.style.display = 'flex';
-
-    imgs.forEach((src, idx) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'gthumb' + (idx === 0 ? ' active' : '');
-
-      const im = document.createElement('img');
-      im.src = src;
-      im.alt = '';
-      b.appendChild(im);
-
-b.addEventListener('click', () => {
-  modalCover.src = src;
-
-  // ✅ 썸네일로 이미지 바꿀 때마다 줌 리셋
+  // ✅ 모달 열 때 항상 줌 리셋(이미지 로드 완료 후도 1회 리셋)
   resetZoom();
   modalCover.addEventListener('load', resetZoom, { once:true });
 
-  modalGalleryThumbs.querySelectorAll('.gthumb').forEach(x => x.classList.remove('active'));
-  b.classList.add('active');
-});
-        modalCover.src = src;
-        modalGalleryThumbs.querySelectorAll('.gthumb').forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-      });
+  // 썸네일 렌더
+  if (modalGalleryThumbs){
+    modalGalleryThumbs.innerHTML = '';
 
-      modalGalleryThumbs.appendChild(b);
-    });
+    if (imgs.length <= 1){
+      modalGalleryThumbs.style.display = 'none';
+    } else {
+      modalGalleryThumbs.style.display = 'flex';
+
+      imgs.forEach((src, idx) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'gthumb' + (idx === 0 ? ' active' : '');
+
+        const im = document.createElement('img');
+        im.src = src;
+        im.alt = '';
+        b.appendChild(im);
+
+        b.addEventListener('click', () => {
+          modalCover.src = src;
+
+          // ✅ 썸네일로 이미지 바꿀 때마다 줌 리셋
+          resetZoom();
+          modalCover.addEventListener('load', resetZoom, { once:true });
+
+          modalGalleryThumbs.querySelectorAll('.gthumb').forEach(x => x.classList.remove('active'));
+          b.classList.add('active');
+        });
+
+        modalGalleryThumbs.appendChild(b);
+      });
+    }
   }
 
   // 모달 열기(공통)
@@ -2356,5 +2369,6 @@ galleryDoorTrigger.addEventListener('click', () => {
 </script>
 </body>
 </html>
+
 
 
