@@ -1356,11 +1356,18 @@ html.modal-open body{
       <img src="img/pf.jpg" alt="artist" class="profile"
            style="border-radius:12px;border:1px solid rgba(16,24,40,0.04)">
       <div style="flex:1;min-width:200px">
-        <p style="margin:0 0 12px 0">【밤하늘의 소리】</p>
-        <p style="margin:0 0 8px 0">‘밤하늘의 소리’는 밤이 짙을수록 빛이 더 선명해진다는 사실에서 출발한 이름입니다.</p>
-        <p style="margin:0 0 8px 0">나는 예술이 감정을 ‘크게’ 만들기보다, 마음을 ‘정확히’ 보여주는 매개체라고 믿습니다.</p>
+        <p style="margin:0 0 8px 0">'밤하늘의 소리'는 밤이 짙을수록 빛이 더 선명해지는데에서 출발한 이름입니다.</p>
+        <p style="margin:0 0 8px 0">저는 필요한 곳에서 활동하는 뮤지션입니다.</p>
       </div>
     </div>
+<!-- ===== ABOUT: Story Blocks (지그재그) ===== -->
+<div class="about-story">
+  <h2 class="section-title">Story</h2>
+  <p class="lead">여기에 한 줄 소개를 넣어도 되고 비워도 됩니다.</p>
+
+  <!-- JS로 스토리 카드가 렌더되는 자리 -->
+  <div id="aboutStoryList"></div>
+</div>
 </section>  <!-- ✅ 이 줄을 추가 -->
   <section id="discography" class="panel">
     <h2 id="discTitle" class="section-title">Discography</h2>
@@ -1666,7 +1673,54 @@ function showSection(id, btn){
       sec.classList.remove('show');
     }
   });
+/* ===============================
+   ABOUT: Story Blocks (지그재그 렌더)
+   - 첫 블록: 이미지 오른쪽
+   - 다음 블록: 이미지 왼쪽 ... 자동 반복
+=============================== */
+const aboutStories = [
+  {
+    title: "대제목 1",
+    text: "여기에 내용 작성\n엔터(줄바꿈)도 그대로 표시됩니다.\n두 줄도 OK.",
+    img: "img/about_01.jpg",
+    caption: "사진 캡션(선택)"
+  },
+  {
+    title: "대제목 2",
+    text: "두 번째 블록 내용",
+    img: "img/about_02.jpg",
+    caption: ""
+  },
+];
 
+function renderAboutStories(){
+  const host = document.getElementById("aboutStoryList");
+  if (!host) return;
+
+  host.innerHTML = "";
+
+  aboutStories.forEach((s, idx) => {
+    // ✅ 첫 번째는 오른쪽 이미지, 다음은 왼쪽… 자동 지그재그
+    const zigzagClass = (idx % 2 === 0) ? "right-img" : "left-img";
+
+    const block = document.createElement("div");
+    block.className = `story-block ${zigzagClass}`;
+
+    block.innerHTML = `
+      <div class="story-img">
+        <img src="${s.img}" alt="${s.title}">
+        ${s.caption ? `<div class="story-caption">${s.caption}</div>` : ""}
+      </div>
+
+      <div class="story-text">
+        <h3>${s.title}</h3>
+        <p class="preline">${s.text}</p>
+      </div>
+    `;
+
+    host.appendChild(block);
+  });
+}
   const buttons = document.querySelectorAll('.hero-nav .btn');
   buttons.forEach(b => b.classList.remove('active'));
   if(btn) btn.classList.add('active');
@@ -2369,7 +2423,9 @@ galleryDoorTrigger.addEventListener('click', () => {
     showFloor(0);
   }, 950);
 });
+renderAboutStories();
 </script>
 </body>
 </html>
+
 
