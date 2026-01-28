@@ -238,6 +238,21 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
   display:block;
   background:#fff;
 }
+/* ✅ 모달에서 MP4(스탑모션)도 이미지처럼 크롭 없이 */
+#modalVideo{
+  width:100%;
+  height:100%;
+  object-fit: contain;
+  display:block;
+  background:#fff;
+}
+
+/* ✅ 모바일(599px 이하)에서는 height:auto가 더 안정적 */
+@media (max-width: 599px){
+  #modalVideo{
+    height:auto;
+  }
+}
 
 /* 오른쪽 본문은 "남는 공간"을 활용하고, 넘치면 내부만 스크롤 */
 .modal-body{
@@ -1445,6 +1460,15 @@ html.modal-open body{
     <div class="modal-grid">
 <div class="modal-cover-wrap zoom-wrap" id="modalCoverWrap">
   <img id="modalCover" class="modal-cover zoom-img" src="" alt="Album cover">
+
+  <!-- ✅ 추가: 갤러리 스탑모션용 -->
+  <video id="modalVideo"
+         class="modal-cover"
+         style="display:none;"
+         playsinline
+         muted
+         loop
+         preload="metadata"></video>
 </div>
       <div class="modal-body">
         <h3 id="modalTitle" style="margin-top:0"></h3>
@@ -1536,7 +1560,15 @@ const galleryItem = [
     desc: '신호가 바뀌어도, 마음은 아직 그 자리에 서 있습니다.\n건너는 동안 더 멀어질까 봐 계속 조마조마하죠.\n스치면 인연 붙잡으면 운명이라는데 붙잡을 용기가 없어서 인연이 있었던 곳에서 외톨이 처럼 운명을 기다립니다.',
     images: ['img/hd1.jpg']
   },
-
+  {
+id: 999999999,
+  title: '스탑모션',
+  year: 2026,
+  desc: '...',
+  images: ['img/3rd ds 01/003.jpg'],   // ✅ 썸네일은 이 이미지 그대로 사용
+  video: 'video/stopmotion_island.mp4', // ✅ 모달에서 자동재생할 mp4
+  poster: 'img/3rd ds 01/003.jpg'       // (선택) 비디오 로딩 전 포스터
+  },
 
 
 
@@ -1731,6 +1763,7 @@ const modalContent = document.getElementById('modalContent');
 const modalTitle = document.getElementById('modalTitle');
 const modalDesc = document.getElementById('modalDesc');
 const modalCover = document.getElementById('modalCover');
+const modalVideo = document.getElementById('modalVideo'); // ✅ 추가
 const modalAudioSrc = document.getElementById('modalAudioSrc');
 const modalAudio = document.getElementById('modalAudio');
 const linkStore = document.getElementById('linkStore');
@@ -1747,6 +1780,44 @@ function resetModalDescScroll(){
     modalDesc.scrollTop = 0;
     modalDesc.scrollLeft = 0;
   });
+}
+/* ===============================
+   Gallery Stopmotion (MP4) Helpers
+=============================== */
+function stopModalVideo(){
+  if (!modalVideo) return;
+  try{ modalVideo.pause(); }catch(e){}
+  modalVideo.removeAttribute('src');
+  modalVideo.style.display = 'none';
+  try{ modalVideo.load(); }catch(e){}
+}
+
+function playModalVideo(src, poster){
+  if (!modalVideo) return;
+
+  // 이미지 숨기고 비디오 표시
+  modalCover.style.display = 'none';
+  resetZoom(); // 이미지용 transform 꼬임 방지
+
+  modalVideo.style.display = 'block';
+  modalVideo.src = src;
+  if (poster) modalVideo.poster = poster;
+
+  // 자동재생 안정 옵션
+  modalVideo.muted = true;
+  modalVideo.loop = true;
+  modalVideo.playsInline = true;
+  modalVideo.controls = false; // 자동재생 기본. 막히면 아래에서 자동으로 켬
+
+  try{ modalVideo.load(); }catch(e){}
+
+  const p = modalVideo.play();
+  if (p && typeof p.catch === 'function'){
+    p.catch(() => {
+      // 자동재생이 막히면 사용자 재생이 가능하도록 컨트롤 표시
+      modalVideo.controls = true;
+    });
+  }
 }
 /* ===============================
    PINCH ZOOM for #modalCover (Mobile)
@@ -1966,7 +2037,9 @@ modalRoot.addEventListener('touchmove', preventModalTouchMove, { passive:false }
 modalContent.addEventListener('touchmove', preventModalTouchMove, { passive:false });
 
 function openModal(d){
-      
+  // ✅ 갤러리(비디오) 모드가 남아있을 수 있으니 먼저 정리
+  stopModalVideo();
+  modalCover.style.display = 'block';      
   // ✅ 디스크(음원) 모드: 플레이어/Streaming 표시, 갤러리 썸네일 숨김
   if (modalPlayerWrap) modalPlayerWrap.style.display = 'block';
   if (modalLinksWrap)  modalLinksWrap.style.display  = 'flex';
@@ -2003,6 +2076,11 @@ function closeModal(){
   setTimeout(()=> modalRoot.style.display='none',220);
   try{ modalAudio.pause(); modalAudio.currentTime=0; }catch(e){}
   syncUI(); // 추가: 닫을 때 UI 리셋 표시
+      
+  // ✅ 갤러리 비디오 정리
+  stopModalVideo();
+  modalCover.style.display = 'block';
+      
 resetZoom();
   unlockScroll();
 }
@@ -2026,15 +2104,30 @@ function openGalleryModal(item){
   modalDesc.textContent = desc;
 resetModalDescScroll();            // ✅ 이 줄 추가
   modalDesc.classList.add('preline'); // ✅ 갤러리 모달에서만 \n 줄바꿈 적용
-  // 대표 이미지(첫 장)
+   // 대표 이미지(첫 장)
   const imgs = Array.isArray(item.images) ? item.images : [];
   const first = imgs.length ? imgs[0] : '';
-  modalCover.src = first;
 
-  // ✅ 모달 열 때 항상 줌 리셋(이미지 로드 완료 후도 1회 리셋)
-  resetZoom();
-  modalCover.addEventListener('load', resetZoom, { once:true });
+  // ✅ 비디오/이미지 분기: video가 있으면 모달에서 자동재생
+  if (item.video) {
+    playModalVideo(item.video, item.poster || first);
 
+    // 영상 작품이면 썸네일 목록은 숨김(원하면 유지 가능)
+    if (modalGalleryThumbs){
+      modalGalleryThumbs.style.display = 'none';
+      modalGalleryThumbs.innerHTML = '';
+    }
+  } else {
+    // 이미지 작품
+    stopModalVideo();
+    modalCover.style.display = 'block';
+    modalCover.src = first;
+
+    resetZoom();
+    modalCover.addEventListener('load', resetZoom, { once:true });
+
+    // ✅ 아래의 "썸네일 렌더" 로직(너 기존 코드)은 그대로 두면 됨
+  }
   // 썸네일 렌더
   if (modalGalleryThumbs){
     modalGalleryThumbs.innerHTML = '';
@@ -2419,6 +2512,7 @@ renderAboutStories();
 </script>
 </body>
 </html>
+
 
 
 
