@@ -1286,14 +1286,41 @@ html.modal-open body{
   touch-action:none;
 }
 /* ===== Gallery Room 카드: 원본 비율(크롭 없이 전체 보이게) ===== */
-.gallery-frame .card-media{
-  display:block;
-  width:100%;
-  height:auto;        /* ✅ 원본 비율 유지 */
-  object-fit: contain;/* ✅ 혹시 높이가 잡혀도 크롭 방지 */
-  background:#fff;
+/* ===== Gallery Room 썸네일: PC(3열)에서 비율 통일 ===== */
+@media (min-width: 981px){
+  /* ✅ 카드 썸네일 영역을 고정 비율 박스로 */
+  #galleryRoomFrames .thumb-ratio{
+    aspect-ratio: 4 / 5;   /* ← 원하는 통일 비율 (예: 4/5, 3/4, 1/1 등) */
+    width:100%;
+    overflow:hidden;
+    background:#ffffff;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  /* ✅ 이미지가 박스 안에 들어가는 방식 */
+  #galleryRoomFrames .thumb-ratio .card-media{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit: contain;   /* 안 잘리고 전체 보이기 (추천) */
+    /* object-fit: cover;  ← 꽉 차게(대신 일부 잘림) 원하면 이걸로 */
+  }
 }
 
+/* ===== Gallery Room 썸네일: 모바일/태블릿은 기존처럼(원본 비율) ===== */
+@media (max-width: 980px){
+  #galleryRoomFrames .thumb-ratio{
+    width:100%;
+    background:#fff;
+  }
+  #galleryRoomFrames .thumb-ratio .card-media{
+    width:100%;
+    height:auto;
+    display:block;
+    object-fit: contain;
+    background:#fff;
+  }
+}
 /* ===== Modal Gallery Thumbnails ===== */
 .gthumbs{
   display:flex;
@@ -1657,18 +1684,20 @@ const discGrid = document.getElementById('discGrid');
 function createCard(d){
   const el = document.createElement('article');
   el.className = 'card';
-  el.innerHTML = `
-    <img class="card-media" src="${d.cover}" alt="${d.title} cover">
-    <div class="card-body">
-      <div class="meta">${d.year}</div>
-      <h4 class="title">${d.title}</h4>
+el.innerHTML = `
+  <div class="thumb-ratio">
+    <img class="card-media" src="${thumb}" alt="${d.title}">
+  </div>
 
-      <!-- ✅ 카드에서는 설명 숨김(모달에서만 보이게) -->
-      <div class="cta-row">
-        <button class="small-btn primary">자세히 보기</button>
-      </div>
+  <div class="card-body">
+    <div class="meta">${d.year}</div>
+    <h4 class="title">${d.title}</h4>
+    <div class="cta-row">
+      <button class="small-btn primary" type="button">자세히 보기</button>
     </div>
-  `;
+  </div>
+`;
+
   const btn = el.querySelector('button');
   btn.addEventListener('click', ()=> openModal(d));
   return el;
@@ -2532,16 +2561,3 @@ renderAboutStories();
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
