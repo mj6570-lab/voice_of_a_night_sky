@@ -416,26 +416,39 @@ p.lead{ color:var(--muted); margin:0 0 8px 0 }
 
   /* ✅ 모바일에서는 "이미지 높이 = 원본 비율"로 먼저 잡고,
         아래 설명 영역이 남는 공간을 쓰도록 rows로 나눔 */
-  .modal-grid{
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;   /* ✅ 위(이미지)는 auto, 아래(본문)는 남은 공간 */
-    height:100%;
-  }
+.modal-grid{
+  grid-template-columns: 1fr;
 
-  /* ✅ 정사각형 강제 제거 */
-  .modal-cover-wrap{
-    height:auto;                    /* ✅ 100% 강제 제거 */
-    aspect-ratio: auto;             /* ✅ 1/1 제거 */
-    overflow:hidden;
-    display:block;                  /* ✅ 불필요한 flex 영향 제거 */
-  }
+  /* ✅ 이미지 영역 높이를 제한: 너무 큰 이미지가 설명을 밀어내지 못하게 */
+  grid-template-rows: minmax(180px, 48svh) 1fr;
 
-  /* ✅ 이미지가 가로 100%로 꽉 차면서 원본비율 유지 */
-  #modalCover{
-    width:100%;
-    height:auto;                    /* ✅ 핵심 */
-    display:block;
-  }
+  height:100%;
+  min-height:0;
+}
+
+.modal-cover-wrap{
+  height:100%;          /* ✅ grid 첫 행 높이를 꽉 채움 */
+  min-height:0;         /* ✅ 내부가 커져도 레이아웃 깨짐 방지 */
+  overflow:hidden;
+  display:block;
+  background:#fff;
+}
+
+#modalCover{
+  width:100%;
+  height:100%;          /* ✅ “제한된 이미지 영역” 안에서만 보이게 */
+  object-fit: contain;  /* ✅ 크롭 없이 전체 보이게 */
+  display:block;
+  background:#fff;
+}
+
+#modalVideo{
+  width:100%;
+  height:100%;
+  object-fit: contain;
+  display:block;
+  background:#fff;
+}
 
   .modal-body{
     padding:14px;
@@ -2519,6 +2532,7 @@ renderAboutStories();
 </script>
 </body>
 </html>
+
 
 
 
