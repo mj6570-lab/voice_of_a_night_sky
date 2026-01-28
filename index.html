@@ -1448,30 +1448,34 @@ html.modal-open body{
   background:#fff;
 }
 /* ===============================
-   DISCO MODAL (Mobile): cover 안 잘리게 "정사각 + contain + 중앙정렬"
+   DISCO MODAL: 1:1(정사각) 유지 + 절대 안 잘리게
+   - "폭 기준"으로 정사각을 만들고, 모바일에서 grid 첫 행을 auto로 바꿔서
+     높이가 폭을 강제로 늘리는(=잘림) 상황을 차단
 =============================== */
-.modal-content.disc-square #modalCoverWrap{
-  display:flex !important;        /* (너 코드에 block !important 덮어쓰기) */
-  align-items:center !important;
-  justify-content:center !important;
 
-  aspect-ratio: 1 / 1;            /* 디스코 커버는 정사각 프레임 */
+/* 디스코 모달일 때: 커버 랩을 "폭 기준 정사각"으로 */
+.modal-content.disc-square #modalCoverWrap{
+  width:100%;
+  aspect-ratio: 1 / 1;        /* ✅ 1:1 유지 */
+  height:auto !important;      /* ✅ 높이로 정사각 만들지 않게 */
+  overflow:hidden;
   background:#fff;
-  overflow:hidden;                 /* 안전 */
+  display:block !important;    /* ✅ flex/center 필요 없음 (object-fit로 해결) */
 }
 
+/* 이미지: 절대 크롭 금지 */
 .modal-content.disc-square #modalCover{
   width:100%;
   height:100%;
-  object-fit: contain !important;  /* ✅ 절대 안 잘리게 */
+  object-fit: contain !important;  /* ✅ 안 잘림 */
   background:#fff;
 }
 
-/* 모바일에서 이미지 영역이 너무 작아져서 잘린 것처럼 보이면 높이만 조금 늘림 */
+/* ✅ 모바일에서 "커버행 높이"를 auto로 바꿔서 잘림 원인 제거 */
 @media (max-width: 599px){
   .modal-content.disc-square .modal-grid{
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(220px, 60svh) 1fr;  /* 기존 48svh보다 여유 */
+    grid-template-rows: auto 1fr;   /* ✅ 여기 핵심: 기존 minmax(…svh) 무효화 */
   }
 }
 </style>
@@ -2177,7 +2181,6 @@ modalContent.addEventListener('touchmove', preventModalTouchMove, { passive:fals
 function openModal(d){
 modalContent.classList.add('disc-square');
 modalContent.classList.remove('ig-portrait');
-modalContent.classList.remove('ig-portrait');
   // ✅ 갤러리(비디오) 모드가 남아있을 수 있으니 먼저 정리
   stopModalVideo();
   modalCover.style.display = 'block';      
@@ -2215,7 +2218,6 @@ modalCover.addEventListener('load', resetZoom, { once:true });
 function closeModal(){
 modalContent.classList.remove('ig-portrait');
 modalContent.classList.remove('disc-square');
-modalContent.classList.remove('ig-portrait');
   modalContent.classList.remove('show');
   setTimeout(()=> modalRoot.style.display='none',220);
   try{ modalAudio.pause(); modalAudio.currentTime=0; }catch(e){}
@@ -2231,7 +2233,6 @@ resetZoom();
 function openGalleryModal(item){
 modalContent.classList.add('ig-portrait');
 modalContent.classList.remove('disc-square');
-modalContent.classList.add('ig-portrait');
   // ✅ 갤러리 모드: 플레이어/Streaming 숨기고, 썸네일 표시
   if (modalPlayerWrap) modalPlayerWrap.style.display = 'none';
   if (modalLinksWrap)  modalLinksWrap.style.display  = 'none';
@@ -2659,6 +2660,7 @@ renderAboutStories();
 </script>
 </body>
 </html>
+
 
 
 
