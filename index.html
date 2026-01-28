@@ -1707,7 +1707,10 @@ const discGrid = document.getElementById('discGrid');
 function createCard(d){
   const el = document.createElement('article');
   el.className = 'card';
-el.innerHTML = `
+
+  const thumb = d.cover; // ✅ 추가 (disc는 cover가 썸네일)
+
+  el.innerHTML = `
     <div class="thumb-ratio">
       <img class="card-media" src="${thumb}" alt="${d.title}">
     </div>
@@ -1715,17 +1718,16 @@ el.innerHTML = `
     <div class="card-body">
       <div class="meta">${d.year}</div>
       <h4 class="title">${d.title}</h4>
-
       <div class="cta-row">
         <button class="small-btn primary" type="button">자세히 보기</button>
       </div>
     </div>
   `;
 
-  const btn = el.querySelector('button');
-  btn.addEventListener('click', ()=> openModal(d));
+  el.querySelector('button').addEventListener('click', ()=> openModal(d));
   return el;
 }
+
 
 if (discGrid) {
   discs.forEach(d => discGrid.appendChild(createCard(d)));
@@ -1736,18 +1738,20 @@ function createGalleryCard(d){
 
   const thumb = (d.images && d.images.length) ? d.images[0] : '';
 
-  el.innerHTML = `
+el.innerHTML = `
+  <div class="thumb-ratio">
     <img class="card-media" src="${thumb}" alt="${d.title}">
-    <div class="card-body">
-      <div class="meta">${d.year}</div>
-      <h4 class="title">${d.title}</h4>
+  </div>
 
-      <!-- ✅ 겉에서는 설명을 아예 렌더하지 않음 -->
-      <div class="cta-row">
-        <button class="small-btn primary" type="button">자세히 보기</button>
-      </div>
+  <div class="card-body">
+    <div class="meta">${d.year}</div>
+    <h4 class="title">${d.title}</h4>
+    <div class="cta-row">
+      <button class="small-btn primary" type="button">자세히 보기</button>
     </div>
-  `;
+  </div>
+`;
+
 
   el.querySelector('button').addEventListener('click', () => {
     openGalleryModal(d);
@@ -1793,28 +1797,21 @@ const aboutStories = [
 function renderAboutStories(){
   const host = document.getElementById("aboutStoryList");
   if (!host) return;
-
   host.innerHTML = "";
-
   aboutStories.forEach((s, idx) => {
-    // ✅ 첫 번째는 오른쪽 이미지, 다음은 왼쪽… 자동 지그재그
     const zigzagClass = (idx % 2 === 0) ? "right-img" : "left-img";
-
     const block = document.createElement("div");
     block.className = `story-block ${zigzagClass}`;
-
     block.innerHTML = `
       <div class="story-img">
         <img src="${s.img}" alt="${s.title}">
         ${s.caption ? `<div class="story-caption">${s.caption}</div>` : ""}
       </div>
-
       <div class="story-text">
         <h3>${s.title}</h3>
         <p class="preline">${s.text}</p>
       </div>
     `;
-
     host.appendChild(block);
   });
 }
@@ -2585,4 +2582,5 @@ renderAboutStories();
 </script>
 </body>
 </html>
+
 
